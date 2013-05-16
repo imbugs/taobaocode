@@ -1,0 +1,214 @@
+{% extends "layouts/baseview.html" %}
+{% load i18n %}
+{% load short_uri %}
+{%block title%}project admin{%endblock%}
+
+
+{% block extrastyle %}
+<script type="text/javascript">
+
+function update_project_meta() {
+    $('#title').val('{{project.title|linebreaks|removetags:"p"}}');
+    $('#license').val('{{project.license}}');
+    {%if project.is_public%}
+      $('#is_public').attr("checked", 'true'); 
+    {%endif%}
+}
+
+function do_invite(in_name) {
+    var name = in_name;
+    if (name == null)
+    {
+	name = $('#invite #name').val();
+    }
+
+    if(name.length <= 0) {
+	return;
+    }
+    q_get("prj/invite/{{project.name}}", {'u':name}, function(result) {
+	get_members();
+    }, function () {
+	show_info('can not invite:'+name);
+    }, function() {
+	$('#add-member #invite #name').val('');	
+    });
+}
+
+function get_members() {
+    var members = $('#members');
+    members.empty();
+
+    q_get("prj/members/{{project.name}}", {}, function(result) {
+	var t="<div name='prj-member-{1}'>"+
+	    "[<span class='actiontext'>{2}</span>] <span><a class='del' href='javascript:;'><img src='/img/remove.png'/></a>{4}</span>"+
+	    "<a class='username' href='{0}'>{1}</a> "+
+	    "<span class='em'>{3}</span>"+
+	    "</div>";
+	
+	for(var i = 0; i < result.length; i++) {
+	    if (result[i][2] == 'reject'){
+		result[i].push('<a class="resend button" href="javascript:;">reinvite</a>');
+	    }else {
+		result[i].push('');
+	    }
+	    var new_elm = $(format_string(t, result[i]));
+	    members.append(new_elm);
+	}
+	$('div[name^="prj-member-"]').each(function() {
+	    var m = $(this);
+	    var uname = m.attr('name').substring("prj-member-".length);
+	    m.find('.del').confirm('Are you sure remove '+uname+' ?',
+					 'Yes', 'No', function() {
+                del_member(uname);
+	    });
+
+	    m.find('.resend').click(function() {
+		do_invite(uname);
+	    });
+	});
+    });
+}
+
+function del_member(name) {
+    q_get("prj/del_member/{{project.name}}", {'u':name}, function() {
+	get_members();
+    }, function() {
+	show_info('can not remove member '+name);
+    });
+}
+
+function del_prj() {
+    q_get("prj/del/{{project.name}}", {}, function(result) {
+	window.location.href = result;
+    }, function() {
+	show_info('can not del project!');
+    });
+}
+
+function edit_prj() {
+    var title = $('#title').val();
+    var license = $('#license').val();
+    var is_public = $('#is_public').attr("checked");
+    
+    if (title.length <= 0) {
+	show_info('need title!');
+	return;
+    }
+
+    var onerror = function () {
+	show_info('can not edit project!');
+	update_project_meta();
+    };
+
+    q_get("prj/edit/{{project.name}}", 
+	   {'t':title,'l':license,'pub':is_public?1:0},
+	  function(result){	      
+	      $('#prj-title').text(title);
+	      $('#prj-public').attr('src', is_public ? '/img/unlock.png':'/img/lock.png');
+	      $('#prj-public').attr('title', is_public ? 'public':'private');
+	      show_info('edit ok!');
+	  }, function() {
+	      onerror();
+	  });	
+}
+
+</script>
+
+
+
+{% endblock %}
+
+{%block ready_js%}
+    $('#btn-invite').click(function () {
+	do_invite();
+    });
+
+    $('#btn-edit').click(function () {
+	$('#prj-edit').toggle(100);
+    });
+
+    $('#btn-save').click(function () {
+	edit_prj();
+    });
+    
+    $('#btn-del').confirm('Are you sure delete this project?<br/>'+
+			  '<font color="red">CAN NOT RECOVERY!</font>', 'Yes', 'No', function() {
+	del_prj();
+    });
+
+    update_project_meta();
+
+    get_members();
+{%endblock%}
+
+
+{%block main-block%}
+
+<div class='prj-nav'>
+  <span class='nav-link'>
+    <span>
+      <img id="prj-public" src='/img/{{project.is_public|yesno:"unlock,lock"}}.png' title="{{project.is_public|yesno:"public,private"}}">
+    </span>
+    
+    <span><a href="/all/">all</a></span>
+    /
+    <span class="prj-name"><a href="{{project|url}}">{{project}}</span>
+  </span>
+  <span class="img-btn">
+    <a href="javascript:;" id="btn-del">
+      <img src='/img/remove.png'></img></a>
+  </span>
+</div>
+<h4>Resouce usages</h4>
+<table>
+  <tr><td>Resouce Name</td><td>Size</td></tr>
+  {%for r in res%}
+  <tr>
+    <td class="res-name">{{r|first}}</td>
+    <td class="res-size">{{r|last}}</td>
+  </tr>
+  {%endfor%}
+</table>
+
+<h4>Edit Project</h4>
+<div id="prj-edit" class="edit-form">
+  <table>
+    <tr>
+      <td>title</td>
+      <td><input type="text" id="title" size="40"></input></td>
+    </tr>
+    <tr>
+      <td>license</td>
+      <td>
+	<select id="license">
+	  {%for li in licenses%}
+	  <option value="{{li}}">{{li}}</option>
+	  {%endfor%}
+	</select>
+      </td>
+    <tr>
+      <td>is public</td>
+      <td><input type="checkbox" id="is_public"></input></td>
+    </tr>
+  </table>
+  <p><a id="btn-save" class="button green" href="javascript:;">save</a></p>
+</div>
+
+<h4>Members</h4>
+<div id="invite">
+  <span  class="img-btn">
+    <img src='/img/invite_user.png'></img>
+  </span>
+  Invite member(<strong>username, email</strong>)<input type="text" id="name" size="25"></input>
+  <a class="button" href="javascript:;" id="btn-invite">Invite</a>
+</div>
+
+<div class="status-example">
+</div>
+<p>
+  <div id="members">
+  </div>
+</p>
+{%endblock%}
+
+

@@ -1,0 +1,82 @@
+= 外部Trac链接  =
+从0.10版之后, Trac就支持在Wiki标记中, 方便地引用其它Trac服务器资源的方法.
+
+== 定义 ==
+
+一个[ZhInterTrac 外部Trac]链接可被看做一个指定范围的Trac链接.
+它用来引用位于另一个Trac环境中的Trac资源, 例如Wiki页面, 变更集, 传票等等.
+
+== 活动外部Trac前缀表 ==
+
+[[InterTrac]]
+
+== 链接语法 ==
+将另外一个Trac环境的名字作为前缀, 紧跟一个冒号, 以另一个Trac环境中的资源结尾.
+{{{
+<target_environment>:<TracLinks>
+}}}
+
+使用一个通常的[ZhTracLinks Trac链接]去指定另外的那个资源.
+
+该目标环境的名字可以是该环境的实名, 也可以是一个别名.
+
+关于别名, 要在`trac.ini`中对其进行定义(见下面的部分). 前缀是区分大小写的.
+
+为了方便, 还有一些快捷的方式. 用户可使用某个别名来作为一个传票, 更改集或者报告等标识符的前缀.
+(例如 `#T234`,  `[T1508]`,  `[trac 1508]`,  ...)
+
+
+要使用[ZhInterTrac 外部Trac], 需要先创建一个配置表. 该配置表位于[ZhTracIni TracIni]文件中[intertrac]节中.
+
+配置例子:
+{{{
+...
+[intertrac]
+# -- 创建一个别名的例子
+t = trac
+
+# -- 到一个外部Trac的链接:
+trac.title = Edgewall's Trac for Trac
+trac.url = http://trac.edgewall.org
+}}}
+
+`.url`是强制的, 用于定位其他Trac. 如果Trac的环境位于同一个服务器, 它可以是一个相对URL.
+
+`.title`用于当你将鼠标移动到一个[ZhInterTrac 外部Trac]链接时, 提供一个有用的提示信息.
+
+最后, `.compat`项会被用来启用或禁用某"兼容模式":
+
+ * 如果目标Trac在运行于小于里程碑0.10(准确说是r3526)的某个版本, 
+   它将不知如何处理一个[ZhInterTrac 外部Trac], 
+   因此, 将由本地Trac来准备好正确的链接. 
+   并不是所有的链接都可以这样运行, 
+   但绝大多数时候是这样的. 
+   这个叫做"兼容模式", 并且默认为`true`.
+
+ * 如果你清楚远端Trac知道如何处理[ZhInterTrac 外部Trac]链接, 
+   你可以明确禁用兼容模式, 
+   那么任何[ZhTracLinks Trac链接]会变成[ZhInterTrac 外部Trac]链接.
+
+现在, 有了上述的配置, 你可以创造以下链接:
+ * 到此 InterTrac 页面:
+   * `trac:wiki:InterTrac` trac:wiki:InterTrac
+   * `t:wiki:InterTrac` t:wiki:InterTrac
+   * Keys are case insensitive: `T:wiki:InterTrac` T:wiki:InterTrac
+ * 到传票 #234:
+   * `trac:ticket:234` trac:ticket:234
+   * `trac:#234` trac:#234 
+   * `#T234` #T234
+ * 到变更集 [1912]:
+   * `trac:changeset:1912` trac:changeset:1912
+   * `[T1912]` [T1912]
+ * 到日志范围 [3300:3330]: '''(注意: 下面这条需要`trac.compat=false`)'''
+   * `trac:log:@3300:3330` trac:log:@3300:3330  
+   * `[trac 3300:3330]` [trac 3300:3330] 
+ * 最后, 到远程trac的起始页面, 只需在一个明确的链接中, 简单地使用其前缀和':'. 例如: `[th: Trac Hacks]` (''从0.11起; 注意, 要使其起作用, ''远程'' Trac 必须运行0.11'')
+
+普通形式`intertrac_prefix:module:id`被转换为对应的URL`<remote>/module/id`. 对于一些特定的模块而言, 可以使用快捷的链接(例如: #T234将被传票模块处理), 而剩余的部分(`intertrac_prefix:something`), 我们将依赖于远端Trac的TracSearch#quickjump机制.
+
+----
+原文版本: InterTrac[[BR]]
+相关信息: [ZhTracLinks Trac链接],  [ZhInterWiki 外部Wiki][[BR]]
+See also: TracLinks,  InterWiki 

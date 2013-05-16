@@ -1,0 +1,60 @@
+{% extends "layouts/baseview.html" %}
+{% load i18n %}
+{% load short_uri %}
+
+{% block title %}{{ project.name }}{% endblock %}
+
+{% block extrastyle %}
+<script type="text/javascript">
+function watch_project(o) {
+q_get('prj/watch/{{project.name}}', {}, function(r){
+$(o).text(r[0]);
+$('#watch_text').text(r[1]);
+});
+
+}
+</script>
+{% endblock %}
+{% block main-block %}
+{%if project.owner != user%}
+
+<p id="watch_op"> 
+  {%if project.my_status == 3 or project.my_status == 0%}
+  <a class="button" href="javascript:;" onclick="watch_project(this);">
+  <span id="watch_text">
+    {{project.my_status|choice:"3:unwatch, 0:watch"}}
+</span>
+  </a>
+  {%endif%}
+</div>
+
+{%endif%}
+
+<p>
+  Check out:
+  <div class="pretext">
+    svn co {{REPOS}} <strong>{{project.name}}</strong>
+  </div>
+</p> 
+<table cellspacing="0" class="wrapper">
+  <tr valign="top">
+    <td>
+        <h4>Work logs({{logs|length}})</h4>
+	{%for log in logs%}
+	{%include "user/activity.html" with log=log%}
+	{%endfor%}
+    </td>
+    <td width="300">
+      <h4>Members({{members|length}})</h4>
+      <table>
+	{%for member in members%}    
+	<tr class="row">
+	  {%include "user/user-info.html" with user=member.user%}
+	</tr>
+	 {%endfor%}
+      </table>
+    </td>
+  </tr>
+</table>
+{% endblock %}
+

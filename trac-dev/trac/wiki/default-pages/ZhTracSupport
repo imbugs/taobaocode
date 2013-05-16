@@ -1,0 +1,17 @@
+= Trac支持 =
+
+一如大多数[http://www.opensource.org/ 开源项目], ''免费的''Trac支持首先是由社区本身来实现, 主要是通过[http://trac.edgewall.org/wiki/MailingList 邮件列表]和项目Wiki.
+
+还有一个[http://trac.edgewall.org/wiki/IrcChannel IRC聊天频道], 在那里人们互相帮助. 很多的''现场''开发讨论都在那里发生.
+
+在你请求新的支持前, 请确认你已经进行了恰当的搜索:
+ * 在项目的[http://trac.edgewall.org/wiki/TracFaq FAQ]中
+ * 在Trac[http://blog.gmane.org/gmane.comp.version-control.subversion.trac.general?set_user_css=http%3A%2F%2Fwww.edgewall.com%2Fcss%2Fgmane.css&do_set_user_css=t 邮件列表]的已有信息中.
+ * 在Trac传票系统中, 使用[http://trac.edgewall.org/search?q=&ticket=on&wiki=on 全文检索]或[http://trac.edgewall.org/query?summary=~&keywords=~" 传票检索].
+
+请'''不要'''在这个Trac中创建有关Trac支持的传票. 仅仅在你遇到'''真正'''并且'''全新'''的Trac的bug时才如此, 并在这样做前, 仔细阅读 NewTicketGuidelines. 错误报告或功能请求的越符合这些指导, 修复或实现的机会将越迅速!
+
+----
+原文版本: TracSupport[[BR]]
+相关信息: [http://trac.edgewall.org/wiki/MailingList 邮件列表], [http://trac.edgewall.org/wiki/CommercialServices 社区][[BR]]
+See also: [http://trac.edgewall.org/wiki/MailingList MailingList], [http://trac.edgewall.org/wiki/CommercialServices CommercialServices]

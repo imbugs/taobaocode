@@ -1,0 +1,153 @@
+= 传票变化的邮件提醒 =
+[[ZhTracGuideToc]]
+
+Trac支持通过邮件来提醒传票的变化.
+
+邮件提醒对于让用户时刻了解传票很有帮助, 并且提拱了一个发送所有的传票变化到一个特定邮件列表的便捷方法. 例如, 这是如何创建[http://lists.edgewall.com/archive/trac-tickets/ Trac传票]邮件列表的描述.
+
+默认情况下提醒是禁用的, 可以在[wiki:ZhTracIni trac.ini]中启用并进行配置.
+
+== 接收提醒邮件 ==
+当报告一个新的传票或添加一个评论时, 在''报告者'', ''指派到/承担者''或''抄送''栏中输入一个有效邮件地址. 当传票有任何改动时, Trac会自动给你发一封邮件(取决于如何配置提醒).
+
+它还可以帮助你时刻关注你感兴趣的事情.
+
+== 配置SMTP提醒 ==
+
+=== 配置选项 ===
+下列时trac.ini中的''[notification]''段的可用选项:
+ * '''smtp_enabled''': 启用邮件提醒.
+ * '''smtp_server''': 用于提醒消息的SMTP服务器.
+ * '''smtp_port''': (''自0.9后'') SMTP服务器的端口.
+ * '''smtp_user''': (自0.9后)验证SMTP帐户的用户名.
+ * '''smtp_password''': (自0.9后)验证SMTP帐户的密码.
+ * '''smtp_from''': 在提醒邮件中"发件人"的邮件地址.
+ * '''smtp_from_name''': 发送人名称, 用于提醒邮件''Sender''标头.
+ * '''smtp_replyto''': 在提醒邮件中"回复至"的邮件地址.
+ * '''smtp_default_domain''': (自0.10后)将指定的域附加到没有包含域的地址中. 完整的地址不会更改. 默认域要附加到所有没有在用户设置中找到邮件地址的用户名中.
+ * '''smtp_always_cc''': 始终发送提醒的邮件地址列表. 通常用于把传票的变化发送到某个特定的邮件列表中.
+ * '''smtp_always_bcc''': (自0.10后)始终发送提醒的邮件地址列表, 但提醒邮件的其他收件人看不见地址.
+ * '''smtp_subject_prefix''': (''自0.10.1后'') 插入到邮件主题前的文本. 默认设为"!__default!__".
+ * '''always_notify_reporter''': 始终将提醒发送到报告人域中的所有地址.
+ * '''always_notify_owner''': (自0.9后)始终将提醒发送给承担者域中的地址.
+ * '''always_notify_updater''': (自0.10后)始终向传票的更新者发送提醒.
+ * '''use_public_cc''': (自0.10后)所有的收件人都能看到收件人(所有者, 报告人)和抄送列表中的地址(默认是''密件抄送:'' - 隐藏的副本).
+ * '''use_short_addr''': (自0.10后)启用发送提醒到不包含域的地址, 例如不以@<domain.com>作为结尾的域. 该选项对内网很有用, SMTP服务器可以处理本地的地址并把用户名或注册映射到一个本地的邮箱. 请见`smtp_default_domain`. 不要将此选项用于一个公共的SMTP服务器.
+ * '''use_tls''': (''自0.10后'') 切换使用[http://en.wikipedia.org/wiki/Transport_Layer_Security TLS], 比如GMail, 发送提醒SMTP服务器 .
+ * '''mime_encoding''': (自0.10后)邮件提醒一直以7位模式发送的. 该选项允许选择MIME编码方案.支持的值有:  
+   * `base64`: 默认值, 可用于任何种类的内容. 可能对和一些敏感的反垃圾邮件或反病毒引擎造成麻烦.
+   * `qp` or `quoted-printable`: 最适合欧洲语言(比base64更紧凑), 不推荐用于非ASCII文本(没有base64紧凑).
+   * 'none': 不编码.只能用于英语(ASCII)纯文本. 使用非ASCII字符的邮件不能发送.
+
+必须设置'''smtp_from'''或'''smtp_replyto'''(或两者), 否则Trac拒绝发送提醒邮件.
+
+=== 配置样例 ===
+
+{{{
+[notification]
+smtp_enabled = true
+smtp_server = mail.example.com
+smtp_from = notifier@example.com
+smtp_replyto = myproj@projects.example.com
+smtp_always_cc = ticketmaster@example.com, theboss+myproj@example.com
+}}}
+
+== 邮件样例 ==
+{{{
+#42: testing
+---------------------------+------------------------------------------------
+       Id:  42             |      Status:  assigned                
+Component:  report system  |    Modified:  Fri Apr  9 00:04:31 2004
+ Severity:  major          |   Milestone:  0.9                     
+ Priority:  lowest         |     Version:  0.6                     
+    Owner:  anonymous      |    Reporter:  jonas@example.com               
+---------------------------+------------------------------------------------
+Changes:
+  * component:  changset view => search system
+  * priority:  low => highest
+  * owner:  jonas => anonymous
+  * cc:  daniel@example.com =>
+         daniel@example.com, jonas@example.com
+  * status:  new => assigned
+
+Comment:
+I'm interested too!
+
+--
+Ticket URL: <http://example.com/trac/ticket/42>
+My Project <http://myproj.example.com/>
+}}}
+
+== 使用 GMail 作为 SMTP 主机 ==
+
+使用如下配置片段
+{{{
+[notification]
+smtp_enabled = true
+use_tls = true
+mime_encoding = base64
+smtp_server = smtp.gmail.com
+smtp_port = 587
+smtp_user = user
+smtp_password = password
+}}}
+
+其中, ''user'' 和 ''password'' 对应已有的GMail帐户, ''即'' 你登录[http://gmail.com]的帐户
+
+或者, 你可以使用 `smtp_port = 25`.[[br]]
+你不应使用 `smtp_port = 465`. 这是不起作用的, 你的传票提交可能会死锁. 端口465被保留用于SMTPS协议, 当前不被Trac支持. 详情参见 [comment:ticket:7107:2 #7107].
+ 
+== 过滤自己做的修改的提醒 ==
+在Gmail中, 使用过滤器:
+
+{{{
+from:(<smtp_from>) (("Reporter: <username>" -Changes) OR "Changes (by <username>)")
+}}}
+
+以删除这些提醒.
+
+== 疑难解答 ==
+
+如果你不能发送提醒, 首先要确定是否启用了日志, 然后查看日志是否有任何错误信息被记录. 关于日志特征的帮助, 请参考[ZhTracLogging Trac日志].
+
+由于邮件提醒的错误不能通过Web界面报告, 所以提交修改或者创建传票的用户无法知道发送邮件提醒失败. Trac管理者需要查看日志, 找到错误的的踪迹.
+
+=== ''拒绝访问''的错误 ===
+
+典型的错误信息:
+{{{
+  ...
+  File ".../smtplib.py", line 303, in connect
+    raise socket.error, msg
+  error: (13, 'Permission denied')
+}}}
+
+该错误通常来自服务器上的安全设置, 许多Linux发行版不允许Web服务器将邮件的信息发送到本地的SMTP服务器.
+
+当用户手动尝试连接SMTP服务器取得成功的时候, 他们会很困惑:
+{{{
+telnet localhost 25
+}}}
+
+问题是, 一个正常用户能连接到SMTP服务器上, 但是Web服务器却不能:
+{{{
+sudo -u www-data telnet localhost 25
+}}}
+
+因此, 需要配置你的服务器, 使Web服务器被授权通过SMTP服务器发送邮件. 实际的设置取决于你的Linux发行版和现行的安全策略. 浏览Trac邮件列表文件以获得帮助.
+
+相关邮件列表论坛:
+ * [http://article.gmane.org/gmane.comp.version-control.subversion.trac.general/7518 SELinux]
+ 
+=== ''可疑垃圾邮件''错误 ===
+
+一些SMTP服务器可能会拒绝Trac发送的提醒邮件.
+
+默认的Trac配置使用Base64编码来发送邮件给收件人. 邮件的整个正文部分都是编码的, 有时会触发对敏感的邮件服务器的''假阳性''垃圾邮件监控. 因此, 建议使用`mime_encoding`选项将编码改为"quoted-printable".
+
+"Quoted-printable"编码与使用拉丁语字符集的语言配合很好. 对于亚洲字符集, 建议坚持Base64编码.
+
+----
+原文版本: TracNotification[[BR]]
+相关信息: [ZhTracTickets Trac传票], [ZhTracIni Trac配置], [ZhTracGuide Trac导览][[BR]]
+See also: TracTickets, TracIni, TracGuide

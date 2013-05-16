@@ -1,0 +1,40 @@
+{% extends "layouts/baseview.html" %}
+{% load i18n %}
+{% load short_uri %}
+
+{%block title%}{{project.name}} - {{path}}{%endblock%}
+
+{% block extrastyle %}
+<script type="text/javascript">
+function show_diff(prj_path, path, n,m) {
+    window.location.href=prj_path+'diff/'+n+':'+m+path;
+}
+</script>
+{% endblock %}
+{%block ready_js%}
+    $('.btn-diff').click(function() {
+	var n = $('input[name=revN]:checked').val();
+	var m = $('input[name=revM]:checked').val();
+
+	if (m == undefined || n == undefined || n == m) {
+	    return;
+	}
+	show_diff('{{project|url}}', '{{path}}', n, m);
+    });    
+
+{%endblock%}
+
+{%block main-block%}
+<p>
+    <strong><a href="{{project|url}}src/">{{project.name}}</a></strong>
+    <span>/</span>
+  {%for p in paths%}
+  
+  <strong><a class="filename" href="{{project|url}}src/{{p.url}}/">{{p.path}}</a></strong>
+  <span>/</span>
+  {%endfor%}    
+</p>
+<div>
+  {%include "repos/logs.html"%}
+</div>
+{%endblock%}

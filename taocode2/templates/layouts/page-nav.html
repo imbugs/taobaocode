@@ -1,0 +1,21 @@
+{% load i18n %}
+{% load short_uri %}
+
+<p>  
+  <span class="time-text">
+    <em name="page-record-count">{{result_count}}</em>
+    {{_('records!')}}
+  </span>
+  <a href="{{first_page_uri}}" id="first">{{_('first')}}</a>
+  {%if page.has_previous %}
+  <a href="{{previous_page_uri}}" id="prev">{{_('prev')}}</a>
+  {%else%}
+  <span class="empty">{{_('prev')}}</span>
+  {%endif%}
+  {%if page.has_next %}
+  <a href="{{next_page_uri}}" id="next">{{_('next')}}</a>
+  {%else%}
+  <span class="empty">{{_('next')}}</span>
+  {%endif%}
+  <a href="{{last_page_uri}}" id="last">{{_('last')}}</a>
+</p>

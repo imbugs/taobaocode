@@ -1,0 +1,53 @@
+{% extends "layouts/baseview.html" %}
+{% load i18n %}
+{% load short_uri %}
+
+{%block title%}{{project.name}}{%endblock%}
+
+{%block ready_js%}
+$('#add_file_line').click(function() {
+    if ($('#files .file_line').length >= 5) {
+	return;
+    }
+    $('#files').append('<div class="file_line"><input type="file" name="attachment"/></div>');
+});
+
+$('#btn_create_issue').click(function () {
+   if ($("#new-issue-form input[name^='title']").val().length <= 0) {
+     show_info('need title');
+     return;
+   }
+
+   if ($("#new-issue-form textarea").val().length <= 0) {
+     show_info("need content");
+     return;
+   }
+
+   $('#new-issue-form').submit();
+});
+
+{%endblock%}
+
+
+{%block main-block%}
+<form id="new-issue-form" action="" method="POST" enctype="multipart/form-data">
+  {%csrf_token%}
+  <div>
+    <input name="title" type="text" size="50"></input>
+    </div>
+  <div>
+    <textarea name="content" cols="50" rows="15"></textarea>
+  </div>
+  <div>
+    <a href="javascript:;" id="add_file_line">{%trans "Append file"%}</a>
+    <div id="files">
+      <div class="file_line">
+	<input type="file" name="attachment"/>
+      </div>
+    </div>
+  </div>
+</form>
+<p>
+  <a href="javascript:;" id="btn_create_issue" class="button">{%trans "create issue"%}</a>
+</p>
+{%endblock%}

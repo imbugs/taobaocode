@@ -1,0 +1,52 @@
+{% extends "layouts/baseview.html" %}
+{% load i18n %}
+{% load short_uri %}
+
+{%block title%}{{project.name}} - {{path}}{%endblock%}
+
+{% block extrastyle %}
+<!--<link rel="stylesheet" type="text/css" href="/css/highlight.css" >-->
+<link rel="stylesheet" type="text/css" href="/css/highlight_py.css" >
+</style>
+{% endblock %}
+
+{%block main-block%}
+<div>
+  <p>
+    <strong><a href="{{project|url}}src/">{{project.name}}</a></strong>
+    <span>/</span>
+    {%for p in paths%}
+    
+    <strong><a class="filename" href="{{project|url}}src/{{p.url}}/">{{p.path}}</a></strong>
+    <span>/</span>
+    {%endfor%}    
+  </p>
+  
+  <div>
+    <a href="{{project|url}}logs{{path}}">History</a>
+    |
+    <a href="{{project|url}}log/{{rev}}{{path}}">r{{rev}}</a>
+    |
+    <em>{{mtime|utc2loc}}</em>
+    |
+    <a href="{{project|url}}src{{path}}?orig">Download</a>
+  </div>
+  <p>
+    {%if content%}
+    <pre class="hl">
+      {{content|safe}}
+    </pre>
+    {%endif%}
+    {%if imgurl%}
+    <img src="{{imgurl}}"/>
+    {%endif%}
+
+    {%if srcurl%}
+    <a href="{{srcurl}}">{{path}}</a>
+    {%endif%}
+
+    
+  </p>
+</div>
+{%endblock%}
+

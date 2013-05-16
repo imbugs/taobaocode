@@ -1,0 +1,124 @@
+{% load i18n %}
+{% load short_uri %}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" class="FF ">
+<head id="ctl00_ctl00_HeadTag">
+    <title>
+        {% block title %}taocode{% endblock %}
+    </title>
+    <link id="ctl00_ctl00_MasterCss" type="text/css" rel="stylesheet" href="/css/100.css"/>
+    <style type="text/css">.SideBar, .SideBarPadding {
+        display: none;
+    }
+
+    .MainContent {
+        width: auto;
+    }
+
+    .SiteContentTable {
+        width: 100%;
+    }</style>
+    <style id="ctl00_ctl00_Header_ProjectStyles" type="text/css">.SiteHeader, .SiteHeaderLeft {
+        height: 45px !important;
+        overflow: hidden;
+    }
+
+    .SiteContent {
+        padding: 0 1em 1em 1em;
+        margin-top: 0;
+        min-height: 225px;
+    }
+
+    .FF .SiteContentTable {
+        clear: both;
+    }
+
+    .ProjectContent {
+        min-height: 225px;
+    }
+
+    .Safari .ProjectContent {
+        padding-top: 0em;
+    }
+
+    .IE6 .ProjectTitleControl {
+        position: relative;
+    }
+
+    .CanvasMargin {
+        width: 0;
+    }
+
+    h1.ProjectHeader {
+        font-size: 2em;
+        font-weight: bold;
+        margin-bottom: 0;
+    }
+
+    .ProjectHeader a {
+        color: #3E62A6;
+    }
+
+    .IE table.MinWidthContent {
+        table-layout: auto !important;
+    }
+
+    .ProjectMessage {
+        border: solid 0.1em #ccc;
+        background-color: #F1FCEE;
+        padding: 1em;
+    }</style>
+
+    <style type="text/css">.ProjectContent {
+        padding: 0;
+    }</style>
+
+    <script type="text/javascript" src="/js/jquery-1.5.min.js"></script>
+    {% block extrastyle %}{% endblock %}
+    {% block extrascript %}{% endblock %}
+</head>
+<body>
+
+<table id="CanvasTable" cellpadding=0 cellspacing=0>
+    <tr valign="top">
+        <td>
+            <div id="Canvas">
+                <div id="CanvasContent">
+                    <div id="ctl00_ctl00_MasterContent_ProjectHeader">
+                        {% include "common/projectTop.html" %}
+                    </div>
+                    <div id="ProjectBody" class="SiteContent">
+                        <table class="SiteContentTable" cellspacing="0" cellpadding="0">
+                            <tr valign="top">
+                                <td class="MainContent">
+                                    <div class="MainContentMinWidthContent">
+
+                                        <div id="ProjectContentPanel" class="ProjectContent">
+
+                                            <div id="MenuDiv">
+                                                {% include "layouts/project-nav.html"%}
+                                                {% block submenu-block %}
+                                                {% endblock %}
+                                            </div>
+
+                                            {% block main-block %}
+                                            {% endblock %}
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </td>
+    </tr>
+    <tr valign="bottom">
+        <td>
+            {% include "common/footer1.html" %}
+        </td>
+    </tr>
+</table>
+</body>
+</html>

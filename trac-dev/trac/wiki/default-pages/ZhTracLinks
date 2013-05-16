@@ -1,0 +1,259 @@
+= Trac链接 =
+[[ZhTracGuideToc]]
+
+[ZhTracLinks Trac链接]是Trac的一个基本特征, 因为他们允许在诸如传票, 报表, 变更集, Wiki页面, 里程碑和源文件等(只要是使用[ZhWikiFormatting Wiki格式])的各种实体间流畅的链接.
+
+[ZhTracLinks Trac链接]通常是 '''type:id''' 形式, ''id''代表了项目的号码, 名称或路径, 尽管一些常用项目也有简化符号.
+
+== 在哪里使用Trac链接 ==
+
+你可以在下列地方使用[ZhTracLinks Trac链接]:
+ * Subversion的源代码提交消息
+ * Wiki页面
+ * 传票, 报表和里程碑的详细描述
+ 
+以及其他明确标明支持Wiki格式的文字域.
+
+一些例子:
+ * 传票: '''!#1''' or '''!ticket:1'''
+ * 传票评论: '''!comment:ticket:1:2''' 
+ * 报表: '''!{1}''' or '''!report:1'''
+ * 变更集: '''!r1''', '''![1]''', '''!changeset:1''' or (restricted) '''![1/trunk]''', '''!changeset:1/trunk'''
+ * 修订日志: '''!r1:3''', '''![1:3]''' or '''!log:@1:3''', '''!log:trunk@1:3'''
+ * 对比 (需0.10以上版本): '''!diff:@1:3''', '''!diff:tags/trac-0.9.2/wiki-default//tags/trac-0.9.3/wiki-default''' or '''!diff:trunk/trac@3538//sandbox/vc-refactoring@3539'''
+ * Wiki页面: '''!CamelCase''' or '''!wiki:CamelCase'''
+ * 里程碑: '''!milestone:1.0'''
+ * 附件: '''!attachment:ticket:944:attachment.1073.diff'''
+ * 文件: '''!source:trunk/COPYING'''
+ * 指定版本文件: '''!source:/trunk/COPYING@200'''
+ * 指定版本文件行: '''!source:/trunk/COPYING@200#L25'''
+显示:
+ * 传票: #1 or ticket:1
+ * 传票注释: comment:ticket:1:2 
+ * 报表: {1} or report:1
+ * 变更集: r1, [1], changeset:1, or (restricted) [1/trunk], changeset:1/trunk
+ * 检入日志: r1:3, [1:3] or log:@1:3, log:trunk@1:3
+ * 对比 (需0.10以上版本): diff:@20:30, diff:tags/trac-0.9.2/wiki-default//tags/trac-0.9.3/wiki-default or diff:trunk/trac@3538//sandbox/vc-refactoring/trac@3539
+ * Wiki页面: CamelCase or wiki:CamelCase
+ * 里程碑: milestone:1.0
+ * 附件: attachment:ticket:944:attachment.1073.diff
+ * 文件: source:trunk/COPYING
+ * 指定版本文件: source:/trunk/COPYING@200
+ * 指定版本文件行: source:/trunk/COPYING@200#L25
+
+''注意'': 很少用到[ZhCamelCase 驼峰式], 但用它来引用那些名称不遵守Wiki页面名称规则的那些页面非常方便, 即, 单个词, 非字母字符等. 更多关于Wiki页面名称的链接的特征, 请见[ZhWikiPageNames Wiki页面名].
+
+使用完整(非简化的)符号的Trac链接, 还可以给它一个类似这样的自定义链接标题:
+
+{{{
+[ticket:1 这是一个到传票1号的链接].
+}}}
+
+显示:[ticket:1 这是一个到传票1号的链接].
+
+如果省略标题, 只有id(在冒号后面)能显示出来:
+
+{{{
+[ticket:1]
+}}}
+
+显示: [ticket:1]
+
+如果省略一个完整的链接的名称空间部分(自0.10版本后), 将默认是`wiki`:
+
+{{{
+[SandBox the sandbox]
+}}}
+
+显示: [SandBox the sandbox]
+
+[ZhTracLinks Trac链接]是一个非常简单的想法, 但实际上可以是一个非常复杂的信息网络. 实践中, 它用起来很直观并且简单, 我们发现''链接轨迹''相当有助于更好理解在项目中发生的事情, 或者为何有一个特定的变化.
+
+
+== TracLinks的高级用法 ==
+
+=== 相当链接 ===
+
+要创建到一个特定锚点的链接, 使用'#':
+{{{
+ [#Relativelinks relative 链接]
+}}}
+显示为:
+  [#Relativelinks relative 链接]
+
+提示: 当你将鼠标移到过段落标题时, 会显示出一个'¶'字符. 这就是到此段落的链接, 你可以复制相对链接中的`#...`部分来使用锚点.
+
+== 子Wiki链接 ==
+要创建到子Wiki页面的链接, 只需使用'/':
+{{{
+ WikiPage/SubWikiPage or ./SubWikiPage
+}}}
+
+要链接到父页面, 只需使用'..':
+{{{
+  [..]
+}}}
+
+要链接到相邻页面, 使用'../':
+{{{
+  [../Sibling see next sibling]
+}}}
+
+''(在0.11中的改变)'' 注意, 在Trac 0.10中, 使用例如 `[../newticket]` 可以链接到/newticket 顶级URL, 但在0.11中, 其将仍然在wiki名字空间中, 链接的是相邻页面. 新语法请参见[#Server-relativelinks].
+
+== [ZhInterWiki 外部Wiki]链接 ==
+
+可以自由地定义指向其他Web应用的资源的前缀. 这些前缀的定义以及相应Web应用的URL被定义在一个特殊的Wiki页面中——[ZhInterMapTxt 链接前缀表]页面. 注意, 虽然它也可被用来创建到其他Trac环境的链接, 但已经有一个比这更特定, 更灵活的方法.
+
+== [ZhInterTrac 外部Trac]链接 ==
+
+这可被看作说一种特别用于其他Trac的[ZhInterWiki 外部Wiki]链接,.
+
+如果用另一个Trac环境的名字作为前缀的话(另一个Trac环境名加冒号":"), 上述所有形式的Trac链接都可引用另一个Trac环境中的资源. 因此, 另一个Trac环境必须在这个Trac环境中注册. 细节请参考[ZhInterTrac 外部Trac].
+
+[ZhInterTrac 外部Trac]相对[ZhInterWiki 外部Wiki]的最大好处是, 这种简化形式的Trac链接通常比[ZhInterTrac 外部Trac]跟容易理解. 例如, Trac传票的链接可以写成#T234 (如果T被设置成Trac的别名), Trac变更集的链接可以写成[trac 1508].
+
+== 服务器相关的链接 ==
+
+通常要求能够链接到没有内置Trac链接机制的服务器的对象, 例如, 静态资源, `/register`页面等. 
+
+只需使用服务器根部的绝对路径或者当前页面的URL的相对链接, 就可以实现(''在0.11中修改''):
+
+{{{
+[/newticket Create a new ticket]
+[/ home]
+}}}
+
+显示: [../newticket newticket][[comment(FIXME that's the 0.10 syntax)]]  [/ home]
+
+要链接到服务器的另一个位置(项目之外), 使用 '//location' 链接语法 (''在0.11中改变''):
+
+{{{
+[//register 在此注册]
+}}}
+
+显示: [//register 在此注册]
+
+== 用引号包围Trac链接中的空格 ==
+
+Trac链接的前缀后, 如果目标包含空格, 应使用一对单引号或双引号来包围.
+
+例子:
+ * !wiki:"The whitespace convention"
+ * !attachment:'the file.txt' 或
+ * !attachment:"the file.txt" 
+ * !attachment:"ticket:123:the file.txt" 
+
+== 链接转义 ==
+
+要防止解析一个Trac链接(转义), 可以在前面加一个感叹号'!'.
+{{{
+ !NoLinkHere.
+ ![42] is not a link either.
+}}}
+
+显示:
+ !NoLinkHere.
+ ![42] is not a link either.
+
+=== 参数化Trac链接 ===
+
+指向Trac资源的Trac链接, 基于一些附加的参数, 通常有多种渲染方式. 例如, Wiki页面可以接受`version`或`format` 参数, 报表可以使用动态变量, 等等.
+
+所有Trac链接支持任意参数集, 写成它们相应的URL相同的形式. 一些例子:
+ - `wiki:WikiStart?format=txt`
+ - `ticket:1?version=1`
+ - `[/newticket?component=module1 为模块1创建新传票]`
+
+
+== TracLinks 参考 ==
+下列章节详细描述了独立链接类型, 以及几个关于链接高级用法的注解.
+
+== 附件: 链接 ==
+
+附件的链接语法如下所示:
+ * !attachment:the_file.txt 创建了一个当前对象的附件the_file.txt的链接
+ * !attachment:wiki:MyPage:the_file.txt 创建了一个到!MyPage Wiki页面的附件的链接
+* !attachment:ticket:753:the_file.txt 创建了一个传票753的附件文件the_file.txt的链接
+
+=== 查询: 链接 ===
+
+请见 [ZhTracQuery#UsingTracLinks 使用Trac链接] 和 [#ticket:链接].
+
+=== 搜索: 链接 ===
+
+请见 [ZhTracSearch#SearchLinks 搜索链接]
+
+=== 传票: 链接 ===
+
+除了明显的`ticket:id`形式, 也可以指定一系列传票, 甚至传票范围, 而不是`id`. 这会生成包含此固定传票集合的, 到定制查询视图的链接.
+
+例子: 
+ - `ticket:5000-6000`
+ - `ticket:1,150`
+
+''(自Trac 0.11)''
+
+=== 时间线: 链接 ===
+
+可以通过指定ISO:8601格式的日期来创建时间线链接. 日期中可以有时间格式说明. 此时间被解释为UTC时间, 但是你也可以指定为你的当地时间(后面跟你的时区, 如果你不想计算UTC时间的话).
+
+例子:
+ - `timeline:2008-01-29`
+ - `timeline:2008-01-29T15:48`
+ - `timeline:2008-01-29T16:48Z+01`
+
+''(自Trac 0.11)''
+
+=== wiki: 链接 ===
+
+参见上述 [ZhWikiPageNames Wiki页面名] 和 [#QuotingspaceinTracLinks 用引号包围Trac链接中的空格].
+
+=== 版本控制相关链接 ===
+== 源码: 链接 ==
+
+如果路径指向一个目录的话, source:/some/path链接的默认行为是打开此目录, 否则会打开日志视图. 
+
+也可以直接链接到文件的某个特定修订:
+ - `source:/some/file@123` - 链接到文件的修订123
+ - `source:/some/file@head` - 链接到文件的最新修订
+
+如果指定了修订号, 甚至可能链接到特定的行号:
+ - `source:/some/file@123#L10`
+ - `source:/tag/0.10@head#L10`
+
+最后, 也可以高亮任何行:
+ - `source:/some/file@123:10-20,100,103#L99` - 高亮10到20行, 和100到103行.
+''(自 0.11)''
+
+== 输出: 链接 ==
+
+要强制下载仓库中的某个文件, 而不是在浏览器中显示, 使用`export`链接.  可用的几种形式为:
+ * `export:/some/file` - 得到指定文件的HEAD修订
+ * `export:123:/some/file` - 得到指定文件的修订123
+ * `export:/some/file@123` - 得到指定文件的修订123
+
+这对于要正确显示HTML文档(其中的样式表和图像已经被检入仓库中)将非常有用.
+
+如果路径是仓库中的目录而不是文件, 源码游览将用于显示目录(跟`source:/some/dir`的结果一样).
+
+==== 日志: 链接 ====
+
+`log:` 链接可用于显示修订范围. 最简单的形式中, 可链接到指定路径的最新修订, 并且也可以用来显示任意修订集.
+ - `log:/` - 始于仓库根目录的最新修订
+ - `log:/trunk/tools` - `trunk/tools`最新修订
+ - `log:/trunk/tools@10000` - `trunk/tools`中始于10000的修订
+ - `log:@20788,20791:20795` - 修订20788和20791到20795的修订范围
+ - `log:/trunk/tools@20788,20791:20795` - 指定路径的修订20788和从20791到20795的修订范围
+
+简化形式:
+ - `[20788,20791:20795]`
+ - `[20788,20791:20795/trunk/tools]`
+ - `r20791:20795` (but not `r20788,20791:20795` nor `r20791:20795/trunk`)
+
+最后, 注意上述中, 修订范围可以写成`x:y` 或 `x-y`.
+
+----
+原文版本: TracLinks[[BR]]
+相关信息: [ZhWikiFormatting Wiki格式], [ZhTracWiki Trac内置Wiki], [ZhWikiPageNames Wiki页面名], [ZhInterTrac 外部Trac], [ZhInterWiki 外部Wiki][[BR]]
+See also: WikiFormatting, TracWiki, WikiPageNames, InterTrac, InterWiki

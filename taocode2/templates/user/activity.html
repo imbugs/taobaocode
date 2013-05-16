@@ -1,0 +1,30 @@
+{% load i18n %}
+{% load short_uri %}
+{% load humanize %} 
+<div class="act-row row">
+  <span><img class="actbtn" src="/img/act_{{log.cmd}}.gif"></img></span>
+  <strong><a class="username" href="{{log.user|url}}">{{log.user}}</a></strong>
+  <span class="actiontext">{{log.act_text}}</span>
+  <strong>on</strong>
+  <a href="{{log.project|url}}">{{log.project}}</a>
+  <strong>at</strong>  
+  <em>{{log.ctime}}</em>
+  <div>
+    <div class="left act-user">
+      <a href="{{log.user|url}}">{%gravatar log.user.email log.user.name%}</a>
+    </div>
+    <div class="memotext">
+      {%if log.issue%}
+      <a href="{{log.project|url}}issue/{{log.issue.id}}">#{{log.issue.id}} {{log.issue.title}}</a>
+      {%endif%}
+      {%if log.comment%}
+      <a href="{{log.project|url}}issue/{{log.comment.issue.id}}#comment-{{log.comment.id}}">#{{log.coWmment.issue.id}} {{log.comment.issue.title}}</a>
+      {%endif%}
+      {%if log.commit%}
+      <a href="{{log.project|url}}log/{{log.commit.rev}}/">r{{log.commit.rev}}</a>
+      <span>{{log.commit.msg}}</span>
+      {%endif%}
+    </div>
+  </div>
+</div>
+

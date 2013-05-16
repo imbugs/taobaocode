@@ -1,0 +1,583 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-10-20 15:50+0800\n"
+"PO-Revision-Date: 2011-10-10 16:19+0800\n"
+"Last-Translator: jonny <quan.jonny@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+
+#: apps/user/forms.py:28
+msgid "user id"
+msgstr "用户名"
+
+#: apps/user/forms.py:31
+msgid "login account"
+msgstr "登陆账号"
+
+#: apps/user/forms.py:42
+msgid "password"
+msgstr "密码"
+
+#: apps/user/forms.py:48
+msgid "password(replay)"
+msgstr "确认密码"
+
+#: apps/user/forms.py:52 apps/user/forms.py:67
+msgid "password must same as twice"
+msgstr "密码与确认密码必须相同"
+
+#: apps/user/forms.py:55
+msgid "email address"
+msgstr "Email地址"
+
+#: apps/user/forms.py:56
+msgid "eg:user@example.org"
+msgstr "例如:user@example.org"
+
+#: apps/user/forms.py:59
+msgid "accept privacy"
+msgstr "接受协议"
+
+#: apps/user/forms.py:60
+msgid "must accept privacy"
+msgstr "亲,必须接受协议才能登陆哦"
+
+#: apps/user/forms.py:76
+msgid "E-mail"
+msgstr "Email"
+
+#: apps/user/forms.py:84
+msgid ""
+"That e-mail address doesn't have an associated user account. Are you sure "
+"you've registered?"
+msgstr "亲,该Email地址尚未注册过,不能登陆哦"
+
+#: apps/user/views.py:280
+msgid "Email Not Exist"
+msgstr "Email不存在"
+
+#: apps/user/views.py:284 apps/user/views.py:298
+msgid "InValid Request"
+msgstr "无效请求"
+
+#: apps/user/views.py:294
+msgid "Name Not Exist"
+msgstr "用户名不存在"
+
+#: apps/wiki/parser.py:313
+#, python-format
+msgid "HTML parsing error: %(message)s"
+msgstr "HTML 解析错误：%(message)s"
+
+#: apps/wiki/parser.py:318
+msgid ""
+"Error: Forbidden character sequence \"--\" in htmlcomment wiki code block"
+msgstr "错误: 不允许在htmlcomment出现的字符 \"--\""
+
+#: apps/wiki/parser.py:398
+#, python-format
+msgid "!#%(name)s must contain at most one table"
+msgstr "!#%(name)s 必须包括至少一个table"
+
+#: apps/wiki/parser.py:402
+#, python-format
+msgid "!#%(name)s must contain at least one table cell (and table cells only)"
+msgstr "!#%(name)s 至少需要一个表格"
+
+#: templates/index.html:14
+#, fuzzy
+msgid "Featured projects"
+msgstr "有趣的项目"
+
+#: templates/index.html:28
+msgid "Last logs"
+msgstr "最近的记录"
+
+#: templates/index.html:36
+msgid "Active Users"
+msgstr "活跃用户"
+
+#: templates/index.html:51
+msgid "Hot projects"
+msgstr "热门项目"
+
+#: templates/index.html:61
+msgid "New projects"
+msgstr "最新的项目"
+
+#: templates/index.html:74 templates/index.html.py:84
+#, fuzzy
+msgid "Random projects"
+msgstr "热门项目"
+
+#: templates/privacy.html:4
+msgid "See also:"
+msgstr "请查阅"
+
+#: templates/issue/list.html:17 templates/issue/view.html:32
+msgid "Are you sure delete this issue?"
+msgstr "你确定删除这条issue?"
+
+#: templates/issue/list.html:17 templates/issue/view.html:12
+#: templates/issue/view.html.py:32 templates/issue/view.html:41
+#: templates/message/list.html:37 templates/wiki/view.html:7
+#: templates/wiki/view.html.py:30
+msgid "Yes"
+msgstr "是的"
+
+#: templates/issue/list.html:17 templates/issue/view.html:12
+#: templates/issue/view.html.py:32 templates/issue/view.html:41
+#: templates/message/list.html:37 templates/wiki/view.html:7
+#: templates/wiki/view.html.py:30
+msgid "No"
+msgstr "不是"
+
+#: templates/issue/list.html:21
+msgid "can not remove issue!"
+msgstr "不能删除issue"
+
+#: templates/issue/list.html:42
+msgid "new issue"
+msgstr "新增 issue"
+
+#: templates/issue/list.html:54
+msgid "search"
+msgstr "搜索"
+
+#: templates/issue/new.html:42
+msgid "Append file"
+msgstr "追加文件"
+
+#: templates/issue/new.html:51
+msgid "create issue"
+msgstr "创建 issue "
+
+#: templates/issue/view.html:12
+msgid "Are you sure delete this comment?"
+msgstr "你确定删除这条评论?"
+
+#: templates/issue/view.html:16
+msgid "can not del comment"
+msgstr "不能删除评论"
+
+#: templates/issue/view.html:23
+msgid "need comment content!"
+msgstr "需要评论内容"
+
+#: templates/issue/view.html:41
+msgid "Are you sure"
+msgstr "你确定"
+
+#: templates/issue/view.html:57 templates/message/list.html:85
+msgid "delete"
+msgstr "删除"
+
+#: templates/issue/view.html:70
+msgid "comments"
+msgstr "评论"
+
+#: templates/issue/view.html:121
+msgid "Post comment"
+msgstr "发表评论"
+
+#: templates/issue/view.html:124 templates/user/login.html:31
+#: templates/user/password_reset_done.html:8
+msgid "login"
+msgstr "登入"
+
+#: templates/issue/view.html:124
+msgid "for new comment"
+msgstr "来发表评论"
+
+#: templates/layouts/baseview.html:84
+msgid "About"
+msgstr "关于"
+
+#: templates/layouts/baseview.html:85
+msgid "Privacy"
+msgstr "隐私保护"
+
+#: templates/layouts/page-nav.html:7
+msgid "records!"
+msgstr "条记录！"
+
+#: templates/layouts/page-nav.html:9
+msgid "first"
+msgstr "第一页"
+
+#: templates/layouts/page-nav.html:11 templates/layouts/page-nav.html.py:13
+msgid "prev"
+msgstr "上一页"
+
+#: templates/layouts/page-nav.html:16 templates/layouts/page-nav.html.py:18
+msgid "next"
+msgstr "下一页"
+
+#: templates/layouts/page-nav.html:20
+msgid "last"
+msgstr "最后一页"
+
+#: templates/layouts/user-nav.html:5
+msgid "Welcome"
+msgstr "欢迎"
+
+#: templates/layouts/user-nav.html:12
+msgid "Messages"
+msgstr "消息"
+
+#: templates/layouts/user-nav.html:15
+msgid "Logout"
+msgstr "登出"
+
+#: templates/layouts/user-nav.html:18
+msgid "Weibo Login"
+msgstr "微博登陆"
+
+#: templates/layouts/user-nav.html:19
+msgid "Taobao Login"
+msgstr "淘宝登陆"
+
+#: templates/layouts/user-nav.html:20 templates/layouts/user-nav.html.py:21
+msgid "or"
+msgstr "或者"
+
+#: templates/layouts/user-nav.html:21 templates/open/taobao/login_ext.html:128
+#: templates/open/wb/login_ext.html:129
+msgid "Login"
+msgstr "登入"
+
+#: templates/layouts/user-nav.html:22
+msgid "Register"
+msgstr "新建角色"
+
+#: templates/layouts/user-nav.html:27
+msgid "Projects"
+msgstr "所有工程"
+
+#: templates/layouts/user-nav.html:32
+msgid "README"
+msgstr ""
+
+#: templates/mail/change_email.html:3
+msgid "change email"
+msgstr "更改 email"
+
+#: templates/mail/change_email.html:10
+msgid "You can use this link to change your new email at our site!"
+msgstr "你可以通过这条连接来更新注册的邮箱地址"
+
+#: templates/mail/reset_password.html:4 templates/user/password_reset.html:13
+#: templates/user/password_reset_form.html:12
+msgid "reset password"
+msgstr "重置密码"
+
+#: templates/mail/reset_password.html:11
+msgid "You can use this link to change your new password at our site!"
+msgstr "你可以通过这条连接来更改你的密码"
+
+#: templates/main/files.html:25
+msgid "Delete"
+msgstr "删除"
+
+#: templates/message/list.html:12
+msgid "del message ok!"
+msgstr "删除消息成功!"
+
+#: templates/message/list.html:15
+msgid "can not del message!"
+msgstr "不能删除消息!"
+
+#: templates/message/list.html:21
+msgid "move message ok!"
+msgstr "消息移动成功!"
+
+#: templates/message/list.html:24
+msgid "can not move message!"
+msgstr "不能删除消息!"
+
+#: templates/message/list.html:37
+msgid "Are you sure delete this message?"
+msgstr "你确定删除这条消息?"
+
+#: templates/message/list.html:78
+msgid "recovery"
+msgstr "恢复"
+
+#: templates/message/list.html:82
+msgid "reply"
+msgstr "回复"
+
+#: templates/open/taobao/login_ext.html:4
+#: templates/open/taobao/login_ext.html:90
+msgid "Taobao Login Ext"
+msgstr "淘宝登陆补充信息"
+
+#: templates/open/taobao/login_ext.html:31 templates/open/wb/login_ext.html:31
+msgid "Name exist,Confirm binding Account?"
+msgstr "用户名已注册，是否要绑定该账号?"
+
+#: templates/open/taobao/login_ext.html:48 templates/open/wb/login_ext.html:48
+msgid "Email exist,Confirm binding Account?"
+msgstr "Email已注册,是否要绑定该账号?"
+
+#: templates/open/taobao/login_ext.html:63
+#: templates/open/taobao/login_ext.html:71 templates/open/wb/login_ext.html:63
+#: templates/open/wb/login_ext.html:71
+msgid "password not match"
+msgstr "密码不正确"
+
+#: templates/open/taobao/login_ext.html:78 templates/open/wb/login_ext.html:78
+msgid "binding account must check password first"
+msgstr "绑定账号时，必须输入密码确认"
+
+#: templates/open/taobao/login_ext.html:99
+#: templates/open/wb/login_ext.html:100
+msgid "UserName"
+msgstr "用户名"
+
+#: templates/open/taobao/login_ext.html:103
+#: templates/open/wb/login_ext.html:104
+msgid "Email"
+msgstr "Email"
+
+#: templates/open/taobao/login_ext.html:113
+#: templates/open/wb/login_ext.html:114
+msgid "BindAccount"
+msgstr "绑定账号"
+
+#: templates/open/taobao/login_ext.html:115
+#: templates/open/wb/login_ext.html:116
+msgid "Bind Reged Account"
+msgstr "绑定已注册账号"
+
+#: templates/open/taobao/login_ext.html:118
+#: templates/open/wb/login_ext.html:119
+msgid "Password"
+msgstr "密码"
+
+#: templates/open/wb/login_ext.html:4 templates/open/wb/login_ext.html:90
+msgid "Weibo Login Ext"
+msgstr "微博登陆补充信息"
+
+#: templates/repos/browse.html:10
+msgid "Check out:"
+msgstr "下载代码:"
+
+#: templates/repos/browse.html:27
+msgid "Path"
+msgstr "路径"
+
+#: templates/repos/browse.html:28 templates/repos/logs.html:9
+#: templates/repos/view_diff.html:28 templates/repos/view_log.html:25
+msgid "Revision"
+msgstr "版本号"
+
+#: templates/repos/browse.html:29 templates/repos/logs.html:11
+msgid "Author"
+msgstr "作者"
+
+#: templates/repos/browse.html:30
+msgid "Size"
+msgstr "大小"
+
+#: templates/repos/browse.html:31
+msgid "Last Changed"
+msgstr "最后更新时间"
+
+#: templates/repos/browse.html:58
+msgid "View all revisions"
+msgstr "查看所有的版本号"
+
+#: templates/repos/logs.html:4 templates/repos/logs.html.py:29
+msgid "View changes"
+msgstr "查看更改"
+
+#: templates/repos/logs.html:10
+msgid "Message"
+msgstr "消息"
+
+#: templates/repos/logs.html:12
+msgid "Date"
+msgstr "日期"
+
+#: templates/repos/view_log.html:26
+msgid "Added by"
+msgstr "创建者"
+
+#: templates/user/change_password.html:11
+msgid "change"
+msgstr "更改"
+
+#: templates/user/edit_my.html:75
+msgid "Public Info"
+msgstr "开放的信息"
+
+#: templates/user/edit_my.html:85 templates/user/edit_my.html.py:102
+#: templates/wiki/edit.html:30
+msgid "Save"
+msgstr "保存"
+
+#: templates/user/edit_my.html:89
+msgid "Change Email"
+msgstr "更改Email"
+
+#: templates/user/edit_my.html:93
+msgid "You need verfiy the code with new email to change mail"
+msgstr "你需要通过邮箱来接收验证码以用来更改邮箱地址"
+
+#: templates/user/edit_my.html:95
+msgid "New Email"
+msgstr "新Email"
+
+#: templates/user/edit_my.html:114
+msgid "Change your avatar at"
+msgstr "修改你的头像"
+
+#: templates/user/edit_my.html:117
+msgid "We're using"
+msgstr "使用使用了"
+
+#: templates/user/login.html:14
+msgid "Sign in"
+msgstr "登录"
+
+#: templates/user/login.html:22
+msgid "Remember(a week)"
+msgstr ""
+
+#: templates/user/login.html:32
+msgid "Forgot password"
+msgstr "忘记密码"
+
+#: templates/user/password_reset_done.html:6
+msgid "your password is reset now!"
+msgstr "你的密码已经重置了"
+
+#: templates/user/password_reset_done.html:8
+msgid "please"
+msgstr "请"
+
+#: templates/user/view.html:85
+msgid "Last login:"
+msgstr "上次登录："
+
+#: templates/user/view.html:91
+msgid "Work logs"
+msgstr "工作记录"
+
+#: templates/user/view.html:97
+msgid "Owner projects"
+msgstr "所属项目"
+
+#: templates/user/view.html:108
+msgid "Not owner projects!"
+msgstr "参与项目"
+
+#: templates/user/view.html:110
+msgid "Create your project now!"
+msgstr "创建你自己的项目吧!"
+
+#: templates/user/view.html:118
+msgid "Joined projects"
+msgstr "参与的项目"
+
+#: templates/user/view.html:127
+msgid "EXIT"
+msgstr "退出"
+
+#: templates/user/view.html:130
+msgid "ACCEPT"
+msgstr "接受"
+
+#: templates/user/view.html:131
+msgid "REJECT"
+msgstr "拒绝"
+
+#: templates/user/view.html:139
+msgid "Watch projects"
+msgstr "关注的项目"
+
+#: templates/wiki/changes.html:11 templates/wiki/view_change.html:15
+msgid "Changes:"
+msgstr "修正记录:"
+
+#: templates/wiki/changes.html:16 templates/wiki/list.html:11
+msgid "last author"
+msgstr "最后修改者"
+
+#: templates/wiki/changes.html:17 templates/wiki/list.html:13
+msgid "modify time"
+msgstr "修改时间"
+
+#: templates/wiki/changes.html:25
+msgid "raw"
+msgstr "原始文本"
+
+#: templates/wiki/changes.html:26
+msgid "diff"
+msgstr "对比"
+
+#: templates/wiki/edit.html:31
+msgid "Preview"
+msgstr "预览"
+
+#: templates/wiki/list.html:9
+msgid "page name"
+msgstr "页面名字"
+
+#: templates/wiki/list.html:10
+msgid "author"
+msgstr "作者"
+
+#: templates/wiki/list.html:12
+msgid "create time"
+msgstr "创建时间"
+
+#: templates/wiki/view.html:7
+msgid "Are you sure delete this page?"
+msgstr "你确定删除这个页面?"
+
+#: templates/wiki/view.html:30
+msgid "Are you sure delete this file?"
+msgstr "你确定删除这个文件?"
+
+#: templates/wiki/view.html:34
+msgid "can not remove this file!"
+msgstr "不能删除这个文件!"
+
+#: templates/wiki/view.html:90
+msgid "submit"
+msgstr "提交"
+
+#: templates/wiki/view.html:99
+msgid "Not found page"
+msgstr "找不到页面"
+
+#: templates/wiki/view.html:102
+msgid "Create Page"
+msgstr "新加页面"
+
+#: templates/wiki/view.html:105
+msgid "All wiki pages"
+msgstr "所有的 wiki 页面 "
+
+#~ msgid "Bind Account"
+#~ msgstr "绑定账号"
+
+#~ msgid "nick name"
+#~ msgstr "昵称"
+
+#, fuzzy
+#~ msgid "display name"
+#~ msgstr "页面名字"

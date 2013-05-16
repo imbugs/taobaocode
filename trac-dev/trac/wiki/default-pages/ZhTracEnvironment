@@ -1,0 +1,127 @@
+= Trac环境 =
+
+Trac用目录和数据库来储存项目信息, 叫做''环境''.
+
+== 创建一个环境 ==
+
+一个新的Trac环境是通过使用[wiki:ZhTracAdmin trac-admin]创建出来的:
+{{{
+$ trac-admin /path/to/myproject initenv
+}}}
+
+[wiki:ZhTracAdmin trac-admin]会要求你给出项目的名称, 数据库类型和你的源代码仓库的类型和路径.
+
+''注意: Web服务器用户会要求对环境目录及其内部所有文件的写权限. 请记得设置恰当的权限. 这同样适用于Trac最终使用的Subversion仓库, 虽然只要你没有使用BDB文件系统, Trac就仅仅要求读访问.''
+
+== 数据库连接字符串 ==
+
+自0.9版本后, Trac支持[http://sqlite.org/ SQLite],  [http://www.postgresql.org/ PostgreSQL]和[http://mysql.com/ MySQL]作为数据库的后端. 默认使用SQLite, 这对大多数项目都是适用的. 数据库文件存储在环境目录中, 可轻松地与环境中的其余部分一起[wiki:ZhTracBackup 备份].
+
+=== 嵌入式 SQLite 连接字符串 ===
+一个连接到SQLite数据库的连接字符串是:
+{{{
+sqlite:db/trac.db
+}}}
+
+=== PostgreSQL 连接字符串 ===
+如果想使用PostgreSQL或MySQL, 你必须使用不同的连接字符串. 例如, 要连接到同一个机器上的一个名叫trac的PostgreSQL数据库, 用户名是`johndoe`, 密码`letmein`, 需要使用:
+{{{
+postgres://johndoe:letmein@localhost/trac
+}}}
+''注意, 由于上述字符串解析的方式, 密码中不能包含字符"/"和"@".''
+
+如果PstgreSQL运行在一个非标准的端口上, 例如9342, 使用:
+{{{
+postgres://johndoe:letmein@localhost:9342/trac
+}}}
+
+在UNIX中, 你也可以为传输使用UNIX套接字,
+可以是PGHOST环境变量定义的默认套接字:
+{{{
+postgres://user:password@/database
+}}}
+也可以指定一个:
+{{{
+postgres://user:password@/database?host=/path/to/socket/dir
+}}}
+
+注意, 使用PostgreSQL, 你必须在运行`trac-admin initenv`之前创建一个数据库.
+
+如何管理[http://postgresql.org PostgreSQL]的详细指令参见[http://www.postgresql.org/docs/ PostgreSQL文档].
+一般来说, 下面足以创建一个名为`tracuser`的数据库用户, 和名为`trac`的数据库.
+{{{
+createuser -U postgres -E -P tracuser
+createdb -U postgres -O tracuser -E UTF8 trac
+}}}
+当运行`createuser`, 你将被提示用户`tracuser`的密码. 这个新用户不是超级用户, 将不允许创建其他数据库, 而且不允许创建其他角色. 运行trac实例不需要这些特权. 如果用户不需要密码, 从`createuser`命令中删除`-P`和`-E`选项. 并请注意, 数据库应该使用UTF-8创建. LATIN1编码将导致使用unicode的trac错误.  SQL_ASCII看来也能其作用.
+
+在一些默认配置(debian)中, 需要以`postgres`用户来运行`createuser`和`createdb`脚本.  例如:
+{{{
+sudo su - postgres -c 'createuser -U postgres -S -D -R -E -P tracuser'
+sudo su - postgres -c 'createdb -U postgres -O tracuser -E UTF8 trac'
+}}}
+
+Trac默认使用`public`schema, 但是你可以在连接字符串中指定一个不同的schema:
+{{{
+postgres://user:pass@server/database?schema=yourschemaname
+}}}
+
+=== MySQL连接字符串 ===
+
+如果你想使用MySQL, 你必须使用不同的链接字符串. 例如, 要连接同一台计算机上的名叫`trac`的MySQL数据库(允许以用户`johndoe`, 密码'letmein'来访问), mysql的连接字符串为:
+{{{
+mysql://johndoe:letmein@localhost:3306/trac
+}}}
+
+== 源代码仓库 ==
+
+首先你需要提供你的仓库的''类型''(例如`svn`, 这是默认的), 然后定位仓库的"路径".
+
+如果你不想和一个源代码仓库一起使用Trac, 只需将"路径"留为空.(这时, "类型"信息就没有关系了)
+
+在某些系统中, 你不但可以指定仓库的路径, 还可以指定仓库内的''范围''. 那么Trac只会显示与该范围下的文件和变更集有关的信息. Trac的Subversion后端支持此功能. 对于其他系统, 你需查看相应插件的文档.
+
+一个Subversion仓库的配置的例子:
+{{{
+[trac]
+repository_type = svn
+repository_dir = /path/to/your/repository
+}}}
+
+一个指定Subversion仓库范围的配置应是:
+{{{
+[trac]
+repository_type = svn
+repository_dir = /path/to/your/repository/scope/within/repos
+}}}
+
+== 目录结构 ==
+
+一份环境目录通常要包含下列文件和目录:
+
+ * `README` - 环境的简短介绍.
+ * `VERSION` - 包含了环境版本.
+ * `attachments` -此处存储wiki页面和传票的附件.
+ * `conf`
+   * `trac.ini` - 主要配置文件.请见[ZhTracIni 配置文件]
+ * `db`
+   * `trac.db` - SQLite数据库(如果你在使用SQLite的话).
+ * `htdocs` - 包含web资源的目录, 可被Genshi模板引用. '''''(仅0.11)'''''
+ * `log` - 日志文件的缺省目录(如果启用日志, 并提供了此日志文件的相对路径).
+ * `plugins` - 环境特定的[wiki:ZhTracPlugins 插件] (Python egg)
+ * `templates` - 定制环境特定的模板. '''''(仅0.10)'''''
+   * `site_css.cs` - 定制CSS规则.
+   * `site_footer.cs` - 定制页脚.
+   * `site_header.cs` - 定制页眉.
+ * `templates` - 定制Genshi环境特定模板. '''''(仅0.11)'''''
+   * `site.html` - 定制页头, 页脚和样式的方法, 见 TracInterfaceCustomization#SiteAppearance
+ * `wiki-macros` - 环境特定的[wiki:ZhWikiMacros Wiki 宏]. '''''(仅0.10)'''''
+
+  '''注意: 不要将Trac环境目录与源代码仓库目录弄混.'''
+
+上述结构稍微模仿了Subversion仓库的目录结构, 但他们没有, 也绝对不能位于同一位置.
+
+----
+原文版本: TracEnvironment[[BR]]
+相关信息: [ZhTracAdmin Trac管理],  [ZhTracBackup Trac备份],  [ZhTracIni Trac配置],  [ZhTracGuide Trac导览][[BR]]
+See also: TracAdmin,  TracBackup,  TracIni,  TracGuide

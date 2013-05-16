@@ -1,0 +1,130 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+  <xi:include href="layout.html" />
+  <xi:include href="macros.html" />
+  <head>
+    <title>$title</title>
+    <script type="text/javascript" src="${chrome.htdocs_location}js/wikitoolbar.js"></script>
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("#text").blur(function() {
+          $("#scroll_bar_pos").val(this.scrollTop);
+        }).get(0).scrollTop = $("#scroll_bar_pos").val();
+        $("#editrows").change(function() {
+          resizeTextArea("text", this.options[this.selectedIndex].value);
+        });
+      });
+    </script>
+  </head>
+
+  <body>
+    <div id="content" class="wiki">
+
+      <h1>Editing ${name_of(page.resource)}</h1>
+      <div py:if="merge" class="system-message">
+        <p>Someone else has modified that page since you started your edits.</p><br />
+        <p><b>If you save right away, you risk to revert those changes</b>
+        (highlighted below as deletions).</p><br />
+        <p>Please review all those changes and manually merge them with your
+        own changes. <br />
+        If you're unsure about what you're doing, please press <tt>Cancel</tt>
+        (losing your changes) and start editing the latest version of the page
+        again.</p>
+      </div>
+      <py:choose test="action">
+        <py:when test="'preview'">
+          <table id="info" summary="Revision info">
+            <tbody>
+              <tr><th scope="col">
+                Change information for future version ${page.version+1} (modified by $author):
+              </th></tr>
+              <tr><td class="message" xml:space="preserve">
+                ${wiki_to_html(context(page.resource(version=None)), comment)}
+              </td></tr>
+            </tbody>
+          </table>
+          <fieldset id="preview" py:choose="">
+            <legend>${diff and 'Review Changes' or 'Preview'} (<a href="#edit">skip</a>)</legend>
+            <div py:when="diff" class="diff">
+              <xi:include href="diff_div.html" py:with="no_id=True" />
+            </div>
+            <div py:otherwise="" class="wikipage" xml:space="preserve">
+              ${wiki_to_html(context(page.resource), page.text)}
+            </div>
+          </fieldset>
+        </py:when>
+        <py:when test="'collision'">
+          <div class="system-message">
+            Sorry, this page has been modified by somebody else since you started
+            editing. Your changes cannot be saved.
+          </div>
+        </py:when>
+      </py:choose>
+      <form id="edit" action="${href.wiki(page.name)}" method="post">
+        <fieldset class="iefix">
+          <input type="hidden" name="action" value="edit" />
+          <input type="hidden" name="version" value="$page.version" />
+          <input type="hidden" id="scroll_bar_pos" name="scroll_bar_pos"
+                 value="$scroll_bar_pos" />
+          <div id="rows">
+            <label for="editrows">Adjust edit area height:</label>
+            <select size="1" name="editrows" id="editrows" tabindex="43">
+              <option py:for="rows in range(8, 42, 4)" value="$rows"
+                      selected="${str(rows) == edit_rows or None}">
+                $rows
+              </option>
+            </select>
+          </div>
+          <p><textarea id="text" class="wikitext" name="text" cols="80" rows="$edit_rows">
+$page.text</textarea>
+          </p>
+        </fieldset>
+        <div id="help">
+          <b>Note:</b> See <a href="${href.wiki('WikiFormatting')}">WikiFormatting</a> and
+          <a href="${href.wiki('TracWiki')}">TracWiki</a> for help on editing wiki content.
+        </div>
+        <fieldset id="changeinfo">
+          <legend>Change information</legend>
+          <div id="changeinfo1">
+            <div py:if="authname == 'anonymous'" class="field">
+              <label>Your email or username:<br />
+                <input id="author" type="text" name="author" size="30" value="$author" />
+              </label>
+              <p py:if="author == 'anonymous'" class="hint">
+                E-mail address and user name can be saved in the <a href="${href.prefs()}">Preferences</a>.
+              </p>
+            </div>
+            <div class="field">
+              <label>Comment about this change (optional):<br />
+                <input id="comment" type="text" name="comment" size="60" value="$comment" />
+              </label>
+            </div>
+          </div>
+          <div py:if="'WIKI_ADMIN' in perm(page.resource)" id="changeinfo2" class="options">
+            <label><input type="checkbox" name="readonly" id="readonly"
+                          checked="${page.readonly or None}" />
+              Page is read-only
+            </label>
+          </div>
+        </fieldset>
+        <div class="buttons" py:choose="action">
+          <py:when test="'collision'">
+            <input type="submit" name="preview" value="Preview" disabled="disabled" />&nbsp;
+            <input type="submit" name="merge" value="Merge changes" accesskey="r" />&nbsp;
+            <input type="submit" name="save" value="Submit changes" disabled="disabled" />&nbsp;
+          </py:when>
+          <py:otherwise>
+            <input type="submit" name="preview" value="Preview Page" accesskey="r" />&nbsp;
+            <input type="submit" name="diff" value="Review Changes" accesskey="r" />&nbsp;
+            <input type="submit" id="save" name="save" value="Submit changes" />&nbsp;
+          </py:otherwise>
+          <input type="submit" name="cancel" value="Cancel" />
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

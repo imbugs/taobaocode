@@ -1,0 +1,89 @@
+{% extends "layouts/baseview.html" %}
+{% load i18n %}
+{% load short_uri %}
+
+{%block title%}{{project.name}} - issues{%endblock%}
+
+{%block ready_js%}
+
+$('#btn-search').click(function () {
+   $('#search-form #q').val($('#key-text').val());
+   $('#search-form').submit();
+});
+
+$(".btn_del_issue").click(function (e) {
+   var issue_id = $(this).attr('data-id');
+   var row = $('.issue-row-'+issue_id);
+   sure(e, '{%trans "Are you sure delete this issue?"%}', '{%trans "Yes"%}', '{%trans "No"%}', function() {
+       q_get("issue/del", {'issue_id':issue_id}, function (result) {
+           row.remove();           
+       }, function() {
+           show_info('{%trans "can not remove issue!"%}');
+        });
+   });	
+});
+
+
+{%endblock%}
+
+{%block body-menu%}
+<div class="body-menu">
+  <div class="left">
+    <ul class="bodynav">
+      {%for m in bodymenus%}
+      <li class="{{m.choice|yesno:'choice,'}}">
+	<a href="{{project|url}}{{m.uri}}">{{m.text}}</a>
+      </li>
+      {%endfor%}
+    </ul>
+  </div>
+</div>
+<div>
+  <a href="{{project|url}}issue/new/">{%trans "new issue"%}</a>
+</div>
+
+{%endblock%}
+
+{%block main-block%}
+<div class="issues-list-nav">
+  <form id="search-form" action="" method="POST">
+    {%csrf_token%}
+    <input id="q" name="q" type="hidden" value="{{key_text}}"></input>
+  </form>
+  <input id="key-text" type="text" value="{{key_text}}"></input>
+  <a id="btn-search" href="javascript:;" class="button">{%trans "search"%}</a>
+</div>
+<div class="bottom-line">
+  {% include "layouts/page-nav.html" %}
+</div>
+<table id="issues" cellspacing="0" class="wrapper">
+  {%for issue in page.object_list%}
+  <tr class="row issue-row-{{issue.id}}">
+    <td width="50">
+      <a href="{{issue.creator|url}}">
+	{%gravatar issue.creator.email issue.creator.name%}
+      </a>
+    </td>
+    <td>
+      <strong><a class="username" href="{{issue.creator|url}}">{{issue.creator}}</a></strong>
+      <em>{{issue.ctime}}</em> <strong>{{issue.comments_count}}</strong> comments</br>
+      <div class="title">
+	{%if issue.can_op%}
+	<span class="img-btn">
+	  <a href="javascript:;" class="btn_del_issue" data-id="{{issue.id}}">
+	    <img src="/img/remove.png" title="delete"></img>
+	  </a>
+	</span>
+	{%endif%}
+	<strong>[<span class="sptext">{{issue.status|choice:"0:open,1:closed"}}</span>]</strong>
+	#{{issue.id}} - 
+	<a href="{{project|url}}issue/{{issue.id}}/">{{issue.title}}</a>
+      </div>
+    </td>
+  </tr>
+  {%endfor%}
+</table>
+<div class="top-line">
+  {% include "layouts/page-nav.html" %}
+</div>
+{%endblock%}

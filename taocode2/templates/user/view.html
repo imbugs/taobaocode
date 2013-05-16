@@ -1,0 +1,152 @@
+{% extends "layouts/baseview.html" %}
+{% load i18n %}
+{% load short_uri %}
+{% load humanize %} 
+
+{%block title%}{{current_user.name}}{%endblock%}
+
+{% block extrastyle %}
+<script type="text/javascript" src="/js/sendmsg.js"></script>
+<script type="text/javascript">
+function do_pm_op(row, name, op) {
+    q_get("prj/"+op+"/"+name, {}, function(result) {
+	row.remove();
+    }, function() {
+	show_info('can not '+ op +' '+name);
+    });
+}
+
+function do_exit(row, name) {
+    do_pm_op(row, name, "exit");
+}
+
+function do_accept(row, name) {
+    do_pm_op(row, name, "accept");
+}
+
+function do_reject(row, name) {
+    do_pm_op(row, name, "reject");
+}
+</script>
+
+{% endblock %}
+
+{%block ready_js%}
+{%if user != current_user%}
+init_send_msg('{{current_user.name}}');
+{%else%}
+    $('tr[name^="joined-prj-"]').each(function() {
+	var prj_row = $(this);
+	var prj_name = prj_row.attr('name').substring('joined-prj-'.length);
+	prj_row.find('#exit').confirm('Are you sure exit '+prj_name+'?', 'Yes', 'No', function() {
+	    do_exit(prj_row, prj_name);
+	});
+	
+	var prj_op = prj_row.find('#joined-op');
+	prj_row.find('#accept').click(function() {
+	    do_accept(prj_op, prj_name);
+	});
+	
+	prj_row.find('#reject').confirm('Are you sure reject '+prj_name+'?', 'Yes', 'No', function() {
+	    do_reject(prj_row, prj_name);
+	});
+    });
+{%endif%}
+
+{%endblock%}
+{%block pagename%}
+<span class="username">{{current_user.name}}</span>
+{%endblock%}
+{%block main-block %}
+<table>
+  <tr>
+    <td class="img-btn">
+      <a href="{{current_user|url}}">
+	{%gravatar current_user.email current_user.name%}
+      </a>
+    </td>
+    <td valign="bottom">
+      {%if user != current_user and user.is_authenticated%}
+      <a id="send-msg" class="button" href="javascript:;" id="show">send message</a>
+      <!--
+      <a id="watch_op" href="javascript:;" onclick="watch_user('{{current_user.name}}', this);">
+	{{current_user.my_status|choice:"1:unfollow, 0:follow"}}
+      </a>
+      -->
+      {%endif%}
+    </td>
+  </tr>
+</table>
+
+<p>
+  <div>
+    <a href="mailto:{{current_user.email}}">mailto:{{current_user.email}}</a>
+  </div>
+  <div>{%trans "Last login:"%}<em>{{current_user.ctime|date}}</em></div>  
+</p>
+
+<table class="wrapper">
+  <tr align="left" valign="top">
+    <td width="550">
+      <h4>{%trans "Work logs"%}</h4>
+      {%for log in logs%}
+      {%include "user/activity.html" with log=log%}
+      {%endfor%}
+    </td>
+    <td>
+      <h4>{%trans "Owner projects"%}<em>({{owner_projects|length}})</em></h4>
+      <table cellspacing="0">
+	<tr><th></th><th width="100%"></th></tr>
+	{%for project in owner_projects%}
+	<tr class="row">
+	  {%include "project/prj-info.html" with project=project hide_owner_pic="1"%}
+	</tr>
+	{%empty%}
+	<tr>
+	  <td colspan="2">
+	    {%if current_user == user%}
+	    <strong>{%trans "Not owner projects!"%}</strong>
+	    <p>
+	      <a href="/new/">{%trans "Create your project now!"%}</a>
+	    </p>
+	    {%endif%}
+	  </td>
+	</tr>
+	{%endfor%}
+      </table>
+
+      <h4>{%trans "Joined projects"%}<em>({{joined_projects|length}})</em></h4>
+      <table cellspacing="0">
+	<tr><th></th><th width="240"></th><th></th></tr>
+	{%for jp in joined_projects%}
+	<tr class="row" name="joined-prj-{{jp.project.name}}">
+	  {%include "project/prj-info.html" with project=jp.project%}
+	  <td class="right">
+	    {%if current_user == user%}
+	    <strong>
+	      <a id="exit" href="javascript:;" >{%trans "EXIT"%}</a><br/>
+	      <span id="joined-op">
+		{%if jp.member_type == 0%}
+		<a id="accept" href="javascript:;">{%trans "ACCEPT"%}</a><br/>
+		<a id="reject" href="javascript:;">{%trans "REJECT"%}</a>
+		{%endif%}
+	    </strong>
+	  </td>
+	  {%endif%}
+	</tr>
+	{%endfor%}
+      </table>
+      <h4>{%trans "Watch projects"%}<em>({{watch_projects|length}})</em></h4>
+      <table cellspacing="0">
+	{%for wp in watch_projects%}
+	<tr class="row">
+	  {%include "project/prj-info.html" with project=wp.project%}
+	</tr>
+	{%endfor%}
+      </table>
+    </td>
+  </tr>
+</table>
+
+{%endblock%}
+

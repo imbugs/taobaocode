@@ -1,0 +1,8 @@
+{%load short_uri%}
+<td class="img-btn">
+  <a href="{{user|url}}"> {%gravatar user.email user.name%}</a>
+</td>
+<td width="100%" valign="top">      
+  <strong><a href="{{user|url}}">{{user}}</a></strong>
+  <em>{{user.last_login}}</em>  
+</td>

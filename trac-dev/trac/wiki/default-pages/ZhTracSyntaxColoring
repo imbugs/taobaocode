@@ -1,0 +1,108 @@
+= 源代码的颜色高亮显示 =
+Trac支持[wiki:ZhWikiFormatting Wiki格式]和[wiki:ZhTracBrowser Trac游览]中特定语言的源代码语法高亮显示.
+
+为了实现大量编程语言的语法高亮显示, Trac使用外部程序库.
+
+目前Trac支持语法高亮显示使用下列其中一个或多个安装包:
+
+ * [http://www.codento.com/people/mtr/genscript/ GNU Enscript] 
+ * [http://silvercity.sourceforge.net/ SilverCity]
+ * [http://pygments.pocoo.org/ Pygments] (但是对于0.10, 需要安装插件, 参见 [#AboutPygments 下面])
+
+要激活语法高亮显示, 只需安装其中一个(或一个以上)的安装包. 不需要进行额外的配置, 但要更改颜色, 请看`trac/htdocs/css/code.css`.
+
+如果你不知道为何trac不检测已安装的库, 请试着打开trac的日志. 它将显示出Trac是由于SilverCity 0.9.6而中断的. 使用当前的 0.9.7 或者旧一些的 0.9.5 http://trac.edgewall.org/wiki/TracFaq#why-is-my-css-code-not-being-highlighted-even-though-i-have-silvercity-installed
+
+当可用时, Trac自动会尽可能优于Enscript使用!SilverCity, (见下面的注释). 
+
+如果没有可用的安装包, Trac会将数据显示为纯文本.
+
+'''注意''': Enscript支持很多语言, 但总的说来!SilverCity更快, 因为它是一个程序库, 并且不在外部进程中执行.
+
+=== 关于SilverCity ===
+!SilverCity使用[http://www.scintilla.org/ Scintilla]中的词法分析程序. Scintilla比!SilverCit支持更多语言. 添加一种Scintilla支持的语言到!SilverCity中并非很困难. 请见[http://projects.edgewall.com/trac/wiki/SilverCityAddLanguage 添加语言到SilverCity].
+
+=== 关于Pygments ===
+
+从trac 0.11开始, [http://pygments.org/ pygments]将是新的默认语法高亮器. 它是用纯python实现的高亮库, 非常快, 容易扩展和 [http://pygments.org/docs/ 有良好的文档]. 虽然它不象 Enscript 和 Scintilla 支持那么多语言, 其整体输出质量却要好得多.
+
+要想在trac 0.11使用 pygments，你只需要安装 pygments 0.5.1 及其更高版本. 如果你也想在trac 0.10中使用, 你需要从trac hacks中安装 [http://trac-hacks.org/wiki/TracPygmentsPlugin TracPygmentsPlugin]. 如果你遇到任何缺陷, 请在[http://dev.pocoo.org/projects/pygments/ pygments trac]中创建一张针对Pygments的传票.
+
+由于pygments支持的语言每星期都在增长, 下面的列表极可能是已经过时了. 请在pygments网站上查看[http://pygments.org/docs/lexers/ 支持字典]页面.
+
+
+== 语法颜色高亮支持 ==
+
+|| || !SilverCity || Enscript || Pygments ||
+|| Ada      ||   || X || ||
+|| Asm      ||   || X || ||
+|| Apache Conf (htaccess)) || || || X ||
+|| * ASP    || X || X || ||
+|| * C      || X || X || X ||
+|| * C#     ||   || X(2) || X ||
+|| * C++    || X || X || X ||
+|| * Java   || X(4)|| X || X ||
+|| Awk      ||   || X || ||
+|| Boo || || || X ||
+|| CSS      || X ||   || X ||
+|| Python Doctests || || || X ||
+|| Diff     ||   || X || X ||
+|| Eiffel   ||   || X || ||
+|| Elisp    ||   || X || ||
+|| Fortran  ||   || X(3) || ||
+|| Haskell  ||   || X || X ||
+|| Genshi || || || X ||
+|| HTML     || X || X || X ||
+|| IDL      ||   || X || ||
+|| INI || || || X ||
+|| Javascript || X || X || X ||
+|| Lua || || || X ||
+|| m4       ||   || X || ||
+|| Makefile ||   || X || X ||
+|| Mako || || || X ||
+|| Matlab   ||   || X (5) || ||
+|| Mygthy || || || X ||
+|| Objective-C|| || X || ||
+|| OCaml    ||   ||   || X ||
+|| Pascal   ||   || X || X ||
+|| * Perl   || X || X || X ||
+|| * PHP    || X ||   || X ||
+|| PSP      || X ||   || ||
+|| Pyrex    ||   || X || ||
+|| * Python || X || X || X ||
+|| * Ruby   || X || X (1) || X ||
+|| Scheme   ||   || X || X ||
+|| Shell    ||   || X || X ||
+|| Smarty || || || X ||
+|| SQL      || X || X || X ||
+|| Troff    ||   || X || X ||
+|| TCL      ||   || X || ||
+|| Tex      ||   || X || X ||
+|| Verilog  || X(4) || X || ||
+|| VHDL     ||   || X || ||
+|| Visual Basic |||| X || X ||
+|| VRML     ||   || X || ||
+|| XML      || X ||  || X ||
+
+''(*) 支持在[wiki:ZhWikiFormatting Wiki文本]中使用[WikiProcessors Wiki解析器]的内嵌代码块.''
+
+''(1) 在Enscript发行版中不包含Ruby高亮显示. Ruby的高亮显示规则可以从http://neugierig.org/software/ruby/得到.''
+
+''(2) 在Enscript发行版中不包含C#高亮显示. C#的高亮显示规则可以从http://wiki.hasno.info/index.php/Csharp.st得到.''
+
+''(3) Fortran: Enscript安装包仅仅支持固定的源码形式. Fortran 90x/2003的高亮规则可能从此处获得: http://wiki.hasno.info/index.php/F90.st
+
+''(4) 从2006-11-23发布的Silvercity 0.9.7起
+
+''(5) 默认`.m`文件被认为是Objective-C文件. 要将`.m`文件处理为MATLAB文件, 在[wiki:TracIni#mimeviewer-section "trac.ini的[mimeviewer]段"]中, 往"mime_map"设置中增加"text/x-matlab:m".
+
+== 附加软件hn ==
+ * GNU Enscript -- http://directory.fsf.org/GNU/enscript.html
+ * GNU Enscript for Windows -- http://gnuwin32.sourceforge.net/packages/enscript.htm
+ * !SilverCity -- http://silvercity.sf.net/
+ * Pygments -- http://pygments.org/
+
+----
+原文版本: TracSyntaxColoring[[BR]]
+相关信息: [ZhWikiProcessors Wiki解析器], [ZhWikiFormatting Wiki格式], [ZhTracWiki Trac内置Wiki], [ZhTracBrowser Trac游览][[BR]]
+See also: WikiProcessors, WikiFormatting, TracWiki, TracBrowser

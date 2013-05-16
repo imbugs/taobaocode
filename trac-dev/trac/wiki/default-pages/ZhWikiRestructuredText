@@ -1,0 +1,182 @@
+= Trac中新结构化文本支持 =
+
+Trac支持在[ZhWikiFormatting Wiki格式]文本中使用''新结构化文本''(RST)作为Wiki标记的替代使用.
+
+摘自新结构化文本网页:
+ "''新结构化文本是一种容易阅读, WYTIWYG~'''所想即所得'''纯文本标记语法和解析系统. 它用于内嵌程序文档(例如Python的docstring),  快速创建简单网页, 以及独立文档."新结构化文本是为扩展特定应用领域而设计的."''
+
+=== 要求 ===
+注意, 要激活Trac中的RST支持, 必须安装python docutils安装包. 如果你的操作系统尚没有此安装包, 你可以从[http://docutils.sourceforge.net/rst.html RST网站]下载.
+
+=== 更多关于RST信息 ===
+
+ * 新结构化文本网站 -- http://docutils.sourceforge.net/rst.html
+ * RST快速参考手册 -- http://docutils.sourceforge.net/docs/rst/quickref.html
+
+----
+
+== 在Trac中使用RST ==
+要指定RST来解析某一段文本, 使用'' rst'' 处理器标记.
+
+=== 新结构化文本中的Trac链接 ===
+
+ * Trac提供一个自定义的RST参考指令'trac'以允许RST文本内使用[ZhTracLinks Trac链接].
+
+ 例子:
+ {{{
+ {{{
+ #!rst
+ This is a reference to |a ticket|
+
+ .. |a ticket| trac:: #42
+ }}}
+ }}}
+
+ 关于所有"trac''指令的完整的例子, 请看[ZhWikiRestructuredTextLinks 新结构化文本中的Trac链接].
+
+ * 可以用更简单的方法在RST中创建[ZhTracLinks Trac链接]:通过使用自定义'':trac:''链接命名方案.
+
+ 例子:
+ {{{
+ {{{
+ #!rst
+ This is a reference to ticket `#12`:trac:
+
+ To learn how to use Trac,  see `TracGuide`:trac:
+ }}}
+ }}}
+
+=== 新结构化文本中的语法高亮显示 ===
+
+在ReST中也有一个关于如何实现[ZhTracSyntaxColoring Trac语法高亮显示]的指令, 该指令叫做code-block.
+
+例子:
+
+{{{
+{{{
+#!rst
+
+.. code-block:: python
+
+ class Test:
+
+    def TestFunction(self):
+        pass
+
+}}}
+}}}
+
+会生成如下结果.
+
+{{{
+#!rst
+
+.. code-block:: python
+
+ class Test:
+
+    def TestFunction(self):
+        pass
+
+}}}
+
+=== 新结构化文本中的Wiki宏 ===
+
+要在ReST中执行[ZhWikiMacros Wiki宏], 你可以使用与语法高亮显示相同的指令, 即code-block. 要使其起作用, 你必须使用应用#801的trac版本.
+
+=== Wiki宏实例 ===
+
+{{{
+{{{
+#!rst
+
+.. code-block:: RecentChanges
+
+   Trac,3
+
+}}}
+}}}
+
+会生成如下结果.
+
+     [[RecentChanges(Trac,3)]]
+
+或更准确的WikiMacro(例如: 语法):
+
+{{{
+{{{
+#!rst
+
+:code-block:`RecentChanges:Trac,3`
+}}}
+}}}
+
+=== 更多的ReST例子 ===
+
+下面的例子大部分应该是无需说明的:
+
+
+{{{
+#!html
+<pre class="wiki">{{{
+#!rst
+表头
+=============
+新结构化文档 是种 **美妙的体验**. 官网_.
+
+表格:
+
+=====  =====  ========
+   输入        输出
+------------  --------
+ 甲     乙     甲 戓 乙
+=====  =====  ========
+徦      徦      徦
+真      徦      真
+徦      真      真
+真      真      真
+=====  =====  ========
+
+新结构化文本Trac链接
+--------------------
+
+参考传票 `#42`:trac:.
+
+.. _官网: http://docutils.sourceforge.net/rst.html}}}</pre>
+}}}
+
+
+会生成如下结果.
+
+{{{
+#!rst
+表头
+=============
+新结构化文档 是种 **美妙的体验**. 官网_.
+
+表格:
+
+=====  =====  ========
+   输入        输出
+------------  --------
+ 甲     乙     甲 戓 乙
+=====  =====  ========
+徦      徦      徦
+真      徦      真
+徦      真      真
+真      真      真
+=====  =====  ========
+
+新结构化文本Trac链接
+--------------------
+
+参考传票 `#42`:trac:.
+
+.. _官网: http://docutils.sourceforge.net/rst.html
+}}}
+
+
+----
+原文版本: WikiRestructuredText[[BR]]
+相关信息: [ZhWikiRestructuredTextLinks 新结构化文本中的Trac链接], [ZhWikiProcessors Wiki解析器], [ZhWikiFormatting Wiki格式][[BR]]
+See also: WikiRestructuredTextLinks, WikiProcessors, WikiFormatting

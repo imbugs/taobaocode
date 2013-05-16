@@ -1,0 +1,1334 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-10-10 16:38+0800\n"
+"PO-Revision-Date: 2011-03-03 16:04+0800\n"
+"Last-Translator: jonny <quan.jonny@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: .\apps\user\forms.py:28
+msgid "user id"
+msgstr ""
+
+#: .\apps\user\forms.py:31
+#, fuzzy
+msgid "login account"
+msgstr "latest login count"
+
+#: .\apps\user\forms.py:42
+#, fuzzy
+msgid "password"
+msgstr "old password"
+
+#: .\apps\user\forms.py:48
+#, fuzzy
+msgid "password(replay)"
+msgstr "password error"
+
+#: .\apps\user\forms.py:52 .\apps\user\forms.py:67
+#, fuzzy
+msgid "password must same as twice"
+msgstr "old password not match"
+
+#: .\apps\user\forms.py:55
+msgid "email address"
+msgstr ""
+
+#: .\apps\user\forms.py:56
+msgid "eg:user@example.org"
+msgstr ""
+
+#: .\apps\user\forms.py:59
+msgid "accept privacy"
+msgstr ""
+
+#: .\apps\user\forms.py:60
+msgid "must accept privacy"
+msgstr ""
+
+#: .\apps\user\forms.py:76
+msgid "E-mail"
+msgstr ""
+
+#: .\apps\user\forms.py:84
+msgid ""
+"That e-mail address doesn't have an associated user account. Are you sure "
+"you've registered?"
+msgstr ""
+
+#: .\apps\user\views.py:280
+#, fuzzy
+msgid "Email Not Exist"
+msgstr "email not exist"
+
+#: .\apps\user\views.py:284 .\apps\user\views.py:298
+msgid "InValid Request"
+msgstr ""
+
+#: .\apps\user\views.py:294
+#, fuzzy
+msgid "Name Not Exist"
+msgstr "email not exist"
+
+#: .\apps\wiki\parser.py:313
+#, python-format
+msgid "HTML parsing error: %(message)s"
+msgstr ""
+
+#: .\apps\wiki\parser.py:318
+msgid ""
+"Error: Forbidden character sequence \"--\" in htmlcomment wiki code block"
+msgstr ""
+
+#: .\apps\wiki\parser.py:398
+#, python-format
+msgid "!#%(name)s must contain at most one table"
+msgstr ""
+
+#: .\apps\wiki\parser.py:402
+#, python-format
+msgid "!#%(name)s must contain at least one table cell (and table cells only)"
+msgstr ""
+
+#: .\templates\index.html.py:14
+#, fuzzy
+msgid "Feature projects"
+msgstr "create project"
+
+#: .\templates\index.html.py:28
+msgid "Last logs"
+msgstr ""
+
+#: .\templates\index.html.py:36
+#, fuzzy
+msgid "Active Users"
+msgstr "Activest Users"
+
+#: .\templates\index.html.py:51
+#, fuzzy
+msgid "Hot projects"
+msgstr "hot project"
+
+#: .\templates\index.html.py:61
+#, fuzzy
+msgid "New projects"
+msgstr "view project"
+
+#: .\templates\privacy.html.py:4
+msgid "See also:"
+msgstr ""
+
+#: .\templates\issue\list.html.py:17 .\templates\issue\view.html.py:32
+msgid "Are you sure delete this issue?"
+msgstr ""
+
+#: .\templates\issue\list.html.py:17 .\templates\issue\view.html.py:12
+#: .\templates\issue\view.html.py:32 .\templates\issue\view.html.py:41
+#: .\templates\message\list.html.py:37 .\templates\wiki\view.html.py:7
+#: .\templates\wiki\view.html.py:30
+msgid "Yes"
+msgstr ""
+
+#: .\templates\issue\list.html.py:17 .\templates\issue\view.html.py:12
+#: .\templates\issue\view.html.py:32 .\templates\issue\view.html.py:41
+#: .\templates\message\list.html.py:37 .\templates\wiki\view.html.py:7
+#: .\templates\wiki\view.html.py:30
+msgid "No"
+msgstr ""
+
+#: .\templates\issue\list.html.py:21
+msgid "can not remove issue!"
+msgstr ""
+
+#: .\templates\issue\list.html.py:42
+msgid "new issue"
+msgstr ""
+
+#: .\templates\issue\list.html.py:54
+#, fuzzy
+msgid "search"
+msgstr "search labs"
+
+#: .\templates\issue\new.html.py:42
+msgid "Append file"
+msgstr ""
+
+#: .\templates\issue\new.html.py:51
+#, fuzzy
+msgid "create issue"
+msgstr "create"
+
+#: .\templates\issue\view.html.py:12
+msgid "Are you sure delete this comment?"
+msgstr ""
+
+#: .\templates\issue\view.html.py:16
+msgid "can not del comment"
+msgstr ""
+
+#: .\templates\issue\view.html.py:23
+#, fuzzy
+msgid "need comment content!"
+msgstr "comment content"
+
+#: .\templates\issue\view.html.py:41
+msgid "Are you sure"
+msgstr ""
+
+#: .\templates\issue\view.html.py:57 .\templates\message\list.html.py:85
+msgid "delete"
+msgstr "delete"
+
+#: .\templates\issue\view.html.py:70
+#, fuzzy
+msgid "comments"
+msgstr "comment"
+
+#: .\templates\issue\view.html.py:121
+#, fuzzy
+msgid "Post comment"
+msgstr "comment"
+
+#: .\templates\issue\view.html.py:124 .\templates\user\login.html.py:31
+#: .\templates\user\password_reset_done.html.py:8
+msgid "login"
+msgstr "login"
+
+#: .\templates\issue\view.html.py:124
+#, fuzzy
+msgid "for new comment"
+msgstr "view comments"
+
+#: .\templates\layouts\baseview.html.py:82
+msgid "About"
+msgstr "About"
+
+#: .\templates\layouts\baseview.html.py:83
+msgid "Privacy"
+msgstr "Privacy"
+
+#: .\templates\layouts\page-nav.html.py:7
+msgid "records!"
+msgstr ""
+
+#: .\templates\layouts\page-nav.html.py:9
+msgid "first"
+msgstr ""
+
+#: .\templates\layouts\page-nav.html.py:11
+#: .\templates\layouts\page-nav.html.py:13
+#, fuzzy
+msgid "prev"
+msgstr "Preview"
+
+#: .\templates\layouts\page-nav.html.py:16
+#: .\templates\layouts\page-nav.html.py:18
+#, fuzzy
+msgid "next"
+msgstr "next page"
+
+#: .\templates\layouts\page-nav.html.py:20
+msgid "last"
+msgstr ""
+
+#: .\templates\layouts\user-nav.html.py:5
+msgid "Welcome"
+msgstr "Welcome"
+
+#: .\templates\layouts\user-nav.html.py:12
+msgid "Messages"
+msgstr "Messages"
+
+#: .\templates\layouts\user-nav.html.py:15
+#, fuzzy
+msgid "Logout"
+msgstr "Log out"
+
+#: .\templates\layouts\user-nav.html.py:18
+#, fuzzy
+msgid "Weibo Login"
+msgstr "Login"
+
+#: .\templates\layouts\user-nav.html.py:19
+msgid "Taobao Login"
+msgstr ""
+
+#: .\templates\layouts\user-nav.html.py:20
+#: .\templates\layouts\user-nav.html.py:21
+#, fuzzy
+msgid "or"
+msgstr "more"
+
+#: .\templates\layouts\user-nav.html.py:21
+#: .\templates\open\taobao\login_ext.html.py:128
+#: .\templates\open\wb\login_ext.html.py:129
+msgid "Login"
+msgstr "Login"
+
+#: .\templates\layouts\user-nav.html.py:22
+msgid "Register"
+msgstr "Register"
+
+#: .\templates\layouts\user-nav.html.py:27
+msgid "Projects"
+msgstr "Projects"
+
+#: .\templates\layouts\user-nav.html.py:32
+msgid "README"
+msgstr ""
+
+#: .\templates\mail\change_email.html.py:3
+#, fuzzy
+msgid "change email"
+msgstr "change"
+
+#: .\templates\mail\change_email.html.py:10
+msgid "You can use this link to change your new email at our site!"
+msgstr ""
+
+#: .\templates\mail\reset_password.html.py:4
+#: .\templates\user\password_reset.html.py:13
+#: .\templates\user\password_reset_form.html.py:12
+msgid "reset password"
+msgstr "reset password"
+
+#: .\templates\mail\reset_password.html.py:11
+msgid "You can use this link to change your new password at our site!"
+msgstr ""
+
+#: .\templates\main\files.html.py:25
+#, fuzzy
+msgid "Delete"
+msgstr "delete"
+
+#: .\templates\message\list.html.py:12
+msgid "del message ok!"
+msgstr ""
+
+#: .\templates\message\list.html.py:15
+msgid "can not del message!"
+msgstr ""
+
+#: .\templates\message\list.html.py:21
+msgid "move message ok!"
+msgstr ""
+
+#: .\templates\message\list.html.py:24
+msgid "can not move message!"
+msgstr ""
+
+#: .\templates\message\list.html.py:37
+msgid "Are you sure delete this message?"
+msgstr ""
+
+#: .\templates\message\list.html.py:78
+#, fuzzy
+msgid "recovery"
+msgstr "revert"
+
+#: .\templates\message\list.html.py:82
+msgid "reply"
+msgstr ""
+
+#: .\templates\open\taobao\login_ext.html.py:4
+#: .\templates\open\taobao\login_ext.html.py:90
+msgid "Taobao Login Ext"
+msgstr ""
+
+#: .\templates\open\taobao\login_ext.html.py:31
+#: .\templates\open\wb\login_ext.html.py:31
+msgid "Name exist,Confirm binding Account?"
+msgstr ""
+
+#: .\templates\open\taobao\login_ext.html.py:48
+#: .\templates\open\wb\login_ext.html.py:48
+msgid "Email exist,Confirm binding Account?"
+msgstr ""
+
+#: .\templates\open\taobao\login_ext.html.py:63
+#: .\templates\open\taobao\login_ext.html.py:71
+#: .\templates\open\wb\login_ext.html.py:63
+#: .\templates\open\wb\login_ext.html.py:71
+#, fuzzy
+msgid "password not match"
+msgstr "two new password not match"
+
+#: .\templates\open\taobao\login_ext.html.py:78
+#: .\templates\open\wb\login_ext.html.py:78
+msgid "binding account must check password first"
+msgstr ""
+
+#: .\templates\open\taobao\login_ext.html.py:99
+#: .\templates\open\wb\login_ext.html.py:100
+#, fuzzy
+msgid "UserName"
+msgstr "userName"
+
+#: .\templates\open\taobao\login_ext.html.py:103
+#: .\templates\open\wb\login_ext.html.py:104
+msgid "Email"
+msgstr ""
+
+#: .\templates\open\taobao\login_ext.html.py:113
+#: .\templates\open\wb\login_ext.html.py:114
+#, fuzzy
+msgid "BindAccount"
+msgstr "latest login count"
+
+#: .\templates\open\taobao\login_ext.html.py:115
+#: .\templates\open\wb\login_ext.html.py:116
+#, fuzzy
+msgid "Bind Reged Account"
+msgstr "latest login count"
+
+#: .\templates\open\taobao\login_ext.html.py:118
+#: .\templates\open\wb\login_ext.html.py:119
+#, fuzzy
+msgid "Password"
+msgstr "old password"
+
+#: .\templates\open\wb\login_ext.html.py:4
+#: .\templates\open\wb\login_ext.html.py:90
+msgid "Weibo Login Ext"
+msgstr ""
+
+#: .\templates\repos\browse.html.py:10
+#, fuzzy
+msgid "Check out:"
+msgstr "Check out"
+
+#: .\templates\repos\browse.html.py:27
+msgid "Path"
+msgstr ""
+
+#: .\templates\repos\browse.html.py:28 .\templates\repos\logs.html.py:9
+#: .\templates\repos\view_diff.html.py:28
+#: .\templates\repos\view_log.html.py:25
+msgid "Revision"
+msgstr ""
+
+#: .\templates\repos\browse.html.py:29 .\templates\repos\logs.html.py:11
+msgid "Author"
+msgstr ""
+
+#: .\templates\repos\browse.html.py:30
+msgid "Size"
+msgstr ""
+
+#: .\templates\repos\browse.html.py:31
+msgid "Last Changed"
+msgstr ""
+
+#: .\templates\repos\browse.html.py:58
+msgid "View all revisions"
+msgstr ""
+
+#: .\templates\repos\logs.html.py:4 .\templates\repos\logs.html.py:29
+#, fuzzy
+msgid "View changes"
+msgstr "change"
+
+#: .\templates\repos\logs.html.py:10
+#, fuzzy
+msgid "Message"
+msgstr "Messages"
+
+#: .\templates\repos\logs.html.py:12
+#, fuzzy
+msgid "Date"
+msgstr "create"
+
+#: .\templates\repos\view_log.html.py:26
+msgid "Added by"
+msgstr ""
+
+#: .\templates\user\change_password.html.py:11
+msgid "change"
+msgstr "change"
+
+#: .\templates\user\edit_my.html.py:75
+msgid "Public Info"
+msgstr ""
+
+#: .\templates\user\edit_my.html.py:85 .\templates\user\edit_my.html.py:102
+#: .\templates\wiki\edit.html.py:30
+msgid "Save"
+msgstr ""
+
+#: .\templates\user\edit_my.html.py:89
+msgid "Change Email"
+msgstr ""
+
+#: .\templates\user\edit_my.html.py:93
+msgid "You need verfiy the code with new email to change mail"
+msgstr ""
+
+#: .\templates\user\edit_my.html.py:95
+msgid "New Email"
+msgstr ""
+
+#: .\templates\user\edit_my.html.py:114
+msgid "Change your avatar at"
+msgstr ""
+
+#: .\templates\user\edit_my.html.py:117
+msgid "We're using"
+msgstr ""
+
+#: .\templates\user\login.html.py:14
+msgid "Sign in"
+msgstr ""
+
+#: .\templates\user\login.html.py:22
+msgid "Remember(a week)"
+msgstr ""
+
+#: .\templates\user\login.html.py:32
+#, fuzzy
+msgid "Forgot password"
+msgstr "reset password"
+
+#: .\templates\user\password_reset_done.html.py:6
+msgid "your password is reset now!"
+msgstr ""
+
+#: .\templates\user\password_reset_done.html.py:8
+#, fuzzy
+msgid "please"
+msgstr "page"
+
+#: .\templates\user\view.html.py:85
+#, fuzzy
+msgid "Last login:"
+msgstr "latest login ip"
+
+#: .\templates\user\view.html.py:91
+msgid "Work logs"
+msgstr ""
+
+#: .\templates\user\view.html.py:97
+#, fuzzy
+msgid "Owner projects"
+msgstr "my projects"
+
+#: .\templates\user\view.html.py:108
+#, fuzzy
+msgid "Not owner projects!"
+msgstr "my join projects"
+
+#: .\templates\user\view.html.py:110
+#, fuzzy
+msgid "Create your project now!"
+msgstr "create project"
+
+#: .\templates\user\view.html.py:118
+#, fuzzy
+msgid "Joined projects"
+msgstr "join project"
+
+#: .\templates\user\view.html.py:127
+msgid "EXIT"
+msgstr ""
+
+#: .\templates\user\view.html.py:130
+msgid "ACCEPT"
+msgstr ""
+
+#: .\templates\user\view.html.py:131
+msgid "REJECT"
+msgstr ""
+
+#: .\templates\user\view.html.py:139
+#, fuzzy
+msgid "Watch projects"
+msgstr "hot project"
+
+#: .\templates\wiki\changes.html.py:11 .\templates\wiki\view_change.html.py:15
+#, fuzzy
+msgid "Changes:"
+msgstr "change"
+
+#: .\templates\wiki\changes.html.py:16 .\templates\wiki\list.html.py:11
+msgid "last author"
+msgstr ""
+
+#: .\templates\wiki\changes.html.py:17 .\templates\wiki\list.html.py:13
+#, fuzzy
+msgid "modify time"
+msgstr "Modify"
+
+#: .\templates\wiki\changes.html.py:25
+msgid "raw"
+msgstr ""
+
+#: .\templates\wiki\changes.html.py:26
+#, fuzzy
+msgid "diff"
+msgstr "Modify"
+
+#: .\templates\wiki\edit.html.py:31
+#, fuzzy
+msgid "Preview"
+msgstr "Preview"
+
+#: .\templates\wiki\list.html.py:9
+#, fuzzy
+msgid "page name"
+msgstr "project name"
+
+#: .\templates\wiki\list.html.py:10
+msgid "author"
+msgstr ""
+
+#: .\templates\wiki\list.html.py:12
+#, fuzzy
+msgid "create time"
+msgstr "create at"
+
+#: .\templates\wiki\view.html.py:7
+msgid "Are you sure delete this page?"
+msgstr ""
+
+#: .\templates\wiki\view.html.py:30
+msgid "Are you sure delete this file?"
+msgstr ""
+
+#: .\templates\wiki\view.html.py:34
+msgid "can not remove this file!"
+msgstr ""
+
+#: .\templates\wiki\view.html.py:90
+msgid "submit"
+msgstr "submit"
+
+#: .\templates\wiki\view.html.py:99
+msgid "Not found page"
+msgstr ""
+
+#: .\templates\wiki\view.html.py:102
+#, fuzzy
+msgid "Create Page"
+msgstr "create at"
+
+#: .\templates\wiki\view.html.py:105
+msgid "All wiki pages"
+msgstr ""
+
+#, fuzzy
+#~ msgid "Bind Account"
+#~ msgstr "latest login count"
+
+#, fuzzy
+#~ msgid "nick name"
+#~ msgstr "reg nick"
+
+#, fuzzy
+#~ msgid "display name"
+#~ msgstr "project name"
+
+#~ msgid "License / GPLv2"
+#~ msgstr "License / GPLv2"
+
+#~ msgid "Home"
+#~ msgstr "Home"
+
+#~ msgid "Change Password"
+#~ msgstr "Change Password"
+
+#~ msgid "join"
+#~ msgstr "join"
+
+#~ msgid "register"
+#~ msgstr "register"
+
+#~ msgid "taocode"
+#~ msgstr "taocode"
+
+#~ msgid "new password:"
+#~ msgstr "new password:"
+
+#~ msgid "join project approvl notice"
+#~ msgstr "join project approvl notice"
+
+#~ msgid "Revision should be a number."
+#~ msgstr "Revision should be a number."
+
+#~ msgid "Non-existant node at the path/revision comparing from."
+#~ msgstr "Non-existant node at the path/revision comparing from."
+
+#~ msgid "Non-existant node at the path/revision comparing to."
+#~ msgstr "Non-existant node at the path/revision comparing to."
+
+#~ msgid "Unique label for the repository for use in the URL"
+#~ msgstr "Unique label for the repository for use in the URL"
+
+#~ msgid "Example: svn://example.com or file:///svn/"
+#~ msgstr "Example: svn://example.com or file:///svn/"
+
+#~ msgid "Externally facing URI for the repository, if available"
+#~ msgstr "Externally facing URI for the repository, if available"
+
+#~ msgid "repositories"
+#~ msgstr "repositories"
+
+#~ msgid ""
+#~ "repository requires authentication, but no username and password available"
+#~ msgstr ""
+#~ "repository requires authentication, but no username and password available"
+
+#~ msgid "<pre>(binary)</pre>"
+#~ msgstr "<pre>(binary)</pre>"
+
+#~ msgid "Add a repository"
+#~ msgstr "Add a repository"
+
+#~ msgid "<label> <root>"
+#~ msgstr "<label> <root>"
+
+#~ msgid "Externally facing URI for the repository, if available."
+#~ msgstr "Externally facing URI for the repository, if available."
+
+#~ msgid "If browsing the repository requires authentication."
+#~ msgstr "If browsing the repository requires authentication."
+
+#~ msgid "Username to use when connecting to the repository."
+#~ msgstr "Username to use when connecting to the repository."
+
+#~ msgid "Password to use when connecting to the repository."
+#~ msgstr "Password to use when connecting to the repository."
+
+#~ msgid "wrong number of arguments, label and root required"
+#~ msgstr "wrong number of arguments, label and root required"
+
+#~ msgid "Repository %s added"
+#~ msgstr "Repository %s added"
+
+#~ msgid "Clean up expired cached files"
+#~ msgstr "Clean up expired cached files"
+
+#~ msgid "Deleting %s nodes..."
+#~ msgstr "Deleting %s nodes..."
+
+#~ msgid "Get repository changes"
+#~ msgstr "Get repository changes"
+
+#~ msgid "<repository repository ...>"
+#~ msgstr "<repository repository ...>"
+
+#~ msgid "Syncing %(label)s..."
+#~ msgstr "Syncing %(label)s..."
+
+#~ msgid "Site Info Title"
+#~ msgstr "Taobao code open Source"
+
+#~ msgid "Site Info Description"
+#~ msgstr "Site Info Description"
+
+#~ msgid "creative already exist"
+#~ msgstr "creative already exist"
+
+#~ msgid "publish creative success"
+#~ msgstr "publish creative success"
+
+#~ msgid "publish creative failed"
+#~ msgstr "publish creative failed"
+
+#~ msgid "email format error"
+#~ msgstr "email format error"
+
+#~ msgid "already exist email reged"
+#~ msgstr "already exist email"
+
+#~ msgid "save remark success"
+#~ msgstr "save remark success"
+
+#~ msgid "project already exist"
+#~ msgstr "project already exist"
+
+#~ msgid "apply project failed"
+#~ msgstr "apply project failed"
+
+#~ msgid "create project success"
+#~ msgstr "create project success"
+
+#~ msgid "update project success"
+#~ msgstr "update project success"
+
+#~ msgid "password reset success,send mail to "
+#~ msgstr "password reset success,send mail to "
+
+#~ msgid "can't found your email"
+#~ msgstr "can't found your email"
+
+#~ msgid "password modify success"
+#~ msgstr "password modify success"
+
+#~ msgid "sync success"
+#~ msgstr "sync success"
+
+#~ msgid "creative home title"
+#~ msgstr "creative home title"
+
+#~ msgid "latest creatives"
+#~ msgstr "latest creatives"
+
+#~ msgid "publish at"
+#~ msgstr "publish at"
+
+#~ msgid "view"
+#~ msgstr "view"
+
+#~ msgid "subscribe"
+#~ msgstr "subscribe"
+
+#~ msgid "count creatives"
+#~ msgstr "count creatives"
+
+#~ msgid "creative comment title"
+#~ msgstr "creative comment"
+
+#~ msgid "comment userName Label"
+#~ msgstr "comment userName"
+
+#~ msgid "close button"
+#~ msgstr "close button"
+
+#~ msgid "creative subscribe title"
+#~ msgstr "creative subscribe"
+
+#~ msgid "innet msg"
+#~ msgstr "innet msg"
+
+#~ msgid "publish your creative title"
+#~ msgstr "publish your creative"
+
+#~ msgid "select creative category label"
+#~ msgstr "creative category"
+
+#~ msgid "creative name label"
+#~ msgstr "creative name"
+
+#~ msgid "creative description label"
+#~ msgstr "creative description"
+
+#~ msgid "creative tags label"
+#~ msgstr "creative tags "
+
+#~ msgid "tags hint label"
+#~ msgstr "tags hint"
+
+#~ msgid "reset button"
+#~ msgstr "reset"
+
+#~ msgid "Creative"
+#~ msgstr "Creative"
+
+#~ msgid "Ding"
+#~ msgstr "Ding"
+
+#~ msgid "Cai"
+#~ msgstr "Cai"
+
+#~ msgid "Ding yi xia"
+#~ msgstr "Ding"
+
+#~ msgid "Cai yi jiao"
+#~ msgstr "Cai"
+
+#~ msgid "latest update"
+#~ msgstr "latest update"
+
+#~ msgid "description"
+#~ msgstr "description"
+
+#~ msgid "memo"
+#~ msgstr "memo"
+
+#~ msgid "hidden"
+#~ msgstr "hidden"
+
+#~ msgid "edit"
+#~ msgstr "edit"
+
+#~ msgid "view memo"
+#~ msgstr "view memo"
+
+#~ msgid "add memo"
+#~ msgstr "add memo"
+
+#~ msgid "already subscribe"
+#~ msgstr "already subscribe"
+
+#~ msgid "comment list"
+#~ msgstr "comment list"
+
+#~ msgid "about title"
+#~ msgstr "about "
+
+#~ msgid "about content"
+#~ msgstr "about content"
+
+#~ msgid "contact us title"
+#~ msgstr "contact us "
+
+#, fuzzy
+#~ msgid "help title"
+#~ msgstr "Home"
+
+#, fuzzy
+#~ msgid "help content"
+#~ msgstr "content"
+
+#~ msgid "home title"
+#~ msgstr "Home"
+
+#~ msgid "hot creative title"
+#~ msgstr "hot creative"
+
+#~ msgid "hot project title"
+#~ msgstr "hot project"
+
+#~ msgid "plz login"
+#~ msgstr "please login"
+
+#~ msgid "login email label"
+#~ msgstr "login email"
+
+#~ msgid "login password label"
+#~ msgstr "login password"
+
+#~ msgid "clean all"
+#~ msgstr "clean all"
+
+#~ msgid "regUser title"
+#~ msgstr "regUser "
+
+#~ msgid "reg email label"
+#~ msgstr "reg email"
+
+#~ msgid "reg password label"
+#~ msgstr "reg password"
+
+#~ msgid "reg"
+#~ msgstr "reg"
+
+#~ msgid "search result title"
+#~ msgstr "search result"
+
+#~ msgid "creative search result title"
+#~ msgstr "creative search result"
+
+#~ msgid "project search result title"
+#~ msgstr "project search result "
+
+#~ msgid "project home title"
+#~ msgstr "project home"
+
+#~ msgid "downloads"
+#~ msgstr "downloads"
+
+#~ msgid "wiki"
+#~ msgstr "wiki"
+
+#~ msgid "source"
+#~ msgstr "source"
+
+#~ msgid "summer"
+#~ msgstr "summer"
+
+#~ msgid "project members"
+#~ msgstr "project members"
+
+#~ msgid "project owner"
+#~ msgstr "project owner"
+
+#~ msgid "project member"
+#~ msgstr "project member"
+
+#~ msgid "latest project list"
+#~ msgstr "latest project list"
+
+#~ msgid "project list by category title"
+#~ msgstr "project list by category"
+
+#~ msgid "count project"
+#~ msgstr "count project"
+
+#~ msgid "apply join project title"
+#~ msgstr "apply join project"
+
+#~ msgid "apply reason Label"
+#~ msgstr "apply reason"
+
+#~ msgid "project comment title"
+#~ msgstr "project comment"
+
+#~ msgid "category"
+#~ msgstr "category"
+
+#~ msgid "view creative"
+#~ msgstr "view creative"
+
+#~ msgid "project status"
+#~ msgstr "project status"
+
+#~ msgid "developing"
+#~ msgstr "developing"
+
+#~ msgid "Browse"
+#~ msgstr "Browse"
+
+#~ msgid "svn command access title"
+#~ msgstr "svn command access"
+
+#~ msgid "project member access title"
+#~ msgstr "project member access"
+
+#~ msgid "anonymously access title"
+#~ msgstr "anonymously access"
+
+#~ msgid "tag result list title"
+#~ msgstr "tag result list"
+
+#~ msgid "Contact Us"
+#~ msgstr "Contact Us"
+
+#~ msgid "Manage menu"
+#~ msgstr "Manage"
+
+#~ msgid "my Creatives menu"
+#~ msgstr "my Creatives"
+
+#~ msgid "my Projects menu"
+#~ msgstr "my Projects"
+
+#~ msgid "total has"
+#~ msgstr "total has"
+
+#~ msgid "count results"
+#~ msgstr "count results"
+
+#~ msgid "current page from"
+#~ msgstr "current page from"
+
+#~ msgid "total"
+#~ msgstr "total"
+
+#~ msgid "pre page"
+#~ msgstr "pre page"
+
+#~ msgid "Hot Creatives"
+#~ msgstr "Hot Creatives"
+
+#~ msgid "Latest Betas"
+#~ msgstr "Latest Betas"
+
+#~ msgid "Latest Creatives"
+#~ msgstr "Latest Creatives"
+
+#~ msgid "latest creative comments label"
+#~ msgstr "latest creative comments"
+
+#~ msgid "latest project comments label"
+#~ msgstr "latest project comments"
+
+#~ msgid "latest project notices"
+#~ msgstr "latest project notices"
+
+#~ msgid "Latest Projects"
+#~ msgstr "Latest Projects"
+
+#~ msgid "Hot tag label"
+#~ msgstr "Hot tag"
+
+#~ msgid "creative pool menu"
+#~ msgstr "creative pool"
+
+#~ msgid "project menu"
+#~ msgstr "project"
+
+#~ msgid "betas menu"
+#~ msgstr "betas"
+
+#~ msgid "knowlege menu"
+#~ msgstr "knowlege"
+
+#~ msgid "publish creative"
+#~ msgstr "publish creative"
+
+#~ msgid "my creatives"
+#~ msgstr "my creatives"
+
+#~ msgid "publish creatives"
+#~ msgstr "publish creatives"
+
+#~ msgid "my subscribe creatives"
+#~ msgstr "my subscribe creatives"
+
+#~ msgid "my creative trash"
+#~ msgstr "my creative trash"
+
+#~ msgid "apply projects"
+#~ msgstr "apply projects"
+
+#~ msgid "my apply projects"
+#~ msgstr "my apply projects"
+
+#~ msgid "my project trash"
+#~ msgstr "my project trash"
+
+#~ msgid "my task"
+#~ msgstr "my task"
+
+#~ msgid "my faq"
+#~ msgstr "my faq"
+
+#~ msgid "my doc"
+#~ msgstr "my doc"
+
+#~ msgid "my release projects"
+#~ msgstr "my release projects"
+
+#~ msgid "manage label"
+#~ msgstr "manage "
+
+#~ msgid "password manage menu"
+#~ msgstr "password manage"
+
+#~ msgid "message manage menu"
+#~ msgstr "message manage"
+
+#~ msgid "project notice manage menu"
+#~ msgstr "project notice manage"
+
+#~ msgid "auto manage menu"
+#~ msgstr "auto manage "
+
+#~ msgid "wiki manage menu"
+#~ msgstr "wiki manage"
+
+#~ msgid "category manage menu"
+#~ msgstr "category manage"
+
+#~ msgid "plugin manage menu"
+#~ msgstr "plugin manage"
+
+#~ msgid "user home title"
+#~ msgstr "user home "
+
+#~ msgid "modify user password"
+#~ msgstr "modify user password"
+
+#~ msgid "new password1"
+#~ msgstr "validy new password"
+
+#~ msgid "no right to access this page"
+#~ msgstr "no right to access this page"
+
+#~ msgid "user reset password title"
+#~ msgstr "user reset password"
+
+#~ msgid "reset user password"
+#~ msgstr "reset user password"
+
+#~ msgid "sync data title"
+#~ msgstr "sync data "
+
+#~ msgid "latest subscribe msg"
+#~ msgstr "latest subscribe msg"
+
+#~ msgid "user stat title"
+#~ msgstr "user stat"
+
+#~ msgid "data stat"
+#~ msgstr "data stat"
+
+#~ msgid "latest login date"
+#~ msgstr "latest login date"
+
+#~ msgid "publish creative count"
+#~ msgstr "publish creative count"
+
+#~ msgid "comment creative count"
+#~ msgstr "comment creative count"
+
+#~ msgid "subscribe creative count"
+#~ msgstr "subscribe creative count"
+
+#~ msgid "apply project count"
+#~ msgstr "apply project count"
+
+#~ msgid "join project count"
+#~ msgstr "join project count"
+
+#~ msgid "publis doc count"
+#~ msgstr "publis doc count"
+
+#~ msgid "faq question count"
+#~ msgstr "faq question count"
+
+#~ msgid "faq answer count"
+#~ msgstr "faq answer count"
+
+#~ msgid "project comment count"
+#~ msgstr "project comment count"
+
+#~ msgid "add remark"
+#~ msgstr "add remark"
+
+#~ msgid "content"
+#~ msgstr "content"
+
+#~ msgid "user upgrade project title"
+#~ msgstr "user upgrade project"
+
+#~ msgid "upgrade project title"
+#~ msgstr "upgrade project"
+
+#~ msgid "select project category label"
+#~ msgstr "project category "
+
+#~ msgid "project name label"
+#~ msgstr "project name"
+
+#~ msgid "project description label"
+#~ msgstr "project description"
+
+#~ msgid "project tags label"
+#~ msgstr "project tags "
+
+#~ msgid "project enable Join Project label"
+#~ msgstr "enable Join Project"
+
+#~ msgid "project mgt Url label"
+#~ msgstr "project mgt Url"
+
+#~ msgid "manage my creative"
+#~ msgstr "manage my creative"
+
+#~ msgid "tags"
+#~ msgstr "tags"
+
+#~ msgid "view subscribe"
+#~ msgstr "view subscribe"
+
+#~ msgid "view stat"
+#~ msgstr "view stat"
+
+#~ msgid "already deleted"
+#~ msgstr "already deleted"
+
+#~ msgid "already projected"
+#~ msgstr "already projected"
+
+#~ msgid "apply to project"
+#~ msgstr "apply to project"
+
+#~ msgid "remark"
+#~ msgstr "remark"
+
+#~ msgid "edit remark"
+#~ msgstr "edit remark"
+
+#~ msgid "my creative trash title"
+#~ msgstr "my creative trash"
+
+#~ msgid "delete forever"
+#~ msgstr "delete forever"
+
+#~ msgid "my creatives title"
+#~ msgstr "my creatives"
+
+#~ msgid "my subscribe creatives title"
+#~ msgstr "my subscribe creatives"
+
+#~ msgid "subscribe msgType"
+#~ msgstr "subscribe msgType"
+
+#~ msgid "subscribe at"
+#~ msgstr "subscribe at"
+
+#~ msgid "user publish creative title"
+#~ msgstr "user publish creative"
+
+#~ msgid "user apply project title"
+#~ msgstr "user apply project"
+
+#~ msgid "apply project title"
+#~ msgstr "apply project"
+
+#~ msgid "project member audit title"
+#~ msgstr "project member audit"
+
+#~ msgid "apply join project member list title"
+#~ msgstr "apply join project member list"
+
+#~ msgid "apply user"
+#~ msgstr "apply user"
+
+#~ msgid "reason"
+#~ msgstr "reason"
+
+#~ msgid "apply time"
+#~ msgstr "apply time"
+
+#~ msgid "agree"
+#~ msgstr "agree"
+
+#~ msgid "reject"
+#~ msgstr "reject"
+
+#~ msgid "edit project title"
+#~ msgstr "edit project"
+
+#~ msgid "my join project list title"
+#~ msgstr "my join project list"
+
+#~ msgid "my project title"
+#~ msgstr "my project"
+
+#~ msgid "allow"
+#~ msgstr "allow"
+
+#~ msgid "no allow"
+#~ msgstr "no allow"
+
+#~ msgid "release project"
+#~ msgstr "release project"
+
+#~ msgid "check member"
+#~ msgstr "check member"
+
+#~ msgid "publish notice"
+#~ msgstr "publish notice"
+
+#~ msgid "user project notice title"
+#~ msgstr "user project notice"
+
+#~ msgid "my project notice list title"
+#~ msgstr "my project notice list"
+
+#~ msgid "user project trash title"
+#~ msgstr "user project trash"
+
+#~ msgid "my project trash title"
+#~ msgstr "my project trash"
+
+#~ msgid "my apply project list title"
+#~ msgstr "my apply project list"
+
+#~ msgid "continue create project"
+#~ msgstr "continue create project"
+
+#, fuzzy
+#~ msgid "approvl join project"
+#~ msgstr "Home"

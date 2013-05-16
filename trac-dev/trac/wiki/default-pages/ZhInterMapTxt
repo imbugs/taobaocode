@@ -1,0 +1,69 @@
+= 链接前缀表 =
+
+== 这是定义外部Wiki前缀的地方 ==
+
+本页效仿了MeatBall:InterMapTxt页. 另外, 可以在映射后, 添加一个注释(可选).
+
+Trac以一种特殊的方式来调用该页, 用于以一种灵活的和动态的方式支持[ZhInterWiki 外部Wiki]链接.
+
+该页中第一个行分隔符后的代码块, 将被解释为[ZhInterWiki 外部Wiki]的规格说明表:
+{{{
+prefix <space> URL [<space> # comment]
+}}}
+
+通过使用URL内的`$1`, `$2`等, 可以创建支持多参数的[ZhInterWiki 外部Wiki]链接, 例如, !Trac:ticket:40. 此URL本身可以添加注释, 该注释会用来修饰那些使用了该前缀的链接.
+
+可以实时向列表添加, 创建新的[ZhInterWiki 外部Wiki]链接.
+
+注意, ''删除前缀''也是立即生效的. 因此如果要禁止前缀, 最好使用注释的方法.
+
+还要注意一点, [ZhInterWiki 外部Wiki]的前缀是区分大小写的.
+
+== 活动前缀列表 ==
+[[InterWiki]]
+
+
+== 前缀定义 ==
+{{{
+PEP     http://www.python.org/peps/pep-$1.html                                       # Python Enhancement Proposal 
+Trac-ML  http://thread.gmane.org/gmane.comp.version-control.subversion.trac.general/ # Message $1 in Trac Mailing List
+trac-dev http://thread.gmane.org/gmane.comp.version-control.subversion.trac.devel/   # Message $1 in Trac Development Mailing List
+
+Mercurial http://www.selenic.com/mercurial/wiki/index.cgi/ # the wiki for the Mercurial distributed SCM
+RFC       http://tools.ietf.org/html/rfc$1 # IETF's RFC $1
+ISO       http://en.wikipedia.org/wiki/ISO_ # ISO Standard $1 in Wikipedia
+
+CheeseShop  http://cheeseshop.python.org/pypi/  # Python Package $1 from the Cheese Shop
+SQLite      http://www.sqlite.org/cvstrac/wiki?p= 
+mysql-bugs  http://bugs.mysql.com/bug.php?id=  # Bug #$1 in MySQL's bug database
+peak        http://peak.telecommunity.com/DevCenter/ # $1 in Python Enterprise Application Kit's Wiki
+MODPYTHON   http://issues.apache.org/jira/browse/MODPYTHON- # Issue $1 in mod_python's JIRA instance
+SvnWiki     http://www.orcaware.com/svn/wiki/ # Subversion Wiki
+
+#
+# A arbitrary pick of InterWiki prefixes...
+#
+Acronym          http://www.acronymfinder.com/af-query.asp?String=exact&Acronym=
+C2find           http://c2.com/cgi/wiki?FindPage&value=
+Cache            http://www.google.com/search?q=cache:
+CPAN             http://search.cpan.org/perldoc?
+DebianBug        http://bugs.debian.org/
+DebianPackage    http://packages.debian.org/
+Dictionary       http://www.dict.org/bin/Dict?Database=*&Form=Dict1&Strategy=*&Query=
+Google           http://www.google.com/search?q=
+GoogleGroups     http://groups.google.com/group/$1/msg/$2        # Message $2 in $1 Google Group
+JargonFile       http://downlode.org/perl/jargon-redirect.cgi?term=
+MeatBall         http://www.usemod.com/cgi-bin/mb.pl?
+MetaWiki         http://sunir.org/apps/meta.pl?
+MetaWikiPedia    http://meta.wikipedia.org/wiki/
+MoinMoin         http://moinmoin.wikiwikiweb.de/
+WhoIs            http://www.whois.sc/
+Why              http://clublet.com/c/c/why?
+c2Wiki             http://c2.com/cgi/wiki?
+WikiPedia        http://en.wikipedia.org/wiki/
+}}}
+
+
+----
+原文版本: InterMapTxt[[BR]]
+

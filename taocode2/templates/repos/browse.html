@@ -1,0 +1,65 @@
+{%extends "layouts/baseview.html" %}
+{%load i18n %}
+{%load short_uri %}
+
+{%block title%}{{project.name}} - {{path}}{%endblock%}
+
+
+{%block main-block%}
+<div>
+  {%trans "Check out:"%}
+  <div class="pretext">
+    svn co {{REPOS}} <strong>{{project.name}}</strong>
+  </div>
+</div>   
+<p>
+  <strong><a href="{{project|url}}src/">{{project.name}}</a></strong>
+  <span>/</span>
+  {%for p in paths%}
+  
+  <strong><a class="filename" href="{{project|url}}src/{{p.url}}/">{{p.path}}</a></strong>
+  <span>/</span>
+  {%endfor%}    
+</p>
+<div class="filelist">
+  <table cellspacing="0" cellpadding="0">
+    <tr align="left">
+      <th width="440">{%trans "Path"%}</th>
+      <th width="70">{%trans "Revision"%}</th>
+      <th width="150">{%trans "Author"%}</th>
+      <th width="70">{%trans "Size"%}</th>
+      <th width="168">{%trans "Last Changed"%}</th>
+    </tr>
+    {%if parent%}
+    <tr class="">
+      <td><a href="{{project|url}}src{{parent}}">..</a></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    {%endif%}
+
+    {%for f in files%}
+    <tr class="row">
+      <td>
+	<img src="/img/{{f.dir|yesno:"dir.png,txt.png"}}"></img>
+	<a class="filename" href="{{project|url}}src{{path}}{{f.name}}{{f.dir|yesno:"/,"}}">{{f.name}}{{f.dir|yesno:"/,"}}</a>
+      </td>
+      <td><a href="{{project|url}}log/{{f.rev}}{{path}}">{{f.rev}}</a></td>
+      <td><a class="username" href="/u/{{f.author}}/">{{f.author}}</a></td>
+      <td>{{f.size|filesizeformat}}</td>
+      <td>{{f.date|utc2loc}}</td>
+    </tr>
+    {%endfor%}
+  </table> 
+</div>
+<p>    
+  <a href="{{project|url}}logs/">{%trans "View all revisions"%}</a>
+</p>
+{%if README%}
+<div class="pretext">
+  {{README|wikitext:project}}
+</div>
+{%endif%}
+{%endblock%}

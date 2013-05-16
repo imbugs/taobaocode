@@ -1,0 +1,135 @@
+= Trac传票工作流系统 =
+[[ZhTracGuideToc]]
+
+Trac事务数据库提供了可配置的工作流.
+
+== 默认传票工作流 ==
+=== 从0.10升级的环境 ===
+当你运行`trac-admin <env> upgrade`, 你的`trac.ini` 将被修改, 以包括`[ticket-workflow]`段.
+这种情况下配置的工作流是原始工作流, 传票将和它们在0.10中那样工作.
+
+图形看起来象这样:
+
+[[Image(htdocs:../common/guide/original-workflow.png)]]
+
+其中有一些重要的"warts"; 比如接受传票设置其为'assigned'状态, 指定一个传票设置其为'new'状态.  非常明显, 是吧?
+因此, 你将可能想迁移到"基本"工作流; `contrib/workflow/migrate_original_to_basic.py`应该有帮助.
+
+=== 用0.11创建的环境 ===
+当创建了一个新环境后, 在你的trac.ini中就配置了默认工作流. 此工作流是基本工作流(`basic-workflow.ini`描述), 与0.10发行版有些不同.
+
+图形看起来象这样:
+
+[[Image(htdocs:../common/guide/basic-workflow.png)]]
+
+== 附加传票工作流 ==
+
+有几个工作流的例子, 在Trac源码中提供; 查看`contrib/workflow`的`.ini`配置段.  它们其中可能正好符合你的需求. 可以直接粘贴到你的`trac.ini`文件的`[ticket-workflow]`段.
+
+== 基本传票工作流定制 ==
+
+在`trac.ini`中创建一个`[ticket-workflow]`段.
+在此段中, 每个条目就是一个传票上可以采取的动作. 
+例如, 考虑在`simple-workflow.ini`中的`accept`动作:
+{{{
+accept = new,accepted -> accepted
+accept.permissions = TICKET_MODIFY
+accept.operations = set_owner_to_self
+}}}
+例子中的第一行定义了`accept`动作, 及该动作有效时的状态(`new`和`accepted`), 及当动作发生(`accepted`)后的新状态. `accept.permissions`行指定了使用该动作的用户所需权限.
+`accept.operations`行指定动作发生后, 对传票做的操作, 及状态的变化. 在这种情况下, 当用户点击`accept`, 传票承担者字段将更新为登录的用户.  可以用逗号分割列出多个操作.
+
+有效操作为:
+ - del_owner -- 清楚承担者字段.
+ - set_owner -- 设置承担者为选择或输入的承担者.
+   - ''actionname''`.set_owner` 可选为逗号分割的列表或单个值.
+ - set_owner_to_self -- 设置承担者为登录的用户.
+ - del_resolution -- 删除决议字段
+ - set_resolution -- 设置决议为选择的值.
+   - ''actionname''`.set_resolution` 可选为逗号分割的列表或单个值.
+{{{
+例如:
+
+resolve_new = new -> closed
+resolve_new.name = resolve
+resolve_new.operations = set_resolution
+resolve_new.permissions = TICKET_MODIFY
+resolve_new.set_resolution = invalid,wontfix
+}}}
+ - leave_status -- 显示 "保持 为 <当前状态>" 并不对传票做修改.
+'''注意:''' 指定冲突的操作 (例如`set_owner` 和 `del_owner`) 将有不可预计的结果.
+
+{{{
+resolve_accepted = accepted -> closed
+resolve_accepted.name = resolve
+resolve_accepted.permissions = TICKET_MODIFY
+resolve_accepted.operations = set_resolution
+}}}
+
+此例中, 我们看见使用了`.name`属性.  此处的动作是`resolve_accepted`, 但它给用户显示的是`resolve`.
+
+对于要在所有状态中都有效的动作, 可以使用`*`表示所有状态.  上例中的是`leave`动作:
+{{{
+leave = * -> *
+leave.operations = leave_status
+leave.default = 1
+}}}
+这也显示`.default`属性的用法.  此值应该是个整数, 决定了动作的排列顺序.  有最高`.default`值的动作首先列出,  并且默认被选上.  剩余的动作按照`.default`值降序排列.
+如果没有为一个动作指定, `.default`为0.  值可以是负数.
+
+工作流中有一些硬编码的限制.  特别地, 传票用状态`new`创建, 并且传票应该有一个`closed`状态.  另外, 默认报表/查询把所以非`closed`的状态都认为是打开状态.
+
+当创建或修改传票工作流时, `contrib/workflow/workflow_parser.py`也许很有用.  它可以创建`.dot`文件, [http://www.graphviz.org GraphViz]可以解读来生成一个工作流可视描述.
+
+使用下面指令(你的安装路径应该不同).
+{{{
+cd /var/local/trac_devel/contrib/workflow/
+sudo ./showworkflow /srv/trac/PlannerSuite/conf/trac.ini
+}}}
+然后, 打开脚本创建的结果`trac.pdf`文件(它将位于`trac.ini`文件相同的目录中).
+
+当改变了工作流后, 你需要重启apache以使其生效. 这非常重要, 因为当你运行你的脚本时修改仍然显示, 但是所有旧工作流仍将保持到服务器重启.
+
+
+== 例子: 增加可选的测试工作流 ==
+
+通过在trac.ini的[ticket-workflow]节增加下列内容, 你将获得可选的测试工作流. 当传票处于new, accepted或needs_work状态时, 你可以选择提交测试. 当它处在testing状态是, 用户将有reject选项, 并将其发返为needs_work状态, 或者, 通过测试并将其关闭. 如果他们接受, 此传票将自动标记为closed, 解决设为fixed. 由于保留了原所有工作流, 传票可以跳过整个这段.
+
+{{{
+testing = new,accepted,needs_work -> testing
+testing.name = Submit to reporter for testing
+testing.permissions = TICKET_MODIFY
+
+reject = testing -> needs_work
+reject.name = Failed testing, return to developer
+
+pass = testing -> closed
+pass.name = Passes Testing
+pass.operations = set_resolution
+pass.set_resolution = fixed
+}}}
+
+== 例子: 限制新传票的可选解决选项 ==
+
+上述resolve_new操作允许你设置新传票的可选解决选项. 通过修改现有解决动作, 并从`->`前删除new状态, 我们将得到两个解决动作. 一个是新传票的有限制的解决, 另一个是一旦传票被接受后的通常那个.
+
+{{{
+resolve_new = new -> closed
+resolve_new.name = resolve
+resolve_new.operations = set_resolution
+resolve_new.permissions = TICKET_MODIFY
+resolve_new.set_resolution = invalid,wontfix,duplicate
+
+resolve = assigned,accepted,reopened -> closed
+resolve.operations = set_resolution
+resolve.permissions = TICKET_MODIFY
+}}}
+
+== 传票工作流的高级定制 ==
+
+如果上述定制还不能符合的的扩展需要, 你可使用插件来扩展工作流.  这些插件可以提供工作流的额前操作, (例如代码审查), 或者实现动作的附加效果(例如触发一次构建), 而不是一次单纯的状态改变. 查看`sample-plugins/workflow`的一个简单例子.
+
+但是如果这还不足够, 你可以禁用!ConfigurableTicketWorkflow组件, 而创建一个插件来完全替换它.
+
+----
+原文版本: TracWorkflow[[BR]]

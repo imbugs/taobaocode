@@ -1,0 +1,27 @@
+{% extends "layouts/projectLayout.html" %}
+{% load i18n %}
+{% load short_uri %}
+
+{% block title %}{{ project.name }}{% endblock %}
+{% block submenu-block %}{% include "project/projectSubmenu.html" %}{% endblock %}
+{% block main-block %}
+    {% if project %}
+        <span>{% to_user project.owner.name %}</span> |
+        <span>{% to_project project.name %}</span> |
+        <span>{{ project.ctime }}</span>|
+        <span>
+            {% if project.my_status == 1 %}
+                <b>owner</b>
+            {% else %} {% if project.my_status == 2 %}
+                member
+            {% endif %}
+            {% endif %}
+        </span>|
+        <span>{{ project.title }}</span>
+    {% else %}
+        not found project {{ project_name }}, {% link_to "/all" "find projects " %}
+
+    {% endif %}
+
+{% endblock %}
+

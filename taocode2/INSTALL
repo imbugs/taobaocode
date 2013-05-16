@@ -1,0 +1,9 @@
+easy_install trac
+easy_install genshi
+easy_install chardet
+easy_install poster
+easy_install pygments
+easy_install isodate
+
+svn co http://code.taobao.org/svn/opens/trunk opens
+sudo python2.6 setup.py install

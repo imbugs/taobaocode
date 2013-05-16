@@ -1,0 +1,107 @@
+{% extends "layouts/baseview.html" %}
+{% load i18n %}
+
+{% load short_uri %}
+
+{%block title%}messages{%endblock%}
+
+{% block extrastyle %}
+<script type="text/javascript">
+function del_msg(elm, msgid) {
+    q_get('msg/del', {'m':msgid}, function() {
+	show_info('{%trans "del message ok!"%}');
+	elm.remove();
+    }, function() {
+	show_info('{%trans "can not del message!"%}');	
+    });    
+}
+
+function move_msg(elm, msgid, target) {    
+    q_get('msg/move', {'m':msgid, 't':target}, function() {
+	show_info('{%trans "move message ok!"%}');
+	elm.remove();
+    }, function() {
+	show_info('{%trans "can not move message!"%}');	
+    });
+}
+</script>
+<script type="text/javascript" src="/js/sendmsg.js"></script>
+{% endblock %}
+
+{%block ready_js%}
+
+   $('tr[name^="msg-"]').each(function() {
+       var msg = $(this);
+       var msg_id = msg.find('#msg-id').val();
+       
+       msg.find('#del').confirm('{%trans "Are you sure delete this message?"%}', '{%trans "Yes"%}', '{%trans "No"%}', function() {
+	   if ('{{boxname}}' != 'trashbox') {
+	       move_msg(msg, msg_id, 'trashbox');
+	   } else {
+	       del_msg(msg, msg_id);
+	   }
+       });
+       
+       msg.find('#btn-send').click(function(e) {
+	   show_send_box(e.pageX, e.pageY, msg.find('#msg-sender').val());
+       });
+       
+       msg.find('#recovery').click(function() {
+	   if (msg.find('#msg-sender').val() == '1'){ // sender is me , recovery into outbox
+	       move_msg(msg, msg_id, 'outbox');
+	   } else {
+	       move_msg(msg, msg_id, 'inbox');
+	   }	
+       });
+   });
+
+{%endblock%}
+
+{%block main-block%}
+<div class="msgbox">
+  <table>
+    {%for msg in page.object_list%}
+    <tr class="message" name="msg-{{msg.id}}" valign="top">
+      <td>
+	{%if msg.sender == user%}
+	<a href="{{msg.owner|url}}">
+	  {%gravatar msg.owner.email msg.owner.name%}
+	</a>
+	{%else%}
+	<a href="/u/{{msg.sender.name}}/">
+	  {%gravatar msg.sender.email msg.sender.name%}
+	</a>	
+	{%endif%}
+      <td>
+      <td width="100%">
+	  {%if boxname == 'trashbox'%}
+	  <a class="button" href="javascript:;" id="recovery">{%trans "recovery"%}</a>
+	  {%endif%}
+	  {%if msg.owner == user%}
+	  <input id="im-sender" type="hidden" value="1"/>
+	  <a class="button" href="javascript:;" id="btn-send">{%trans "reply"%}</a>
+	  {%endif%}
+	  <span class="op-del">
+	    <a class="button orange" id="del" href="javascript:;">{%trans "delete"%}</a>
+	  </span>
+	  <input id="msg-id" type="hidden" value="{{msg.id}}"/>
+	  {%if msg.sender == user%}
+	  To <a href="{{msg.owner|url}}">{{msg.owner}}</a>
+	  {%else%}
+	  From <a href="{{msg.sender|url}}">{{msg.sender.name}}</a>
+	  <input id="msg-sender" type="hidden" value="{{msg.sender.name}}"/>
+	  {%endif%}
+	  <em>{{msg.send_time}}</em> 
+	  <p>
+	    <div id="content" class="pretext">{{msg.content|linebreaks}}</div>
+	  </p>
+      </td>
+    </tr>
+    {%endfor%}
+  </table>
+  <div class="bottom-line">
+    {%include "layouts/page-nav.html"%}
+  </div>
+</div>
+{%endblock%}
+

@@ -1,0 +1,109 @@
+{% extends "layouts/baseview.html" %}
+{% load i18n %}
+{% load short_uri %}
+
+{%block title%}{{pagename}}{%endblock%}
+{%block ready_js%}
+$('#btn_del').confirm('{%trans "Are you sure delete this page?"%}', '{%trans "Yes"%}', '{%trans "No"%}', function() {
+    $('#del_wiki').submit();
+});
+
+$('#btn_add_file').click(function() {
+    $('#add_file_form').toggle(100);
+});
+
+$('#btn_files_submit').click(function() {
+    $('#add_file_form form').submit();
+});
+
+
+$('#add_file_line').click(function() {
+    if ($('#files .file_line').length >= 5) {
+	return;
+    }
+    $('#files').append('<div class="file_line"><input type="file" name="attachment"/></div>');
+});
+
+$('.btn_delete_file').click(function(e){
+    var fid = $(this).attr('data-id');
+    var line = $(this).parent();
+    sure(e, '{%trans "Are you sure delete this file?"%}', '{%trans "Yes"%}', '{%trans "No"%}', function() {
+	q_get('delfile', {'fid': fid}, function (result) {
+	    line.remove();
+	}, function (result) {
+	    alert('{%trans "can not remove this file!"%}');
+	});
+    });
+});
+
+{%endblock%}
+{%block main-block%}
+<div>
+  <a href="{{project|url}}wiki/index/">Wiki Index</a>
+  |
+  <a href="{{project|url}}wikis/">All wiki pages</a>
+  |
+  <a href="{{project|url}}raw_wiki/{{wiki.path}}/">Raw text</a>
+</div>
+
+{%if wiki%}
+
+<div class="wiki-content">
+  {{wiki.content|wikitext:wiki}}  
+</div>
+
+
+
+<hr/>
+<p class="op"> 
+{%if can_op%}
+  <form id="del_wiki" action="{{project|url}}del_wiki/" method="POST">
+    {%csrf_token%}
+    <input type="hidden" name="wiki_id" value="{{wiki.id}}"/>
+  </form>
+  
+  <a href="{{project|url}}edit_wiki/{{wiki.path}}" class="button">edit</a>
+  <a id="btn_del" href="javascript:;" class="button">delete</a>
+  <a href="{{project|url}}wiki_changes/{{wiki.path}}" class="button">changes</a>
+  <a id="btn_add_file" href="javascript:;" class="button">Add attachment</a>
+  |
+{%endif%}
+  <a href="{{project|url}}wikis/">All wiki pages</a>
+  |
+  <a href="{{project|url}}raw_wiki/{{wiki.path}}/">Raw text</a>
+</p>
+
+{%if can_op%}
+<div id="add_file_form" class="hide">
+  <form action="" method="POST" enctype="multipart/form-data">
+    {%csrf_token%}
+    <input type="hidden" name="wiki_id" value="{{wiki.id}}"/>
+    <a href="javascript:;" id="add_file_line">Append file</a>
+    <div id="files">
+      <div class="file_line">
+	<input type="file" name="attachment"/>
+      </div>
+    </div>
+  </form>
+
+  <p>
+    <a href="javascript:;" class="button" id="btn_files_submit">{%trans "submit"%}</a>
+  </p>
+</div>
+{%endif%}
+
+{%include "main/files.html"%}
+
+{%else%}
+<p>
+  {%trans "Not found page"%} <strong>{{pagename}}</strong>
+  {%if can_op%}
+  <span>
+     <a href="{{project|url}}edit_wiki/{{pagename}}/">{%trans "Create Page"%}</a>
+  </span>
+  |
+   <a href="{{project|url}}wikis/">{%trans "All wiki pages"%}</a>
+  {%endif%}
+</p>
+{%endif%}
+{%endblock%}

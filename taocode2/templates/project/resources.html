@@ -1,0 +1,22 @@
+{% extends "layouts/baseview.html" %}
+{% load i18n %}
+{% load short_uri %}
+{%block title%}project admin{%endblock%}
+
+{%block main-block%}
+<div>
+  <table>
+    <tr><td>Resouce Name</td><td>Size</td></tr>
+    {%for r in res%}
+    <tr>
+      <td class="res-name">{{r|first}}</td>
+      <td class="res-size">{{r|last}}</td>
+    </tr>
+    {%endfor%}
+  </table>
+</div>
+<div>
+</div>
+{%endblock%}
+
+

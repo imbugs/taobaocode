@@ -1,0 +1,320 @@
+= Trac与FastCGI =
+
+自0.9版本后, Trac支持通过[http://www.fastcgi.com/ FastCGI]接口运行. 像[wiki:ZhTracModPython mod_python], 它允许Trac保留在原处, 并且比外部的CGI接口(此接口必须为每个请求开始一个新进程)要快. 然而, 不像mod_python, 它能支持[http://httpd.apache.org/docs/suexec.html SuEXEC]. 另外, FastCGI也被更广范围的Web服务器支持.
+
+{{{
+#!html
+<p style="background: #fdc; border: 2px solid #d00; font-style: italic; padding: 0 .5em; margin: 1em 0;">
+<strong>Windows用户注意:</strong> Trac的FCGI不能在Windows运行, 因为Windows没有实现_fcgi.py需要的Socket.fromfd
+</p>
+}}}
+
+== 简单的Apache配置 ==
+
+有两种FastCGI模式适用于Apache, `mod_fastcgi`和 `mod_fcgid`. 下面讨论的`FastCgiIpcDir` 和`FastCgiConfig`是`mod_fastcgi`指令, `DefaultInitEnv`是`mod_fgcid`指令.
+
+对`mod_fastcgi`, 添加下面内容到相应的Apache配置文件中:
+{{{
+# Enable fastcgi for .fcgi files
+# (If you're using a distro package for mod_fcgi,  something like
+# this is probably already present)
+<IfModule mod_fastcgi.c>
+   AddHandler fastcgi-script .fcgi
+   FastCgiIpcDir /var/lib/apache2/fastcgi 
+</IfModule>
+LoadModule fastcgi_module /usr/lib/apache2/modules/mod_fastcgi.so
+}}}
+
+如果默认的选项合适的话, `FastCgiIpcDir`选项是可选的. 注意, `LoadModule`行必须位于`IfModule`组之后.
+
+象`Trac Cgi`中描述的那样配置`ScriptAlias`及类似选项, 但是调用''trac.fcgi''而不是''trac.cgi''.
+
+你可将`TRAC_ENV`设置为全局默认选项:
+{{{
+FastCgiConfig -initial-env TRAC_ENV=/path/to/env/trac
+}}}
+
+或者你可以在一个目录中服务多个Trac项目:
+{{{
+FastCgiConfig -initial-env TRAC_ENV_PARENT_DIR=/parent/dir/of/projects
+}}}
+
+但这两个模式都对"mod_fcgid"不起作用. `mod_fcgid`的一个类似但只是部分的解决方法是:
+{{{
+DefaultInitEnv TRAC_ENV /path/to/env/trac/
+}}}
+
+但它不能用于Directory` 或 `Location`上下文中, 这样会使它很难支持多个项目.
+
+有一个更好对以上两种模式(包括对lighttpd和CGI)都其作用的方法(因为它不涉及对环境变量的服务器配置设置), 是在`trac.fcgi`设置其中一个变量. 例如:
+{{{
+import os
+os.environ['TRAC_ENV'] = "/path/to/projectenv"
+}}}
+
+或者
+{{{
+import os
+os.environ['TRAC_ENV_PARENT_DIR'] = "/path/to/project/parent/dir"
+}}}
+
+使用这个方法, 通过使用带不同`ScriptAliases`的`.fcgi`脚本, 复制和相应地重命名`trac.fcgi`, 以及将上面的代码加进来, 以创建每个类似的脚本, 从而可支持不同的项目.
+
+参见 [https://coderanger.net/~coderanger/httpd/fcgi_example.conf fcgid配置例子], 其使用了!ScriptAlias指令如下(在trac.fcgi中使用/后缀):
+{{{
+ScriptAlias / /srv/tracsite/cgi-bin/trac.fcgi/
+}}}
+
+== 简单Cherokee配置 ==
+
+暂无.
+
+== 简单的Lighttpd配置 ==
+
+FastCGI前端主要是为了使用其他Web服务器(如:lighttpd).
+
+lighttpd是一种安全, 快速, 合适和非常灵活的Web服务器, 并已优化以使用于高性能的环境. 与其他Web服务器相比, 它只有非常低的内存占用和CPU负载.
+
+为了通过lighttpd使用`trac.fcgi`, 将下面内容添加到你的lighttpd.conf中:
+{{{
+fastcgi.server = ("/trac" =>
+                   ("trac" =>
+                     ("socket" => "/tmp/trac-fastcgi.sock",
+                      "bin-path" => "/path/to/cgi-bin/trac.fcgi",
+                      "check-local" => "disable",
+                      "bin-environment" =>
+                        ("TRAC_ENV" => "/path/to/projenv")
+                     )
+                   )
+                 )
+}}}
+
+注意, 你需要在fastcgi.server中为每个单独的Trac实例添加一个新的条目. 或者, 你可以使用`TRAC_ENV_PARENT_DIR`变量而不是上面提到的`TRAC_ENV`, 而且, 你可以通过使用`bin-environment`在trac.fcgi`中设置两个变量中的一个, 而不是`lighttpd.conf`中(就像上面Apache配置的段中一样).
+
+为了通过lighttpd使用两个项目, 将下列内容添加到你的`lighttpd.conf`中:
+{{{
+fastcgi.server = ("/first" =>
+                   ("first" =>
+                    ("socket" => "/tmp/trac-fastcgi-first.sock",
+                     "bin-path" => "/path/to/cgi-bin/trac.fcgi",
+                     "check-local" => "disable",
+                     "bin-environment" =>
+                       ("TRAC_ENV" => "/path/to/projenv-first")
+                    )
+                  ),
+                  "/second" =>
+                    ("second" =>
+                    ("socket" => "/tmp/trac-fastcgi-second.sock",
+                     "bin-path" => "/path/to/cgi-bin/trac.fcgi",
+                     "check-local" => "disable",
+                     "bin-environment" =>
+                       ("TRAC_ENV" => "/path/to/projenv-second")
+                    )
+                  )
+                )
+}}}
+
+注意, 域值是不同的. 如果你更喜欢在`.fcgi`脚本中设置环境变量, 那么复制或重命名`trac.fcgi`. 比如说, 将其变为`first.fcgi` 和 `second.fcgi`, 并且在上述设置中引用他们. 注:上述情况会产生不同的进程, 即使二者都运行自同样的`trac.fcgi`脚本.
+{{{
+#!html
+<p style="background: #fdc; border: 2px solid #d00; font-style: italic; padding: 0 .5em; margin: 1em 0;">
+<strong>来自c00i90wn的注释:</strong> server.modules载入的顺序非常重要, 如果mod_auth在mod_fastcgi<strong>之前</strong>载入 , 服务器将无法验证用户.
+</p>
+}}}
+
+为了验证, 你应启用lingttpd.conf'server.modules'中的mod_auth, 选择auth.backend和验证规则:
+{{{
+server.modules              = (
+...
+  "mod_auth",
+...
+)
+
+auth.backend               = "htpasswd"
+
+# 每个项目的独立的口令文件
+# 请见 "Conditional Configuration" 
+# http://trac.lighttpd.net/trac/file/branches/lighttpd-merge-1.4.x/doc/configuration.txt
+
+$HTTP["url"] =~ "^/first/" {
+  auth.backend.htpasswd.userfile = "/path/to/projenv-first/htpasswd.htaccess"
+}
+$HTTP["url"] =~ "^/second/" {
+  auth.backend.htpasswd.userfile = "/path/to/projenv-second/htpasswd.htaccess"
+}
+
+# 启用trac URL上的验证, 请见
+# http://trac.lighttpd.net/trac/file/branches/lighttpd-merge-1.4.x/doc/authentication.txt
+
+auth.require = ("/first/login" =>
+                ("method"  => "basic",
+                 "realm"   => "First project",
+                 "require" => "valid-user"
+                ),
+                "/second/login" =>
+                ("method"  => "basic",
+                 "realm"   => "Second project",
+                 "require" => "valid-user"
+                )
+               )
+
+
+}}}
+
+注意:如果口令文件不存在的话, ligttpd会停止运行(我用的是1.4.3版本).
+
+注意:1.3.16之前的版本中, lighttpd不支持''有效的用户''('valid-user').
+
+条件配置对于映射静态资源也是有用的, 即, 直接将图片和CSS分发出去而不是通过FastCGI:
+{{{
+# Aliasing functionality is needed
+server.modules += ("mod_alias")
+
+# 为静态资源设置一个别名
+alias.url = ("/trac/chrome/common" => "/usr/share/trac/htdocs")
+
+# 使用nagative lookahead来匹配trac下的任意资源的请求, 除非在/trac/chrome/common中
+# 并对它们使用FastCGI
+$HTTP["url"] =~ "^/trac(?!/chrome/common)" {
+# 即使你有应用程序而不是Trac的其他的fastcgi.server声明, 不要使用下面设置
+fastcgi.server = ("/trac" =>
+                   ("trac" =>
+                     ("socket" => "/tmp/trac-fastcgi.sock",
+                      "bin-path" => "/path/to/cgi-bin/trac.fcgi",
+                      "check-local" => "disable",
+                      "bin-environment" =>
+                        ("TRAC_ENV" => "/path/to/projenv")
+                     )
+                   )
+                 )
+}
+}}}
+
+通过为每个项目创建一个别名, 并把对fastcgi.server的声明封装在条件配置块中的方法, 可以轻松地应用于多个项目. 还有一个方法来处理多项目, 它是使用TRAC_ENV_PARENT_DIR和全局验证而不是TRAC_ENV, 请看下面的一个例子:
+{{{
+#  用于处理多个项目
+  alias.url       = ( "/trac/" => "/path/to/trac/htdocs/" )
+
+  fastcgi.server += ("/projects"  =>
+                      ("trac" =>
+                        (
+                          "socket" => "/tmp/trac.sock",
+                          "bin-path" => "/path/to/cgi-bin/trac.fcgi",
+                          "check-local" => "disable",
+                          "bin-environment" =>
+                            ("TRAC_ENV_PARENT_DIR" => "/path/to/parent/dir/of/projects/" )
+                        )
+                      )
+                    )
+#此处开启了全局验证配置
+  auth.backend = "htpasswd"
+  auth.backend.htpasswd.userfile = "/path/to/unique/htpassword/file/trac.htpasswd"
+  $HTTP["url"] =~ "^/projects/.*/login$" {
+    auth.require = ("/" =>
+                     (
+                       "method"  => "basic",
+                       "realm"   => "trac",
+                       "require" => "valid-user"
+                     )
+                   )
+  }
+}}}
+
+通过环境变量LC_TIME, lighttpd也支持更改日期或时间格式.
+{{{
+fastcgi.server = ("/trac" =>
+                   ("trac" =>
+                     ("socket" => "/tmp/trac-fastcgi.sock",
+                      "bin-path" => "/path/to/cgi-bin/trac.fcgi",
+                      "check-local" => "disable",
+                      "bin-environment" =>
+                        ("TRAC_ENV" => "/path/to/projenv",
+                        "LC_TIME" => "ru_RU")
+                     )
+                   )
+                 )
+}}}
+
+关于语言规格的细节, 请参见`TracFaq question 2.13`.
+
+像[http://trac.lighttpd.net/trac/wiki/TracInstall 升级后的安装说明]的重要信息, [wiki:TracCgi#MappingStaticResources 还有这里]对于非fastcgi安装方面是有帮助的.
+
+如果你使用trac-0.9, 阅读[http://lists.edgewall.com/archive/trac/2005-November/005311.html 关于一些bug]
+
+重新启动lighttpd并浏览`http://yourhost.example.org/trac`来访问Trac.
+
+注意关于运行lighttpd的几点:
+
+  如果没有别的办法, 并且trac.fcgi没有跟lighttpd设置(server.username = "www-data",  server.groupname = "www-data")启动,  那么, 在bin-environment 段中设置PYTHON_EGG_CACHE为www-data的主目录, 或者该帐户有写权限的其他目录. 
+
+== 简单的LiteSpeed配置 ==
+
+FastCGI前端主要是为了与另外的Web服务器一起使用而开发的, 例如[http://www.litespeedtech.com/ LiteSpeed].
+
+LiteSpeedWeb服务器是一个事件驱动的异步Apache的替代物, 从其最开始起, 就是以安全的, 扩展性和最低资源消耗为设计目标. LiteSpeed可以直接从一个Apache配置文件进行操作, 并且目标定位于重要的商业环境. 
+
+安装:
+
+1) 请确保你首先有安装一个Trac项目. 首先用"tracd"测试其安装.
+
+2) 为该安装创建一个虚拟机. 从现在开始, 我们会将这个虚拟机叫做TracVhost. 对于该指南, 我们会假设, 你的trac项目会通过下列实现:
+
+{{{
+http://yourdomain.com/trac/
+}}}
+
+3) 到''TracVhost → External Apps''选项卡, 并创建一个新的''外部程序''.
+
+{{{
+Name: MyTracFCGI	
+Address: uds://tmp/lshttpd/mytracfcgi.sock
+Max Connections: 10
+Environment: TRAC_ENV=/fullpathto/mytracproject/ <--- path to root folder of trac project
+Initial Request Timeout (secs): 30
+Retry Timeout (secs): 0
+Persistent Connection	Yes
+Connection Keepalive Timeout: 30
+Response Bufferring: No	
+Auto Start: Yes
+Command: /usr/share/trac/cgi-bin/trac.fcgi  <--- path to trac.fcgi
+Back Log: 50
+Instances: 10
+}}}
+
+4) 可选的. 如果你需要使用基于htpasswd的验证. 选择''TracVhost → Security(安全)''选项卡并创建一个新的安全''域''.
+
+{{{
+DB Type: Password File
+Realm Name: MyTracUserDB               <--- any name you wish and referenced later
+User DB Location: /fullpathto/htpasswd <--- path to your htpasswd file
+}}}
+
+如果你没有htpasswd文件或者不知道如何在其中创建选项, 访问http://sherylcanter.com/encrypt.php去创建''用户:密码''.
+
+5) 选择''PythonVhost → Contexts''并创建一个新的"FCGI Context".
+
+{{{
+URI: /trac/                              <--- URI path to bind to python fcgi app we created	
+Fast CGI App: [VHost Level] MyTractFCGI  <--- select the trac fcgi extapp we just created
+Realm: TracUserDB                        <--- only if (4) is set. select realm created in (4)
+}}}
+
+6) 更改/fullpathto/mytracproject/conf/trac.ini.
+
+{{{
+#find/set base_rul, url, and link variables
+base_url = http://yourdomain.com/trac/ <--- base url to generate correct links to
+url = http://yourdomain.com/trac/      <--- link of project
+link = http://yourdomain.com/trac/     <--- link of graphic logo
+}}}
+
+7) 重新启动LiteSpeed, ''lswsctrl restart'', 并在以下地址访问你的新Trac项目:
+
+{{{
+http://yourdomain.com/trac/
+}}}
+
+----
+原文版本: TracFastCgi[[BR]]
+相关信息: [ZhTracCgi TracCgi],  [ZhTracModPython ModPython],  [ZhTracInstall Trac安装],  [ZhTracGuide Trac导览][[BR]]
+See also: TracCgi,  TracModPython,  TracInstall,  TracGuide

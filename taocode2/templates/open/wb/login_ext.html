@@ -1,0 +1,137 @@
+{% extends "layouts/baseview.html" %}
+{% load i18n %}
+{% block pagename %}
+    <img src='{{ openUser.profile_image_url }}'/>{% trans 'Weibo Login Ext' %}
+{% endblock %}
+{% block extrastyle %}
+    <style type="text/css">
+        .hiddenLoginAuth {
+            display: none;
+        }
+    </style>
+{% endblock %}
+{% block extrascript %}
+    <script type="text/javascript">
+        $('#login_ext').hide()
+        var enableName = true;
+        var enableEmail = true;
+        var binding_type = ''
+        function checkUsername() {
+            var name = $('#name').val()
+            if (name == null || name.length == 0)
+                return
+            q_get('user/checkname/' + name, {}, function() {
+                $('#login_ext').addClass('hiddenLoginAuth')
+                enableName = true
+                if (binding_type == 'name')
+                    binding_type = ''
+            }, function() {
+                enableName = false
+                $('#login_ext').removeClass('hiddenLoginAuth')
+                $('#hint').html("{% trans 'Name exist,Confirm binding Account?' %}")
+                binding_type = 'name'
+            });
+        }
+
+        function checkEmail() {
+            var email = $('#email').val()
+            if (email == null || email.length == 0)
+                return
+            q_get('user/checkemail/' + email, {}, function() {
+                $('#login_ext').addClass('hiddenLoginAuth')
+                enableEmail = true
+                if (binding_type == 'email')
+                    binding_type = ''
+            }, function() {
+                enableEmail = false
+                $('#login_ext').removeClass('hiddenLoginAuth')
+                $('#hint').html("{% trans 'Email exist,Confirm binding Account?' %}")
+                binding_type = 'email'
+            });
+        }
+        var passwordCheck=false
+        function checkAuth() {
+            var email = $('#email').val()
+            var name=$('#name').val()
+            var pwd = $('#bind_password').val()
+            if (binding_type == 'email') {
+                q_get('user/checkemailauth', {email:email,pwd:pwd}, function() {
+                    $('#hint').html('')
+                    passwordCheck = true
+                }, function() {
+                    passwordCheck = false
+                    $('#hint').html("<font color=red>{% trans 'password not match' %}</font>")
+                });
+            } else if (binding_type == 'name') {
+                q_get('user/checknameauth', {name:name,pwd:pwd}, function() {
+                    $('#hint').html('')
+                    passwordCheck = true
+                }, function() {
+                    passwordCheck = false
+                    $('#hint').html("<font color=red>{% trans 'password not match' %}</font>")
+                });
+            }
+        }
+
+        function subimtLoginForm() {
+            if (binding_type != '' && passwordCheck==false){
+                $('#hint').html('<font color=red>{% trans 'binding account must check password first' %}</font>')
+            }
+            if(binding_type!=''){
+                $('#bind_account').val(binding_type)
+            }
+            if ((binding_type != '' && passwordCheck) || (binding_type == '' && enableEmail && enableName))
+                $('#login-form').submit()
+        }
+    </script>
+{% endblock %}
+{% block main-block %}
+    <div id="login" class="center">
+        <h4>{{ openUser.screen_name }} {% trans 'Weibo Login Ext' %}</h4>
+
+        <div>
+            <form id="login-form" action="/open/weibo/login/ext/" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="openId" value="{{ access_token.user_id }}">
+                <input type="hidden" name="oauth_token" value="{{ access_token.oauth_token }}">
+                <input type="hidden" name="oauth_token_secret" value="{{ access_token.oauth_token_secret }}">
+                <table>
+                    <tr>
+                        <td>{% trans 'UserName' %}</td>
+                        <td><input type="text" name="name" id="name" onblur="checkUsername()"></td>
+                    </tr>
+                    <tr>
+                        <td>{% trans 'Email' %}</td>
+                        <td><input type="text" name="email" id="email" onblur="checkEmail()"></td>
+                    </tr>
+                    <tr id="login_ext" class="hiddenLoginAuth">
+                        <td colspan="2">
+                            <table width="100%">
+                                <tr>
+                                    <td colspan="2" align="center"><span id='hint'></span></td>
+                                </tr>
+                                <tr>
+                                    <td>{% trans 'BindAccount' %}</td>
+                                    <td><input type="checkbox" name="bind_account" id="bind_account" checked="checked"><label
+                                            for='bind_account'>{% trans 'Bind Reged Account' %}</label></td>
+                                </tr>
+                                <tr>
+                                    <td>{% trans 'Password' %}</td>
+                                    <td><input type="password" name="bind_password" id="bind_password" onblur="checkAuth()">
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="center">
+                            <input type="button" onclick="subimtLoginForm();" id="loginButton"
+                                   value="{% trans 'Login' %}"/>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+
+        </div>
+    </div>
+{% endblock %}

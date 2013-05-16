@@ -1,0 +1,125 @@
+{% extends "layouts/baseview.html" %}
+{% load i18n %}
+{% load short_uri %}
+
+{%block title%}my{%endblock%}
+
+{% block extrastyle %}
+<script type="text/javascript" src="/js/fclean.js"></script> 
+{% endblock %}
+
+{%block ready_js%}
+
+
+    $('#__clean_nick__ input').blur(function () {
+	var new_nick = $(this).val();
+	if (new_nick.length == 0 || new_nick == '{{user.nick}}') {	    
+	    return;
+	}	
+	__fclean('/ajax/user/clean/newuserform_nick/', '__clean_nick__');	
+    });
+
+    $('#__clean_email__ input').blur(function () {
+	var new_email = $(this).val();
+	if (new_email.length == 0 || new_email == '{{user.email}}') {	    
+	    return;
+	}	
+	__fclean('/ajax/user/clean/newuserform_email/', '__clean_email__');	
+    });
+
+
+    $('#edit-user-pub').click(function() {
+	$('.user-pub .edit-form').toggle(100);	
+    });
+
+    $('#edit-user-mail').click(function() {
+	$('.user-mail .edit-form').toggle(100);	
+    });
+
+    $(".user-pub #btn-save").click(function() {
+	var new_nick = $("#id_nick").val();
+	if (new_nick.length == 0 || new_nick == '{{user.nick}}') {	    
+	    return;
+	}
+	
+	q_get("user/edit_my", {'n':new_nick}, function(result) {
+	    show_info('change profile ok!');
+	    user.nick = new_nick;
+	    $('#nav-my .nick').text('('+new_nick+')');
+
+	}, function () {
+	    show_info('can not change profile!');
+	});
+    });
+    
+    $(".user-mail #btn-save").click(function() {
+	var new_email = $("#id_email").val();
+	if (new_email.length == 0 || new_email == '{{user.email}}') {	    
+	    return;
+	}
+	
+	q_get("user/edit_email", {'e':new_email}, function(result) {
+	    var t = 'change email ok, please check the verify code with '+new_email;
+	    show_info(t);
+	    $('#new-mail-notify').text(t);
+	}, function () {
+	    show_info('can not change email');
+	});
+    });
+
+{%endblock%}
+
+{%block main-block%}
+<div style="width:500px">
+<!--
+<h4>{%trans "Public Info"%}</h4>
+<div class="edit-form user-pub pretext">
+  <div>
+    <span>Nick</span>
+    <span id="__clean_nick__">
+      <input id="id_nick" type="text" name="nick" maxlength="32" value="{{user.nick}}"/>
+      <span id="clean_result"></span>
+    </span>
+  </div>
+  <p>
+    <a id="btn-save" href="javascript:;" class="button">{%trans "Save"%}</a>
+  </p>
+</div>
+-->
+<h4>{%trans "Change Email"%}</h4>
+<div id="new-mail-notify"></div>
+<div class="edit-form user-mail pretext">
+  <div>
+    {%trans "You need verfiy the code with new email to change mail"%}
+    <div>
+      <span>{%trans "New Email"%}</span>
+      <span id="__clean_email__">
+	<input id="id_email" type="text" name="email" value="{{user.email}}"></input>
+	<span id="clean_result"></span>
+      </span>
+    </div>
+    <p>
+      <a id="btn-save" href="javascript:;" class="button">{%trans "Save"%}</a>
+    </p>
+  </div>
+</div>
+
+<table>
+  <tr>
+    <td>
+      {%gravatar user.email user.name%}
+    </td>
+    <td>
+      <div>
+	{%trans "Change your avatar at"%} <a href="http://www.gravatar.com">gravatar.com</a>
+      </div>
+      <div>
+	{%trans "We're using"%} {{user.email}}
+      </div>
+    </td>
+  </tr>
+</table>
+
+</div>
+</div>
+{%endblock%}

@@ -1,0 +1,25 @@
+= 驼峰式 =
+使用多个首字母大写的单词组成新单词.
+
+在Wiki中, 驼峰式约定用于创建超链接, 并且要求大写字母后面必须是小写字母; 因此, "AlabamA"和"ABc"将不是链接.
+
+== 定制Wiki行为 ==
+
+有些人却不喜欢驼峰式.  虽然Trac忠实于原版Wiki样式, 它还是提供了一些适应用户要求的方法:
+ * 有一个选项(在`[wiki]`的`ignore_missing_pages`中), 可以忽略所有没有对应页面的驼峰式的链接, 而不是将其显示成一个带问号("?")的灰色链接.[[BR]]
+   这对于将驼峰式用于代码名称(比如: 类名), 因而没有相应页面的情况非常有用.
+ * 有一个选项(在`[wiki]`的`split_page_names`中), 可以在渲染链接时向驼峰式链接的单词中自动插入空格.
+ * 创建显式Wiki链接也相当容易, 详情请参见[ZhWikiPageNames Wiki页面名字].
+ * 另外, Wiki格式在某些地方可以被完全禁用(比如, 在渲染提交日志消息时).
+
+更多选项, 请参见[ZhTracIni Trac配置].
+
+== 更多驼峰式的相关信息 ==
+
+ * http://c2.com/cgi/wiki?WikiCase
+ * http://en.wikipedia.org/wiki/CamelCase
+
+----
+原文版本: CamelCase[[BR]]
+相关信息: [ZhWikiPageNames Wiki页面名字],  [ZhWikiNewPage 创建Wiki页面], [ZhWikiFormatting Wiki格式], [ZhTracWiki Trac内置Wiki][[BR]]
+See also: WikiPageNames, WikiNewPage, WikiFormatting, TracWiki

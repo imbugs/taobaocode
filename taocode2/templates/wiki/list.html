@@ -1,0 +1,27 @@
+{% extends "layouts/baseview.html" %}
+{% load i18n %}
+{% load short_uri %}
+
+{%block title%}{{pagename}}{%endblock%}
+{%block main-block%}
+<table>
+  <tr>
+    <th>{%trans "page name"%}</th>
+    <th>{%trans "author"%}</th>
+    <th>{%trans "last author"%}</th>
+    <th>{%trans "create time"%}</th>
+    <th>{%trans "modify time"%}</th>    
+  </tr>
+
+  {%for wiki in wikis%}
+  <tr>
+    <td><a href="{{wiki|url}}">{{wiki.path}}</a></td>
+    <td><a href="{{wiki.user|url}}" class="username">{{wiki.user}}</a></td>
+    <td><a href="{{wiki.last_user|url}}" class="username">{{wiki.last_user}}</a></td>
+    <td>{{wiki.ctime}}</td>
+    <td>{{wiki.mtime}}</td>    
+  </tr>
+  {%endfor%}
+</table>
+{%endblock%}
+

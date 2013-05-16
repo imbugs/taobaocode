@@ -1,0 +1,88 @@
+= 导入传票数据 =
+
+== Bugzilla ==
+
+可以通过使用[http://projects.edgewall.com/trac/browser/trunk/contrib/bugzilla2trac.py bugzilla2trac.py]脚本从Bugzilla中导入传票数据. 该脚本位于Trac的contrib/目录中.
+
+{{{
+$ bugzilla2trac.py
+bugzilla2trac - 从Bugzilla中导入一个bug数据库到Trac中.
+
+使用:bugzilla2trac.py [选项]
+
+可用的选项:
+  --db <MySQL dbname>              - Bugzilla的数据库
+  --tracenv /path/to/trac/env      - Trac db环境的完整路径
+  -h | --host <MySQL hostname>     - Bugzilla的DNS主机名
+  -u | --user <MySQL username>     - Bugzilla数据库的有效用户名
+  -p | --passwd <MySQL password>   - Bugzilla的用户密码
+  -c | --clean                     - 在导入前删除现有的Trac传票
+  --help | help                    - 本帮助信息
+
+在脚本中可以直接定义额外的配置选项.
+}}}
+
+目前, 从Bugzilla中导入了下列数据:
+
+  * bugs
+  * bug活动(字段改变)
+  * bug附件
+  * 用户名和密码(放在htpasswd文件中)
+
+该脚本提供了许多特性, 以使转换过程轻松一些, 例如:
+
+  * PRODUCT_KEYWORDS:  Trac没有产品的概念, 因此脚本提供了一个附加传票关键字作为替代.
+
+  * IGNORE_COMMENTS:  不导入匹配某个正则表达式的Bugzilla注释.
+
+  * STATUS_KEYWORDS:  为Trac中不可用的Bugzilla状态附加传票关键字. 默认情况下, 'VERIFIED'和'RELEASED' Bugzilla状态是转换为Trac关键字.
+
+可用选项的更多细节, 请见该脚本头部的配置部分.
+
+== Sourceforge ==
+
+可通过使用[http://projects.edgewall.com/trac/browser/trunk/contrib/sourceforge2trac.py sourceforge2trac.py]脚本从Sourceforge2trac.py中导入传票数据. 该脚本可在Trac的contrib/目录中得到.
+
+== Mantis ==
+
+注意! mantis2trac脚本现在位于 http://trac-hacks.org/wiki/MantisImportScript . 你总是可以从 http://trac-hacks.org/changeset/latest/mantisimportscript?old_path=/&filename=mantisimportscript&format=zip 得到其最新版本. 
+
+Mantis的bug可以使用其附带的脚本导入.
+
+目前, 从Mantis中导入下列数据:
+  * bugs
+  * bug 注释
+  * bug 活动 (字段改变)
+  * 附件 (只要文件存在于mantis数据库而不是在文件系统中) 
+
+如果你使用该脚本, 请阅读`注意`那一节(在该文件的头部), 并确认你调整了适合你的环境的配置参数.
+
+mantis2trac.py与bugzilla2trac.py脚本有同样的参数:
+{{{
+mantis2trac - 从Mantis中导入一个bug数据库到Trac中.
+
+使用:mantis2trac.py [选项] 
+
+可用的选项:
+  --db <MySQL dbname>              - Mantis数据库
+  --tracenv /path/to/trac/env      - Trac db环境的完整路径
+  -h | --host <MySQL hostname>     - Mantis DNS主机名
+  -u | --user <MySQL username>     - 有效的Mantis数据库用户
+  -p | --passwd <MySQL password>   - Mantis数据库用户密码
+  -c | --clean                     - 在导入前删除现有的Trac传票
+  --help | help                    - 本帮助信息
+
+在脚本中可以直接定义额外的配置选项.
+}}} 
+
+
+== 其他 ==
+
+因为trac用一个SQL数据库来存储数据, 你可以通过检查数据库表格, 以从其他数据库系统中导入. 只需进入[http://www.sqlite.org/sqlite.html sqlite]命令行查看表格, 然后从你的应用程序中导入它们.
+
+=== 使用一个逗号分隔的文件 - CSV ===
+
+细节请见[http://trac.edgewall.org/attachment/wiki/TracSynchronize/csv2trac.2.py]. 如果有人需要手动输入大量的传票, 那么该方法会非常有用(注意, 该脚本需要传票类型字段(task等等...), 以使其与后来的Trac发行版一起工作).
+
+----
+原文版本: TracImport[[BR]]

@@ -1,0 +1,25 @@
+{% load i18n %}
+{% load short_uri %}
+<td class="img-btn" valign='top'>
+  {%if not hide_owner_pic%}
+  <a href="/u/{{project.owner.name}}/">
+    {%gravatar project.owner.email project.owner.name%}
+  </a>
+  {%endif%}
+</td>
+<td valign='top'>
+  {%if project.owner == user%}
+  <span class="img-btn">
+    <a href="{{project|url}}admin/"><img src="/img/prj_admin.png" title="admin"></img></a>
+  </span>
+  {%endif%}
+  <span>
+    <img id="prj-public" src='/img/{{project.is_public|yesno:"unlock,lock"}}.png' title="{{project.is_public|yesno:"public,private"}}">
+  </span>
+  <strong><a class="username" href="{{project.owner|url}}">{{project.owner}}</a>
+  /
+  <a href="{{project|url}}">{{project}}</a></strong>
+  <em>{{project.ctime|date}}</em>
+  <div>{{project.title|truncatechars:60}}</div>
+</td>
+

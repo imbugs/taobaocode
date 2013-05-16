@@ -1,0 +1,61 @@
+= 在Wiki中使用HTML =
+
+
+Trac支持向任意 Wiki文字中插入HTML, 通过使用HTML [wiki:ZhWikiProcessors Wiki解析器]来完成.
+
+支持HTML是内置的功能, 不需要安装任何其他软件包.
+
+== 如何使用HTML ==
+
+要告诉 Wiki引擎, 这段文字应被当作HTML, 请使用''html''解析器声明.
+
+例子:
+{{{
+#!html
+<pre class="wiki">{{{
+#!html
+&lt;h1 style="text-align: right; color: blue"&gt;HTML Test&lt;/h1&gt;
+}}}</pre>
+}}}
+
+结果:
+{{{
+#!html
+<h1 style="text-align: right; color: blue">HTML Test</h1>
+}}}
+
+注意, 在显示你的HTML代码前, Trac做了一些清理工作. 就是说, 如果你想使用一些可能有危险的代码, 例如Javascript事件处理代码, 这些代码都会从输出中被自动删除掉.
+
+自从0.11, 过滤器使用Genshi实现, 因此, 生成的输出将是格式良好的HTML片段. 换句话说, 这意味着你不能再使用两个HTML块, 一个用于打开<div>, 第二个用于关闭它, 以封装任意的wiki文本.
+要实现此目的, 现在你需要使用''div'' Wiki处理器:
+
+{{{
+{{{
+#!div class=important style="border: 2pt solid; text-align: center"
+This is the ''only'' way to go in Trac 0.11
+}}}
+}}}
+
+结果:
+{{{
+#!div class=important style="border: 2pt solid; text-align: center"
+This is the ''only'' way to go in Trac 0.11
+}}}
+
+对于span, 你应当使用宏语法:
+{{{
+ Hello [[span(''WORLD'' (click [#world-anchor here]), style=color: green; font-size: 120%, id=world-anchor)]]!
+}}}
+
+结果:
+ Hello [[span(''WORLD'' (click [#world-anchor here]), style=color: green; font-size: 120%, id=world-anchor)]]!
+
+== 更多信息 ==
+
+ * http://www.w3.org/ -- World Wide Web Consortium
+ * http://www.w3.org/MarkUp/ -- HTML Markup Home Page
+
+----
+原文版本: WikiHtml[[BR]]
+相关信息: [ZhWikiProcessors Wiki解析器], [ZhWikiFormatting Wiki格式], [ZhWikiRestructuredText 新结构化文本][[BR]]
+See also: WikiProcessors, WikiFormatting, WikiRestructuredText

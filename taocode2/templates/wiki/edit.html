@@ -1,0 +1,44 @@
+{% extends "layouts/baseview.html" %}
+{% load i18n %}
+{% load short_uri %}
+
+{%block title%}edit wiki{%endblock%}
+
+{%block ready_js%}
+$('#btn_save').click(function (){
+    $('#edit_wiki_form input[name="do"]').val('save');
+    $('#edit_wiki_form').submit();	
+});    
+
+$('#btn_preview').click(function (){
+    $('#edit_wiki_form input[name="do"]').val('preview');
+    $('#edit_wiki_form').submit();	
+});    
+
+{%endblock%}
+
+{%block main-block%}
+<div>
+  See <a href="/p/taobaocode/wiki/WikiFormatting/" target="_blank">Wiki Formarts</a>.
+</div>
+<div>
+  <form id="edit_wiki_form" action="" method="POST">
+    {% csrf_token %}
+    <textarea id="wiki" name="content" rows="27" cols="100">{{ content}}</textarea>
+    <p>
+      <input type="hidden" name="do"/>      
+      <a href="javascript:;" id="btn_save" class="button">{%trans "Save"%}</a>
+      <a href="javascript:;" id="btn_preview" class="button">{%trans "Preview"%}</a>
+    </p>
+  </form>
+  
+  {%if preview%}
+  <p id="preview">
+    <h4>Preview</h4>
+    <div class="preview">
+      {{preview|wikitext:wiki}}
+    </div>
+  </p>
+  {%endif%}
+</div>
+{%endblock%}

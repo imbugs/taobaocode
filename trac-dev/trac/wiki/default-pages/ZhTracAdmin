@@ -1,0 +1,47 @@
+= TracAdmin =
+[[ZhTracGuideToc]]
+跟Trac一起发布的, 有一个强大的命令行配置工具. 该工具可以用来配置和定制您的Trac安装, 从而更好的适应您的需求.
+
+其中一些操作可通过[http://trac.edgewall.org/wiki/WebAdmin WebAdmin]([http://trac.edgewall.org/wiki/WebAdmin WebAdmin] 插件的升级版, 现在(从0.11起)集成在Trac中)Web界面实现.
+
+== 用法 ==
+
+通过执行`trac-admin`和`help`命令, 你可以得到有效选项, 命令和子命令的完整列表:.
+{{{
+trac-admin help
+}}}
+
+你需要将[ZhTracEnvironment Trac环境]路径作为第一个参数(除非是运行`help`, `about` 或`version`等子命令), 例如:
+{{{
+trac-admin /path/to/projenv wiki list
+}}}
+
+== 交互方式 ==
+
+将环境路径作为唯一的参数时, `trac-admin`进入交互模式. 这些命令将在选定的环境中执行, 命令提示符提供了提供了tab补全(在非Windows系统中并且Python"readline"模块可用时)和自动重复最后一个命令的功能.
+
+一旦你进入交互方式, 你还可以得到某些具体的命令或者命令子集的帮助:
+
+例如, 为了得到`resync`命令的一个解释, 运行:
+{{{
+> help resync
+}}}
+
+为了得到所有Wiki相关的命令的帮助, 运行:
+{{{
+> help wiki
+}}}
+
+== 命令完整参考 ==
+
+[[TracAdminHelp()]]
+
+=== 题注 ===
+
+`initenv`也支持附加的`--inherit`选项, 可用于在创建环境时指定`[inherit] file` 选项, 以仅仅将''没有''在全局配置文件中指定的选项写入新创建环境的conf/trac.ini文件中.
+参见 [ZhTracIni#GlobalConfiguration 全局选项].
+
+----
+原文版本: TracAdmin[[BR]]
+相关信息: [ZhTracGuide Trac导览],  [ZhTracBackup Trac备份],  [ZhTracPermissions TracACL],  [ZhTracEnvironment Trac环境],  [ZhTracIni Trac配置][[BR]]
+See also: TracGuide,  TracBackup,  TracPermissions,  TracEnvironment,  TracIni

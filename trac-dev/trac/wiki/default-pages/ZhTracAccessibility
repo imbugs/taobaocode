@@ -1,0 +1,27 @@
+= Trac中的辅助性支持 =
+不是每个用户都拥有带鼠标或其他定点设备的图形环境. 一些用户依赖键盘, 替代键盘或者语音输入来导航链接, 激活表单控件, 等等. 在Trac中, 我们要确保用户可以使用这些设备.
+
+Trac支持使用`辅助键`来做最通常的操作. 在Wndows和Linux系统上, 同时按下列任意一个键以及`<Alt>`键;在Mac系统上, 则是`<ctrl>`键.
+
+''注意当使用Windows版的Firefox 2.0时, 你需要按`<Shift> + <Alt> + <Key>`.''
+
+''注意在Windows系统中使用IE浏览器时, 使用了辅助键后你需要敲一下Enter键.''
+
+== 全局辅助键 ==
+
+ * `1` - [ZhWikiStart Wiki首页]
+ * `2` - [wiki:ZhTracTimeline 时间线索]
+ * `3` - [wiki:ZhTracRoadmap 路线图]
+ * `4` - [wiki:ZhTracSearch 搜索]
+ * `6` - [wiki:ZhTracGuide Trac导览]
+ * `7` - [wiki:ZhTracTickets 新建传票]
+ * `9` - [../about 关于Trac]
+ * `0` - 本页
+ * `e` - 编辑页面
+ * `f` - 搜索
+
+
+----
+原文版本: TracAccessibility[[BR]]
+相关信息: [ZhTracGuide Trac导览][[BR]]
+See also: TracGuide

@@ -1,0 +1,18 @@
+{% extends "layouts/baseview.html" %}
+{% load i18n %}
+{% load short_uri %}
+
+{%block title%}change new email{%endblock%}
+{%block main-nav%}
+{%endblock%}
+
+{%block main-block %}
+<p>
+  Would you want change email with <strong>{{task.data}}</strong> ?
+</p>
+<div>
+  <span><a class="button" href="/verify/{{task.code}}/ok/">Yes</a></span>
+  <span><a class="button orange" href="/verify/{{task.code}}/cancel/">No</a></span>      
+</div>
+{%endblock%}
+

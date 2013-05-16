@@ -1,0 +1,131 @@
+{%extends "layouts/baseview.html" %}
+{%load i18n %}
+{%load short_uri %}
+
+{%block title%}{{project.name}}{%endblock%}
+
+{%block ready_js%}
+
+$('.btn_del_comment').click(function(e) {
+    var comment_id = $(this).attr('data-id');
+    var row = $('.comment-row-'+comment_id);
+    sure(e, '{%trans "Are you sure delete this comment?"%}', '{%trans "Yes"%}', '{%trans "No"%}', function(e) {	  
+	q_get("issue/del_comment", {'comment_id':comment_id}, function(result) {
+	    row.remove();
+	}, function() {
+	    show_info("{%trans "can not del comment"%}");
+	});	    
+    });
+});
+
+$('#btn_add_comment').click(function() {
+    if ($('#add_comment_form textarea').val().length <= 0) {
+	show_info('{%trans "need comment content!"%}');
+	return;
+    }
+    $('#add_comment_form').submit();
+});
+
+$('#btn_del').click(function (e) {
+   var issue_id = $(this).attr('data-id');
+
+   sure(e, '{%trans "Are you sure delete this issue?"%}' ,'{%trans "Yes"%}', '{%trans "No"%}', function() {
+	$("#edit_issue_form input[name^='op']").val('del');
+	$("#edit_issue_form").submit();
+    });
+});
+
+$('#btn_close').click(function (e) {
+   var issue_id = $(this).attr('data-id');
+
+   sure(e, '{%trans "Are you sure"%} {{issue.status|choice:"0:close,1:reopen"}}?' ,'{%trans "Yes"%}', '{%trans "No"%}', function() {
+	$("#edit_issue_form input[name^='op']").val('{{issue.status|choice:"0:close,1:reopen"}}');
+	$("#edit_issue_form").submit();
+    });
+});
+
+{%endblock%}
+
+{%block body-menu%}
+{%if issueowner%}
+<form id="edit_issue_form" action="{{project|url}}issue/change/{{issue.id}}/" method="POST">
+  {%csrf_token%}
+    <input type="hidden" name="op" value=""/>
+</form>
+
+<span><a class="button" href="javascript:;" id="btn_close">{{issue.status|choice:"0:close,1:reopen"}}</a></span>
+<span><a class="button" href="javascript:;" id="btn_del" data-id="{{issue.id}}">{%trans "delete"%}</a></span>
+{%endif%}
+{%endblock%}
+
+{%block main-block%}
+<div id="issue-body">
+  <h3>
+    <strong>[<span class="sptext">{{issue.status|choice:"0:open,1:closed"}}</span>]</strong>
+    #{{issue.id}} - <span id="title">{{issue.title}}</span>
+  </h3>
+  <div>
+    <strong><a class="username" href="{{issue.creator|url}}">{{issue.creator}}</a></strong>
+    post on <em>{{issue.ctime}}</em>    
+    <strong class="">{{comments|length}}</strong> {%trans "comments"%}
+  <span><a href="#comments">»</a></span>
+  </div>
+  
+  <div class="pretext">
+    <div id="content">{{issue.content|linebreaks}}</div>
+  </div>
+</div>
+
+{%include "main/files.html"%}
+
+<p id="comments">
+  <table cellspacing="0" class="wrapper">
+  {%for comment in comments%}
+    <tr class="row comment-row-{{comment.id}}" valign="top">
+      <td class="img-btn" width="50">
+	<a href="{{comment.owner|url}}">
+	  {%gravatar comment.owner.email comment.owner.name%}
+	</a>
+      </td>
+      <td>
+	<span><a id='comment-{{comment.id}}' href="#comment-{{comment.id}}">#{{forloop.counter}}</a></span>
+	{%if issueowner%}
+	<span class="img-btn">
+	  <a class="btn_del_comment" data-id="{{comment.id}}" href="javascript:;" title="remove">
+	    <img src="/img/remove.png"></img>
+	  </a>
+	</span>
+	{%endif%}
+	<a class="username" href="{{comment.owner|url}}">{{comment.owner}}</a>
+	<em>{{comment.ctime}}</em>	
+	<div class="pretext">
+	  {{comment.content|linebreaks}}
+	</div>
+      </td>
+    </tr>
+    {%endfor%}
+  </table>
+</p>
+{%if not issue.closed%}
+<div id="add-comment">
+  {%if user.is_authenticated%}    
+  <form id="add_comment_form" action="" method="POST">
+    {%csrf_token%}
+    <input type="hidden" name="prj_id"/>
+    <input type="hidden" name="issue_id"/>
+    <div class="comment-connent">
+      <textarea name="content" cols="50" rows="8"></textarea>
+    </div>
+  </form>
+  <p>
+    <a href="javascript:;" class="button" id="btn_add_comment">{%trans "Post comment"%}</a>
+  </p>
+  {%else%}
+  <a href="/login/?next={{issue.project|url}}issue/{{issue.id}}/">{%trans "login"%}</a> {%trans "for new comment"%}
+  {%endif%}
+</div>
+{%endif%}
+{%endblock%}
+
+
+

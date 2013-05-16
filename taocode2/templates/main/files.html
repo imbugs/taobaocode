@@ -1,0 +1,29 @@
+{% load short_uri %}
+{% load i18n %}
+
+{%if files%}
+<h4>Attachments</h4>
+{%endif%}
+
+<p id="wike-files">
+  {%for f in files%}
+  <div class="wike-file">
+    <span>
+      <a href="{{f.owner|url}}">{{f.owner}}</a>
+    </span>
+    |
+    <span>{{f.ctime}}</span>
+    |
+    <span>
+      <a class="filename" href="{{project|url}}file/{{f.id}}/{{f.orig_name}}">{{f.orig_name}}</a>
+    </span>
+    |
+    <span>
+      {{f.size|filesizeformat}}	
+    </span>
+    {%if can_op%}
+    <a href="javascript:;" class="btn_delete_file" data-id="{{f.id}}">{{_('Delete')}}</a>
+    {%endif%}
+  </div>
+  {%endfor%}
+</p>

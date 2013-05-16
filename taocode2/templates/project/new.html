@@ -1,0 +1,28 @@
+{% extends "layouts/baseview.html" %}
+{% load i18n %}
+{% load short_uri %}
+
+{%block title%}new project{%endblock%}
+
+
+{% block extrascript %}
+<script type="text/javascript" src="/js/fclean.js"></script>
+{% endblock %}
+
+{%block main-block%}
+<p>
+  <a href="/all/">All Projects</a> 
+</p>
+<div>
+  <form id="new-prj-form" action="" method="post">
+    {% csrf_token %}
+    <table>
+      {{form.as_table}}
+    </table>
+    <a class="button" href="javascript:;" onclick="javascript:$('#new-prj-form').submit();">create</a>
+  </form>
+</div>
+{%endblock%}
+
+
+

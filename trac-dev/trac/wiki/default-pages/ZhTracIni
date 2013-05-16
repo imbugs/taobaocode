@@ -1,0 +1,94 @@
+= Trac配置文件 =
+
+[[ZhTracGuideToc]]
+
+== 全局选项 ==
+在0.11版之前, 全局选项默认位于`$prefix/share/trac/conf/trac.ini`, 或根据发布版本的不同, 有时位于/etc/trac/trac.ini. 如果你正在升级, 你可能想指定这个要继承的文件.
+
+全局选项将与环境特定的选项进行合并, 其中局部选项覆盖全局选项. 选项文件用下面指定:
+{{{
+[inherit]
+file = /usr/share/trac/conf/trac.ini
+}}}
+
+注意, 当创建一个新项目时, 通过增加选项`--inherit=/path/to/global/options` 到 [TracAdmin trac-admin] 的 `initenv`命令中, 你也可以指定全局选项文件.
+如果你不想这样做, 而是想在你的新环境中, 使用全局选项文件,
+你将需要翻阅生成的整个conf/trac.ini文件, 删除会覆盖全局选项的条目.
+
+== 参考 ==
+
+下面是可用配置选项的简明参考.
+
+[[TracIni()]]
+
+== [components] == #components-section
+该节是用于启用或禁用插件提供的组件以及Trac本身的组件. 启用或禁用的组件是通过选项的名字来指定的. 能否启用是由选项值决定的, 将值设定为''enabled''或''on''会启用该组件, 其他任意值则禁用该组件, 一般是''disabled''或''off''.
+
+选项名可以是组件的全名, 或模块/安装包的前缀. 前者启用或禁用一个具体的组件, 但后者却可以启用或禁用指定的包或模块中的任意组件.
+
+考虑下列的配置片断:
+{{{
+[components]
+trac.ticket.report.ReportModule = disabled
+webadmin.* = enabled
+}}}
+
+第一个选项让Trac禁用[wiki:ZhTracReports 报表模块]. 第二个选项让Trac启用`webadmin`包中的所有组件. 注意, 要匹配模块/包, 结尾的通配符是必不可少的.
+
+参见''关于Trac''的''插件''页以获得所有可用组件的列表(要求`CONFIG_VIEW` [wiki:ZhTracPermissions 权限]).
+
+相关信息:[ZhTracPlugins Trac插件]
+
+== [ticket-custom] == #ticket-custom-section
+
+此段中, 你可以定义传票的附加域. 更多详情参见TracTicketsCustomFields.
+
+== [ticket-workflow] == #ticket-workflow-section
+''(自 0.11)''
+
+传票工作流由插件控制. 默认情况下, 只指定了一个`ConfigurableTicketWorkflow`组件. 此组件允许通过trac.ini文件中的此段的来配置工作流.
+更多详情参见TracWorkflow.
+
+== [milestone-groups] == #milestone-groups-section
+''(自 0.11)''
+
+由于传票工作流现在可配置, 将可能有许多传票状态, 简单地显示已关闭传票和所有其他状态, 可能不是所有情况下都恰当的. 此段可以轻易创建状态''组'', 其将在里程碑进度条中以不同颜色显示.
+
+配置样例(也是默认配置):
+{{{
+closed = closed
+closed.order = 0                     # 进度条序列号
+closed.query_args = group=resolution # 查询的可选附加参数
+closed.overall_completion = true     # 总体完成的数量
+
+active = *                           # 允许一个catch-all组
+active.order = 1
+active.css_class = open              # 交替显示的CSS类
+}}}
+
+定义由逗号分割的可用状态列表组成. 并且, '*'表示所有状态, 可用于关联所有剩余状态到一个catch-all组.
+
+CSS类可以是: new (黄色), open (无色) 或 closed (绿色). 新样式可以使用如下段轻易添加:  `table.progress td.<class>`
+
+== [svn:externals] == #svn:externals-section
+''(自从 0.11)''
+
+[ZhTracBrowser Trac游览](Subversion)天生就可以解析目录的`svn:externals`属性.
+然而, 如果那些外部目录''不''使用`http:`协议, 或者如果链接到一个不同的仓库浏览器(比如另一个Trac或者[http://www.viewvc.org/ ViewVC]), 那么Trac需要能映射到此URL的外部前缀 .
+
+此映射在[ZhTracIni Trac配置]的`[svn:externals]`段完成.
+
+例如:
+{{{
+[svn:externals]
+http://theirserver.org/svn/eng-soft       http://ourserver/viewvc/svn/$path/?pathrev=25914
+svn://anotherserver.com/tools_repository  http://ourserver/trac/support/browser/$path?rev=$rev
+}}}
+上例中, `svn://anotherserver.com/tools_repository/tags/1.1/tools`外部链接将映射到`http://ourserver/trac/support/browser/tags/1.1/tools?rev=` (并且`修订号` 将设置为此外部链接对应的修订号(如果指定了修订号), 更多详情参见[http://svnbook.red-bean.com/en/1.4/svn.advanced.externals.html Subversion Book on externals]).
+
+注意, 上述节中使用的关键字纯粹是用作占位符的, 因为URL本身不能用作关键字(由于配置文件解析器的各种限制). 
+
+----
+原文版本: TracIni[[BR]]
+相关信息: [ZhTracGuide Traqc导览],  [ZhTracAdmin Trac管理],  [ZhTracEnvironment Trac环境][[BR]]
+See also: TracGuide,  TracAdmin,  TracEnvironment

@@ -1,0 +1,181 @@
+= Trac权限 =
+[[ZhTracGuideToc]]
+
+Trac使用一种简单的权限系统来控制用户能否访问资源.
+
+权限由[wiki:ZhTracAdmin trac-admin]工具管理, 或者web界面''管理''中的''一般 / 权限''面板.
+
+除了本页中描述的默认权限策略, 可以启用插件来激活附加的权限, 并在[ZhTracIni TracIni]的`[trac] permission_policies` 配置栏目中列出. 详情参见[ZhTracFineGrainedPermissions TracFineGrainedPermissions].
+
+未验证的用户访问系统时, 系统分配给他的名字是"anonymous". 为"anonymous"用户分配权限, 从而可以给匿名/访客身份的用户设置特权. 用户没有特权的Trac部分不会显示在导航中.
+除这些特权外, 当用户认证并登录到系统时, 还能得到其他的单独权利. 所有登录的用户属于"authenticated"的组, 他们继承"anonymous"用户的权限.
+
+== 可用的特权 ==
+
+要让用户拥有所有特权, 使用`TRAC_ADMIN`权限. 拥有`TRAC_ADMIN`权限就像是*NIX系统上的一个''root'', 它会让你执行任何操作. 
+
+否则, 可以给用户分配用于Trac各个不同功能领域的单独特权(注意, 特权名是区分大小写的).
+
+=== 仓库浏览器 ===
+
+|| `BROWSER_VIEW` || 在[wiki:ZhTracBrowser 仓库浏览器]中查看目录清单 ||
+|| `LOG_VIEW` || 在[wiki:ZhTracBrowser 仓库浏览器]中查看文件和目录的修订日志 ||
+|| `FILE_VIEW` || 在[wiki:ZhTracBrowser 仓库浏览器]中查看文件 ||
+|| `CHANGESET_VIEW` || 查看[wiki:ZhTracChangeset Subversion仓库检入] ||
+
+=== 传票系统 ===
+|| `TICKET_VIEW` || 查看现有[wiki:ZhTracTickets 传票]和执行[wiki:TracQuery 传票查询] ||
+|| `TICKET_CREATE` || 创建新的[wiki:ZhTracTickets 传票] ||
+|| `TICKET_APPEND` || 为[wiki:ZhTracTickets 传票]添加评论或附件 ||
+|| `TICKET_CHGPROP` || 更改[wiki:ZhTracTickets 传票]属性, 包括优先级, 指派到, 关键字等等(描述域除外) ||
+|| `TICKET_MODIFY` || 包括`TICKET_APPEND`和`TICKET_CHGPROP`. 另外, 允许解决[wiki:TracTickets 传票] ||
+|| `TICKET_EDIT_CC` || 更改抄送字段 ||
+|| `TICKET_EDIT_DESCRIPTION` || 更改描述字段 ||
+|| `TICKET_ADMIN` || 所有`TICKET_*`权限, 还有删除传票附件和描述域的更改 ||
+
+注意: 需要`REPORT_VIEW`权限以显示"查看传票"按钮.
+
+=== 路线图 ===
+
+|| `MILESTONE_VIEW` || 查看里程碑 ||
+|| `MILESTONE_CREATE` || 创建一个新里程碑 ||
+|| `MILESTONE_MODIFY` || 修改现有里程碑 ||
+|| `MILESTONE_DELETE` || 删除里程碑 ||
+|| `MILESTONE_ADMIN` || 所有`MILESTONE_*`权限 ||
+|| `ROADMAP_VIEW` || 查看[wiki:ZhTracRoadmap 路线图]页面 ||
+|| `ROADMAP_ADMIN` || 从#3022中删除, 由MILESTONE_ADMIN替换 ||
+
+=== 报表 ===
+
+|| `REPORT_VIEW` || 查看[wiki:ZhTracReports 报表] ||
+|| `REPORT_SQL_VIEW` || 查看[wiki:ZhTracReports 报表]的底层SQL查询 ||
+|| `REPORT_CREATE` || 创建新[wiki:ZhTracReports 报表] ||
+|| `REPORT_MODIFY` || 更改现有[wiki:ZhTracReports 报表] ||
+|| `REPORT_DELETE` || 删除[wiki:ZhTracReports 报表] ||
+|| `REPORT_ADMIN` || 所有`REPORT_*`权限 ||
+
+=== Wiki系统 ===
+
+|| `WIKI_VIEW` || 查看现有的[wiki:ZhTracWiki Wiki]页面 ||
+|| `WIKI_CREATE` || 创建新的[wiki:ZhTracWiki Wiki]页面 ||
+|| `WIKI_MODIFY` || 更改[wiki:ZhTracWiki Wiki]页面 ||
+|| `WIKI_DELETE` || 删除[wiki:ZhTracWiki Wiki]页面和附件 ||
+|| `WIKI_ADMIN` || 所有`WIKI_*`权限, 和''只读''页面的管理 ||
+
+=== 权限 ===
+
+|| `PERMISSION_GRANT` || 增加/授予权限 ||
+|| `PERMISSION_REVOKE` || 删除/收回权限 ||
+|| `PERMISSION_ADMIN` || 所有`PERMISSION_*`权限 ||
+
+
+=== 其他 ===
+
+|| `TIMELINE_VIEW` || 查看[wiki:ZhTracTimeline 时间线]页面 ||
+|| `SEARCH_VIEW` || 查看和执行[wiki:ZhTracSearch 搜索]查询 ||
+|| `CONFIG_VIEW` || 启用''关于Trac''的附加页面, 显示现在的配置或已安装插件的列表 ||
+|| `EMAIL_VIEW` || 显示邮件地址, 即使[wiki:0.11/TracIni `trac show_email_addresses`配置项是`false`] ||
+
+== 授予特权 ==
+
+你可用[wiki:TracAdmin trac-admin]授予用户特权. 现有的特权集可以用下面命令列出来:
+{{{
+  $ trac-admin /path/to/projenv permission list
+}}}
+
+下面命令允许 ''bob'' 删除报表:
+{{{
+  $ trac-admin /path/to/projenv permission add bob REPORT_DELETE
+}}}
+
+`permission add` 也可以一次增加多个权限:
+{{{
+  $ trac-admin /path/to/projenv permission add bob REPORT_DELETE WIKI_CREATE
+}}}
+
+或增加所有特权:
+{{{
+  $ trac-admin /path/to/projenv permission add bob TRAC_ADMIN
+}}}
+
+== 权限组合 ==
+
+有两个内置组, "authenticated"和"anonymous".[[BR]]
+所有没有登录的用户自动是"anonymous"组.[[BR]]
+所有登录的用户自动是"authenticated"组.[[BR]]
+"authenticated"组从"anonymous"组继承权限.[[BR]]
+例如, 如果"anonymous"组有WIKI_MODIFY权限, 则不需要为"authenticated"增加WIKI_MODIFY permisison权限.
+
+定制组可以定义为从内置组中继承权限.
+
+权限可以按照''developer'', ''admin''等角色进行分组.
+{{{
+  $ trac-admin /path/to/projenv permission add developer WIKI_ADMIN
+  $ trac-admin /path/to/projenv permission add developer REPORT_ADMIN
+  $ trac-admin /path/to/projenv permission add developer TICKET_MODIFY
+  $ trac-admin /path/to/projenv permission add bob developer
+  $ trac-admin /path/to/projenv permission add john developer
+}}}
+
+组内成员资格可通过做一个{{{permission list}}}(没有其他更多的参数)来进行核查, 结果会包含组成员资格. 组名应该使用小写字母, 大写字母是保留用于权限的.
+
+== 增加新组和权限 ==
+权限组可以通过将一个用户指定到一个组来创建, 然后为那个组指定权限.
+
+下面将''bob''增加到名为''beta_testers''新组, 然后为那个组指定WIKI_ADMIN权限. (因此, ''bob''将继承WIKI_ADMIN 权限)
+{{{ 
+   $ trac-admin /path/to/projenv permission add bob beta_testers
+   $ trac-admin /path/to/projenv permission add beta_testers WIKI_ADMIN
+
+}}}
+
+== 删除权限 ==
+
+通过`remove`命令来删除权限. 例如:
+
+该命令会阻止用户''bob''删除报表:
+{{{
+  $ trac-admin /path/to/projenv permission remove bob REPORT_DELETE
+}}}
+
+就像`permission add`, 该命令接受多个特权名.
+
+你还可以删除某个用户的全部特权:
+{{{
+  $ trac-admin /path/to/projenv permission remove bob '*'
+}}}
+
+或者所有用户的某个特权:
+{{{
+  $ trac-admin /path/to/projenv permission remove '*' REPORT_ADMIN
+}}}
+
+== 默认权限 ==
+
+新安装的Trac, 默认的`anonymous`用户将有''查看''Trac中所有内容的权限, 但是不能创建或修改.
+另一方面, `authenticated`用户将有权限''创建和修改传票和wiki页面''.
+
+ '''anonymous'''::
+ BROWSER_VIEW 
+ CHANGESET_VIEW 
+ FILE_VIEW 
+ LOG_VIEW 
+ MILESTONE_VIEW 
+ REPORT_SQL_VIEW 
+ REPORT_VIEW 
+ ROADMAP_VIEW 
+ SEARCH_VIEW 
+ TICKET_VIEW 
+ TIMELINE_VIEW
+ WIKI_VIEW 
+
+ '''authenticated'''::
+ TICKET_CREATE 
+ TICKET_MODIFY 
+ WIKI_CREATE 
+ WIKI_MODIFY  
+
+----
+原文版本: TracPermissions[[BR]]
+相关信息: [ZhTracAdmin Trac管理], [ZhTracGuide Trac导览][[BR]]
+See also: TracAdmin, TracGuide

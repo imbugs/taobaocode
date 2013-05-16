@@ -1,0 +1,50 @@
+= Trac日志 =
+[[ZhTracGuideToc]]
+
+Trac支持使用与Python自带的标准[http://docs.python.org/lib/module-logging.html 日志模块]来记录系统消息.
+
+日志记录在[wiki:TracIni#logging-section trac.ini]的`[logging]`段中进行配置.
+
+== 支持的日志记录方法 ==
+
+记录日志的方法通过使用`log_type`配置选项来设置, 配置选项采用了下列的某个值:
+
+ '''none'':: 禁止所有的日志消息.
+ '''file''':: 将消息记录到一个[wiki:ZhTracIni trac.ini]中log_file`选项指定的文件中.
+ '''stderr''':: 到控制台输出所有的日志(只对[wiki:ZhTracStandalone tracd]起作用).
+ '''syslog''':: (UNIX)通过命名管道`/dev/log`发送消息到本地的syslogd .
+ '''eventlog''':: (Windows)使用系统的NT事件日志为Trac记录日志. 
+
+== 日志等级 ==
+
+日志消息的详细程度可通过用[wiki:ZhTracIni trac.ini]中的''log_level''指令来进行设置. 日志等级定义了一个需要记录的消息所需的最低紧急等级. 这些等级有:
+
+ '''CRITICAL''':: 只记录最重要的错误(一般是致命错误).
+ '''ERROR''':: 记录失败, bug和错误. 
+ '''WARN''':: 记录警告, 不中断的事件等.
+ '''INFO''':: 诊断信息, 关于所有进程的日志信息.
+ '''DEBUG''':: Trace消息, profiling等等.
+
+== 日志格式 ==
+
+从Trac 0.10.4起(见#2844), 已经可以设置日志的输出格式. 通过设置[wiki:TracIni#logging-section trac.ini]中的`log_format`选项. 其格式为包含 [http://docs.python.org/lib/node422.html Python日志格式化变量]的字符串. 另外, 还可以使用下列Trac特定变量:
+ '''$(basename)s''':: 当前环境的路径中的最后一个名字.
+ '''$(path)s''':: 当前环境的绝对路径.
+ '''$(project)s''':: 最初项目名字.
+
+注意, 变量使用(`$(...)s`)来标记, 而不是(`%(...)s`).
+
+缺省格式为:
+{{{
+log_format = Trac[$(module)s] $(levelname)s: $(message)s
+}}}
+
+在多项目环境(所有日志都发送到相同的地方, 比如`syslog`)中, 最好加上项目的名字. 下面例子中, 我们使用`basename` , 因为其通常用于标识一个项目:
+{{{
+log_format = Trac[$(basename)s:$(module)s] $(levelname)s: $(message)s
+}}}
+
+----
+原文版本: TracLogging[[BR]]
+相关信息: [ZhTracIni Trac配置], [ZhTracGuide Trac导览], [ZhTracEnvironment Trac环境][[BR]]
+See also: TracIni, TracGuide, TracEnvironment

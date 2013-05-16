@@ -1,0 +1,34 @@
+= Trac备份 =
+[[ZhTracGuideToc]]
+
+由于Trac使用了数据库后端, 为了安全地备份一个[wiki:ZhTracEnvironment Trac环境], 需要额外做一些事情. 幸运的是[wiki:ZhTracAdmin trac-admin]提供了一个轻松安全创建备份的命令:  `hotcopy`.
+
+  ''注意: Trac使用`hotcopy`术语来对应[http://subversion.tigris.org/ Subversion]的术语,  以在同时管理Trac和Subversion两种服务器时, 能减少记忆的负担.''
+
+== 创建备份 ==
+
+为了创建[ZhTracEnvironment Trac环境]的热备份, 只需运行:
+{{{
+
+  $ trac-admin /path/to/projenv hotcopy /path/to/backupdir
+
+}}}
+
+在复制的过程中, [wiki:ZhTracAdmin trac-admin]会锁住数据库.
+
+备份的结果目录将能被标准的基于文件的备份工具(比如:tar和dump/restore)安全处理.
+
+请注意, 热备份命令不会覆盖目标路径, 当目标路径存在时, 热备份发出错误: `命令失败: [错误号 17] 文件存在:` 此问题的讨论见 trac:ticket:3198.
+
+=== 备份恢复 ===
+
+备份文件仅仅是整个[wiki:ZhTracEnvironment 项目环境]目录的一个快照(包含了SQLite数据库).
+
+为了从某个备份中恢复Trac环境, 只需停止运行Trac的程序(比如, Web服务器或[wiki:ZhTracStandalone tracd]), 从备份中恢复目录结构, 并重新启动服务.
+
+  ''注意: 目前还不支持不使用SQLite作为数据库后端的环境的自动备份. 提示一个可行的方法: 我们建议你停止该服务器, 备份Trac环境的目录结构, 并创建一个数据库的备份文件(可以使用任何该数据库能提供的机制).
+----
+
+原文版本: TracBackup[[BR]]
+相关信息: [ZhTracAdmin Trac管理],  [ZhTracEnvironment Trac环境],  [ZhTracGuide Trac导览][[BR]]
+See also: TracAdmin,  TracEnvironment,  TracGuide

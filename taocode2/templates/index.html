@@ -1,0 +1,96 @@
+{%extends "layouts/baseview.html"%}
+{%load i18n %}
+{%load short_uri %}
+
+
+{%block main-nav%}
+{%endblock%}
+
+{%block pagename-nav%}
+{%endblock%}
+
+{%block main-block%}
+<div>
+  <h4>{%trans 'Featured projects'%}</h4>  
+  {%for prj in feature_prjs%}
+  <div>
+    <a class="username" href="{{prj.project.owner|url}}">{{prj.project.owner}}</a> / 
+    <a href="{{prj.project|url}}">{{prj.project}}</a>
+    <div class="pretext">
+      {{prj.desc|wikitext:prj.project}}
+    </div>
+  </div>
+  {%endfor%}
+</div>
+<table cellspacing="0" class="wrapper">
+  <tr valign="top" valign="top">
+    <td>
+      <h4>{%trans 'Last logs'%}</h4>
+      <table width="100%">
+	{%for log in logs%}
+	{%include "user/activity.html" with log=log%}
+	{%endfor%}
+      </table>      
+    </td>
+    <td width="300" valign="top">
+      <h4>{%trans 'Active Users'%}</h4>
+      <table>
+	{%for au in ausers%}
+	<tr class="row">
+	  {%include "user/user-info.html" with user=au%}
+	</tr>
+	{%endfor%}
+      </table>
+    </td>
+  </tr>
+</table>
+
+<table cellspacing="0" class="wrapper">
+  <tr>
+    <td width="50%" valign="top">
+      <h4>{%trans 'Hot projects'%}</h4>
+      <table>
+	{%for prj in hot_projects%}
+	<tr class="row">
+	  {%include "project/prj-info.html" with project=prj%}
+	</tr>
+	{%endfor%}
+      </table>
+    </td>
+    <td width="50%"  valign='top'>
+      <h4>{%trans 'New projects'%}</h4>
+      <table>
+	{%for prj in new_projects%}
+	<tr class="row">
+	  {%include "project/prj-info.html" with project=prj%}
+	</tr>
+	{%endfor%}
+      </table>
+    </td>
+  </tr>
+
+  <tr>
+    <td width="50%" valign="top">
+      <h4>{%trans 'Random projects'%}</h4>
+      <table>
+	{%for prj in random0_projects%}
+	<tr class="row">
+	  {%include "project/prj-info.html" with project=prj%}
+	</tr>
+	{%endfor%}
+      </table>
+    </td>
+    <td width="50%"  valign='top'>
+      <h4>{%trans 'Random projects'%}</h4>
+      <table>
+	{%for prj in random1_projects%}
+	<tr class="row">
+	  {%include "project/prj-info.html" with project=prj%}
+	</tr>
+	{%endfor%}
+      </table>
+    </td>
+  </tr>
+</table>
+
+{%endblock%}

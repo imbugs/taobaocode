@@ -1,0 +1,321 @@
+= Trac和mod_python =
+[[ZhTracGuideToc]]
+
+Trac支持[http://www.modpython.org/ mod_python], 它显著加快了Trac的响应时间, 特别是和[ZhTracCgi CGI]相比, 并允许使用许多[wiki:ZhTracStandalone tracd]/mod_proxy无法使用的Apache特征.
+
+这些指令用于Apache 2; 如果你还在使用Apache 1.3, 你可能需要在[wiki:TracModPython2.7 TracModPython2.7]碰运气了.
+
+== 简单的配置 ==
+
+如果你只安装了mod_python, 你可能还要在Apache配置中添加一行来载入模块:
+{{{
+LoadModule python_module modules/mod_python.so
+}}}
+
+ ''注意:模块的准确路径取决于HTTPD安装布局.''
+在Debian上使用apt-get
+{{{
+apt-get install libapache2-mod-python libapache2-mod-python-doc
+}}}
+(还是在Debian上) 在你安装了mod_python后, 你必须启用apache2中的模块 (跟上面的Load Module指令相同):
+{{{
+a2enmod mod_python
+}}}
+在Fedora上使用yum:
+{{{
+yum install mod_python
+}}}
+通过增加下面内容到你的httpd.conf中, 你可以测试你的mod_python安装.  当你完成测试后, 基于安全原因, 你应该删除它. 注意: mod_python.testhandler仅仅在mod_python 3.2+才有.
+{{{
+#!xml
+<Location /mpinfo>
+   SetHandler mod_python
+   PythonInterpreter main_interpreter
+   PythonHandler mod_python.testhandler
+</Location>
+}}}
+
+mod_python上的Trac的一个简单设置如下:
+
+{{{
+#!xml
+<Location /projects/myproject>
+   SetHandler mod_python
+   PythonInterpreter main_interpreter
+   PythonHandler trac.web.modpython_frontend 
+   PythonOption TracEnv /var/trac/myproject
+   PythonOption TracUriRoot /projects/myproject
+</Location>
+}}}
+
+'''`TracUriRoot`'''选项可有可无. 试试不带该选项进行配置, 如果Trac构造出的URL看起来是错的或如果Trac似乎不能正确地识别URL, 就添加'''`TracUriRoot`'''选项. 你将注意到, `Location`和'''`TracUriRoot`'''的路径是相同的.
+
+=== 配置验证 ===
+
+配置密码文件和验证, 跟在[wiki:ZhTracCgi#AddingAuthentication CGI]中一样:
+{{{
+#!xml
+<Location /projects/myproject/login>
+  AuthType Basic
+  AuthName "myproject"
+  AuthUserFile /var/trac/myproject/.htpasswd
+  Require valid-user
+</Location>
+}}}
+
+在Apache中配置mod_ldap验证需要一些技巧(httpd 2.2.x 和 OpenLDAP: slapd 2.3.19)
+
+1. 你需要在Apache httpd.conf中载入下列模块
+{{{
+LoadModule ldap_module modules/mod_ldap.so
+LoadModule authnz_ldap_module modules/mod_authnz_ldap.so
+}}}
+
+2. 你的httpd.conf需要如下这些:
+
+{{{
+#!xml
+<Location /trac/>
+  SetHandler mod_python
+  PythonInterpreter main_interpreter
+  PythonHandler trac.web.modpython_frontend
+  PythonOption TracEnv /home/trac/
+  PythonOption TracUriRoot /trac/
+  Order deny,allow
+  Deny from all
+  Allow from 192.168.11.0/24
+  AuthType Basic
+  AuthName "Trac"
+  AuthBasicProvider "ldap"
+  AuthLDAPURL "ldap://127.0.0.1/dc=example,dc=co,dc=ke?uid?sub?(objectClass=inetOrgPerson)"
+  authzldapauthoritative Off
+  require valid-user
+</Location>
+}}}
+
+或是到Microsoft Active Directory的LDAP接口:
+
+{{{
+#!xml
+<Location /trac/>
+  SetHandler mod_python
+  PythonInterpreter main_interpreter
+  PythonHandler trac.web.modpython_frontend
+  PythonOption TracEnv /home/trac/
+  PythonOption TracUriRoot /trac/
+  Order deny,allow
+  Deny from all
+  Allow from 192.168.11.0/24
+  AuthType Basic
+  AuthName "Trac"
+  AuthBasicProvider "ldap"
+  AuthLDAPURL "ldap://adserver.company.com:3268/DC=company,DC=com?sAMAccountName?sub?(objectClass=user)"
+  AuthLDAPBindDN       ldap-auth-user@company.com
+  AuthLDAPBindPassword "the_password"
+  authzldapauthoritative Off
+  # require valid-user
+  require ldap-group CN=Trac Users,CN=Users,DC=company,DC=com
+</Location>
+}}}
+
+注 1: 这是LDAP搜索得到多个OU的情况, 连接到AD的全局目录服务器部分(注意, 端口是3268, 而不是通常的LDAP 389). GCS基本上为一个"扁平"的树状结构, 允许不知道其所属的OU来搜索用户.
+
+注 2: 访问Active Directory的记录, 要求验证用户/密码 (AuthLDAPBindDN 和 AuthLDAPBindPassword).
+
+注 3: 指令"require ldap-group ..."  指定其成员可以访问的AD组.
+
+
+
+=== 设置!PythonPath ===
+
+如果Trac安装包没有安装在你的Python路径中, 你需要使用`PythonPath`指令, 告诉Apache在哪里找到Trac mod_python处理程序:
+{{{
+#!xml
+<Location /projects/myproject>
+  ...
+  PythonPath "sys.path + ['/path/to/trac']"
+  ...
+</Location>
+}}}
+
+注意一下`PythonPath`指令, ''不是''`SetEnv PYTHONPATH`, 因为后者不起作用.
+
+== 设置多个项目 ==
+
+Trac mod_python处理程序有一个类似Subversion的`SvnParentPath`配置选项, 叫做`TracEnvParentDir`:
+{{{
+#!xml
+<Location /projects>
+  SetHandler mod_python
+  PythonInterpreter main_interpreter
+  PythonHandler trac.web.modpython_frontend 
+  PythonOption TracEnvParentDir /var/trac
+  PythonOption TracUriRoot /projects
+</Location>
+}}}
+
+当你请求`/projects`URL时, 你会得到在`TracEnvParentDir`中设置的目录下所有Trac环境子目录的列表. 选择列表中的任意项目都会把你带到相应的Trac环境.
+
+如果你不想将子目录列表作为你的项目主页, 你可以使用
+{{{
+#!xml
+<LocationMatch "/.+/">
+}}}
+
+它会指导Apache对所有非根目录的位置使用mod_python, 而同时又允许你在文档根目录中放入一个自定义主页.
+
+你还可以通过使用`<LocationMatch>`指令, 对所有的项目使用同样的验证域:
+
+{{{
+#!xml
+<LocationMatch "/projects/[^/]+/login">
+  AuthType Basic
+  AuthName "Trac"
+  AuthUserFile /var/trac/.htpasswd
+  Require valid-user
+</LocationMatch>
+}}}
+
+== 虚拟机配置 ==
+
+下面的配置例子将trac设置为一个虚拟服务器(即:当你在类似!http://trac.mycompany.com的URL上访问它时):
+
+{{{
+#!xml
+<VirtualHost * >
+    DocumentRoot /var/www/myproject
+    ServerName trac.mycompany.com
+    <Location />
+        SetHandler mod_python
+        PythonInterpreter main_interpreter
+        PythonHandler trac.web.modpython_frontend
+        PythonOption TracEnv /var/trac/myproject
+        PythonOption TracUriRoot /
+    </Location>
+    <Location /login>
+        AuthType Basic
+        AuthName "MyCompany Trac Server"
+        AuthUserFile /var/trac/myproject/.htpasswd
+        Require valid-user
+    </Location>
+</VirtualHost>
+}}}
+
+如果你有登录的问题, 试试使用`<LocationMatch>`而不是`<Location>`
+
+对于支持多个项目的虚拟机, 将"`TracEnv`" /var/trac/myproject替换为"`TracEnvParentDir`" /var/trac/
+
+== 疑难解答 ==
+
+通常, 如果你收到服务器的错误网页, 你可以查看Apache错误日志, 或者启用`PythonDebug`选项:
+{{{
+#!xml
+<Location /projects/myproject>
+  ...
+  PythonDebug on
+</Location>
+}}}
+
+对于多个项目, 也试试重启服务器.
+
+=== Expat相关的段错误(segmentation faults) === #expat
+
+该问题大多数发生在使用python 2.4的Unix上.
+在Python 2.4中, 使用Expat(一个用C写的XML解析库)的某些版本, 
+并且如果Apache使用了另一个版本, 将导致段错误(segmentation faults).
+因为Trac 0.11使用的是Genshi, 将间接使用Expat, 该问题
+将可能发生, 即使你从前使用Trac 0.10时一切正常.
+
+参见Graham Dumpleton详细的[http://www.dscpl.com.au/wiki/ModPython/Articles/ExpatCausingApacheCrash 解释和解决办法].
+
+=== 表单提交问题 ===
+
+如果你在Trac中提交表单时遇到了问题(通常在提交后, 你被重定向到起始页), 检查{{{DocumentRoot}}}中是否包含一个与映射到mod_python处理器相同路径的目录或文件. 由于某种原因, mod_python映射到一个位置同时又匹配一个静态资源时, 它会很困惑.
+
+=== 虚拟机配置的问题 ===
+
+如果使用<Location />指令, 设置`DocumentRoot`会造成一个''403 (Forbidden)''错误. 删除`DocumentRoot`指令, 或确认它指向的访问目录是允许的(在对应的`<Directory>`块中).
+
+与`SetHandler`一起使用<Location />, 使得所有文件都要由mod_python来处理, 从而造成不能下载任何CSS或图片/图标. 我使用<Location /trac> `SetHandler None` </Location>来绕开这个问题, 尽管我不知道这是否是最好的解决办法.
+
+=== 使用 .htaccess ===
+
+尽管看起来可以用.htaccess文件来rewrite上述配置为文档根目录, 但却不起作用. Apache会向每个Trac URL中添加一个"/", 这样会干扰其正常的运行.
+
+用mod_rewrite可能会让它起作用, 但我没有做到. 总之, 比起其价值来太麻烦了, 还是用前面提供的指导吧.:)
+
+=== Win32 问题 ===
+如果你在Windows上运行trac和mod_python, 上传附件将不起作用. 这个问题在3.1.4或之后的mod_python版本中得到了解决, 因此请升级mod_python来修复它.
+
+=== OS X 问题 ===
+
+在OS X上使用mod_python, 你无法用`apachectl restart`重启Apache. 这个问题在mod_python3.2中已经修复了, 但还有一个更早版本[http://www.dscpl.com.au/projects/vampire/patches.html here]的可用补丁包.
+
+=== SELinux 问题 ===
+
+如果Trac报告类似''无法在db.lock获得共享锁'', 存储库的安全环境需要进行设置:
+
+{{{
+chcon -R -h -t httpd_sys_content_t PATH_TO_REPOSITORY
+}}}
+
+请参考[[http://subversion.tigris.org/faq.html#reposperms]]
+
+=== FreeBSD 问题 ===
+
+如果你是自己编译安装的apache2, apache将不支持线程 (因为其在FreeBSD上工作欠佳). 你可以强制线程支持, 当运行apache的 ./configure时, 使用 --enable-threads, 但并不推荐这样.
+最佳选项[[http://modpython.org/pipermail/mod_python/2006-September/021983.html 看起来是]] 增加 /usr/local/apache2/bin/ennvars行
+
+{{{
+export LD_PRELOAD=/usr/lib/libc_r.so
+}}}
+
+=== Subversion 问题 ===
+
+如果你只在mod_python下遇到以下Trac错误''不支持的版本控制系统"svn"'', 但是在命令行甚至是在[ZhTracStandalone Trac独立服务器]下运行得很好, 有可能是你忘记了用[TracModPython#ConfiguringPythonPath PythonPath]指令添加Python绑定的路径了.(更好的办法是在Python的site-packages目录中, 增加一个到绑定的链接, 或者在该目录中创建一个.pth文件)
+
+你同时需要较新版本的`mod_python`, 以避免源于多子解释器的默认用法导致的运行时错误({{{argument number 2: a 'apr_pool_t *' is expected}}}). 3.2.8 ''应该'' 工作, 然而, 可能的话, 最好使用#3371描述的变通方法, 要想强制使用主解释器:
+{{{
+PythonInterpreter main_interpreter
+}}}
+当使用Python的Subversion绑定及mod_python (#2611, #3455)时, 这是推荐处理其他众所周知的问题的变通方法. 参见Graham Dumpleton解释此问题的评论[comment:ticket:3455:9 #3455].
+
+=== 页面布局问题 ===
+
+如果Trac页面格式看起来很古怪, 可能是页面布局的样式表没有被web服务器处理. 试试在apache配置中增加下来几行:
+{{{
+#!xml
+Alias /myproject/css "/usr/share/trac/htdocs/css"
+<Location /myproject/css>
+    SetHandler None
+</Location>
+}}}
+
+注意: 要是上述配置起作用, 必须将其放在你的项目根位置的后面, 即, {{{<Location /myproject />}}}.
+
+=== HTTPS问题 ===
+
+如果你想完全使用https运行Trac, 你可能发现其试着重定向到普通http. 这种情况下, 只需在apache配置中增加下列行:
+{{{
+#!xml
+<VirtualHost * >
+    DocumentRoot /var/www/myproject
+    ServerName trac.mycompany.com
+    SetEnv HTTPS 1
+    ....
+</VirtualHost>
+}}}
+
+=== Fedora 7问题 ===
+确认你安装'python-sqlite2'包, 因为TracModPython(而不是tracd)需要它
+
+
+=== 使用php5-mhash或其他php5模块的分段错误(Segmentation fault)  ===
+你也许遇到分段错误(segfaults) (由debian etch报道), 如果安装了php5-mhash模块. 试试删除它. 参见debian bug report [[http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=411487]]
+
+当使用php5自带的第三方库(而没有用系统库)编译的php5, 一些人也会遇到问题. 请查看此处[[http://www.djangoproject.com/documentation/modpython/#if-you-get-a-segmentation-fault]]
+
+----
+原文版本: TracModPython[[BR]]
+相关信息: [ZhTracGuide Trac导览], [ZhTracInstall Trac安装], [ZhTracCgi TracCgi], [ZhTracFastCgi TracFastCgi][[BR]]
+See also: TracGuide, TracInstall, TracCgi, TracFastCgi

@@ -1,0 +1,28 @@
+{% extends "layouts/baseview.html" %}
+{% load i18n %}
+{% load short_uri %}
+
+{%block title%}{{pagename}}{%endblock%}
+{% block extrastyle %}
+<style>
+  {{content_style|safe}}
+</style>
+{% endblock %}
+
+{%block main-block%}
+<div>
+  <div>
+    {%trans "Changes:"%} <a href="{{log.wiki|url}}">{{log.wiki.path}}</a>
+  </div>
+
+  <div><a href="{{log.user|url}}" class="username">{{log.user}}</a></div>
+  <div>{{log.ctime}}</div>
+</div>
+
+<p>
+  <div class="pretext">
+    {{content|linebreaks}}
+  </div>
+<p>
+{%endblock%}
+

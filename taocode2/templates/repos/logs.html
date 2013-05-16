@@ -1,0 +1,30 @@
+{% load i18n %}
+{% load short_uri %}
+<div>
+   <button class="btn-diff">{%trans "View changes"%}</button>
+</div>
+<div class="filelist">
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr align="left">
+      <th width="100">{%trans "Revision"%}</th>
+      <th width="470">{%trans "Message"%}</th>
+      <th width="160">{%trans "Author"%}</th>
+      <th width="168">{%trans "Date"%}</th>
+    </tr>
+    {%for log in logs%}
+    <tr class="row">
+    <td>
+      <a href="{{project|url}}log/{{log.rev}}{{path}}">r{{log.rev}}</a>
+      <input name="revM" type="radio" value="{{log.rev}}"></input>
+      <input name="revN" type="radio" value="{{log.rev}}"></input>
+    </td>
+    <td>{{log.msg|truncatechars:90|linebreaks}}</td>
+    <td><a class="username" href="/u/{{log.author}}/">{{log.author}}</a></td>
+    <td>{{log.date|utc2loc}}</td>
+    </tr>
+    {%endfor%}
+  </table>
+</div>
+<div>
+  <button class="btn-diff">{%trans "View changes"%}</button>
+</div>

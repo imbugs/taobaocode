@@ -1,0 +1,132 @@
+= Wiki解析器 =
+
+解析器是指为[TracWiki Wiki引擎]提供内容格式而设计的[ZhWikiMacros Wiki宏]声明, 解析器可以理解为''根据用户文字的格式进行HTML输出处理的宏函数''.
+
+Wiki引擎使用解析器, 使Trac中的所有Wiki文本, 可以分别使用[wiki:ZhWikiRestructuredText 新结构化文本], [wiki:ZhWikiHtml raw HTML]和 [http://www.textism.com/tools/textile/ textile] 格式来进行内容组织.
+
+
+== 使用解析器 ==
+
+要在一个文本块上套用解析器, 在Wiki代码块 ''shebang notation''部分(大多数UNIX用户应该很熟悉)中声明一个解析器.
+
+''例1'' (在wiki文本中插入HTML)
+
+{{{
+#!html
+<pre class="wiki">{{{
+#!html
+&lt;h1 style="color: orange"&gt;This is raw HTML&lt;/h1&gt;
+}}}</pre>
+}}}
+
+'''结果:'''
+{{{
+#!html
+<h1 style="color: orange">This is raw HTML</h1>
+}}}
+
+----
+
+''例2'' (在wiki文字中插入新结构化文本):
+
+{{{
+#!html
+<pre class="wiki">{{{
+#!rst
+A header
+--------
+这是有脚注的 **文字** [*]_.
+
+.. [*] 这是脚注.
+}}}</pre>
+}}}
+
+'''结果:'''
+{{{
+#!rst
+A header
+--------
+这是有脚注的 **文字** [*]_.
+
+
+.. [*] 这是脚注.
+}}}
+
+----
+
+''例3'' (在Wiki文本中插入一段C源代码):
+
+{{{
+#!html
+<pre class="wiki">{{{
+#!c
+int main(int argc, char *argv[])
+{
+  printf("Hello World\n");
+  return 0;
+}
+}}}</pre>
+}}}
+
+'''结果:'''
+{{{
+#!c
+int main(int argc, char *argv[])
+{
+  printf("Hello World\n");
+  return 0;
+}
+}}}
+
+----
+
+== 可用解析器 ==
+下列解析器包含在Trac发行版中:
+ * '''html''' -- 在Wiki页面中插入自定义HTML. 见[ZhWikiHtml WikiHtml].
+ * '''div''' -- 在一个<div>元素中包装任意Wiki内容 (''自0.11''). 参见 [ZhWikiHtml WikiHtml].
+ * '''span''' -- 在一个<span>元素中包装任意Wiki内容 (''自0.11''). 参见 [ZhWikiHtml WikiHtml].
+ * '''rst''' -- Trac支持新结构化文本. 见[wiki:ZhWikiRestructuredText  新结构化文本].
+ * '''textile''' -- 如果安装了[http://dealmeida.net/projects/textile/ Textile]则支持. 请见[http://hobix.com/textile/ Textile参考手册].
+ * '''comment''' -- 在此段中不解析文本 (即, 只出现在原文中 - 不出现在渲染后的页面中).
+
+=== 代码语法高亮显示支持 ===
+Trac包含的解析器支持下列语言的内嵌[wiki:ZhTracSyntaxColoring 语法高亮]:
+ * '''c''' -- C
+ * '''cpp''' -- C++
+ * '''python''' -- Python
+ * '''perl''' -- Perl
+ * '''ruby''' -- Ruby
+ * '''php''' -- PHP
+ * '''asp''' --- ASP
+ * '''java''' -- Java
+ * '''js''' -- Javascript
+ * '''sql''' -- SQL
+ * '''xml''' -- XML
+ * '''sh''' -- Bourne/Bash shell
+'''注意:''' ''Trac的语法高亮依赖外部软件包. 更多信息参见[wiki:ZhTracSyntaxColoring 语法高亮].''
+
+通过将MIME类型作为解析器来使用, 在浏览源代码时, 同样可以支持语法高亮显示. 例如, 你可以写:
+{{{
+{{{
+#!text/html
+<h1>text</h1>
+}}}
+}}}
+
+结果会是语法高亮显示的HTML代码. 同样也适用于其他支持的mime类型.
+
+
+要想了解更多用户开发和贡献的解析器宏, 请访问:
+ * [trac:ProcessorBazaar]
+ * [trac:MacroBazaar]
+ * [th:WikiStart Trac Hacks] community site
+
+
+== 高级话题: 开发解析器宏 ==
+开发解析器和[ZhWikiMacros Wiki宏]并没有不同之处. 事实上他们以同样的方式运行, 只是使用语法有些不同而已. 更多信息请见[ZhWikiMacros Wiki宏].
+
+
+----
+原文版本: WikiProcessors[[BR]]
+相关信息:[ZhWikiMacros Wiki宏], [ZhWikiHtml WikiHtml], [ZhWikiRestructuredText 新结构化文本], [ZhTracSyntaxColoring 语法高亮], [ZhWikiFormatting Wiki格式], [ZhTracGuide Trac导览][[BR]]
+See also: WikiMacros, WikiHtml, WikiRestructuredText, TracSyntaxColoring, WikiFormatting, TracGuide

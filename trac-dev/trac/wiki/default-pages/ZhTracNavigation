@@ -1,0 +1,31 @@
+= Trac导航 =
+
+从Trac 0.11起, 已经可以用基本方式来定制主导航和meta导航栏目.
+
+新的`[mainnav]` 和 `[metanav]` 配置段现在能用于定制导航栏目的文本和链接, 甚至将其禁用.
+
+`[mainnav]`对应'''main navigation bar''', 其中包含比如''Wiki'', ''Timeline'', ''Roadmap'', ''Browse Source''等等栏目. 此导航栏用于的访问Trac中启用主模块的默认页面和当前用户的附件.
+
+`[metanav]`对应于'''meta navigation bar''', 默认位于主导航栏的上面, ''搜索''框的下面. 包含''登录'', ''注销'', ''帮助/指南''等等栏目. 此导航栏用于访问关于Trac项目和当前用户的某些全局信息.
+
+注意, 仍然不能定制'''上下文导航栏''', 即, 位于主导航栏下面的那个.
+
+=== 例子 ===
+
+下面例子中, 我们将Wiki起始页面更名为"Home", 并且隐藏了"帮助/指南"链接. 
+我们同时创建了"查看传票"栏目, 链接至一个特定的报表.
+
+TracIni中的相关配置:
+{{{
+[mainnav]
+wiki.label = Home
+tickets.href = /report/24
+
+[metanav]
+help = disabled
+}}}
+
+----
+原文版本: TracNavigation[[BR]]
+相关信息: [ZhTracInterfaceCustomization Trac界面定制],  TracHacks:NavAddPlugin (增加栏目时仍然需要)[[BR]]
+See also: TracInterfaceCustomization, the TracHacks:NavAddPlugin (still needed for adding entries)

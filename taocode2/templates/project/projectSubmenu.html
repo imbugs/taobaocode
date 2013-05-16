@@ -1,0 +1,17 @@
+{% load i18n %}
+{% load short_uri %}
+
+<table cellpadding="0" cellspacing="0" style="width: 100%" id="SubTabMenuTable">
+    <tr id="wikiTop" class="wikiTop" width="100%">
+        <td align="left" nowrap="nowrap">
+            <div id="wikiLinksPanel">
+                <a id="CommentsHyperLink" href="/p/{{ project.name }}/comments">View All Comments</a>
+                <span>|</span>
+                <a id="pageInfoHyperLink" href="/p/{{ project.name }}/info/">Project
+                    Info</a>
+                <span>|</span>
+                <a id="changesHyperlink" href="/p/{{ project.name }}/wiki/history">Change&nbsp;History&nbsp;(all&nbsp;pages)</a>
+            </div>
+        </td>
+    </tr>
+</table>

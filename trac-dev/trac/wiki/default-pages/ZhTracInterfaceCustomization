@@ -1,0 +1,180 @@
+= 定制Trac界面 =
+[[ZhTracGuideToc]]
+
+== 介绍 ==
+
+该页面旨提供有关如何定制Trac界面的建议. 话题涵盖了编辑HTML模板和CSS文件, 但不包含程序代码本身. 这些话题想要向用户展示如何更改Trac的外观来满足他们特定的要求. 
+
+== 项目Logo和图标 ==
+定制Trac界面最简单的部分是logo和站点的图标. 他们都可以通过[wiki:ZhTracIni trac.ini]的设置进行配置.
+
+logo或者图标应放在项目环境目录中的一个''htdocs''目录中(注意: 用Trac0.9之前的版本创建的项目, 你需要创建该目录).
+
+ ''注意: 实际上你可以把logo和图标放在服务器的任何地方(只要通过服务器能访问到就可以), 并且在配置中使用他们的绝对URL或服务器的相对URL.''
+
+在你的[wiki:ZhTracIni trac.ini]中的配置相应的段:
+
+=== Logo ===
+将`src`设置改为`site/`, 后面跟着你的图像文件的名字. 应修改''宽度''和''高度''设置来匹配你的图像的尺寸(Trac的chrome处理器用"site/"对应位于项目目录的"htdocs", 用"common/"对应普通文件).
+{{{
+[header_logo]
+src = site/my_logo.gif
+alt = My Project
+width = 300
+height = 100
+}}}
+
+=== 图标 ===
+图标应该是`.gif`或`.ico`格式的大小16x16的图像. 将`icon`选项修改为`site/`, 后面跟着你的图标文件的名称. 在你的Web浏览器中, 图标一般会显示在站点的URL旁边或者在''书签''菜单中.
+{{{
+[project]
+icon = site/my_icon.ico
+}}}
+
+'''注意''', 该图标会被 IE 忽略, 它只接受主机根路径下名为''favicon.ico''的文件. 要使项目图标在IE和其他浏览器中都起作用的话, 你可以将图标储存在主机的根路径中, 并按照下列方法在``trac.ini``中引用它:
+{{{
+[project]
+icon = /favicon.ico
+}}}
+
+== 定制导航栏项目 ==
+新的[mainnav]和[metanav]可以用于定制导航栏项目的文本和链接, 甚至是禁止它们.
+
+在下面的例子中, 我们把Wiki起始页面改为"Home", 并隐藏了"帮助/指南". 同时我们增加了某个特定报表的"查看传票"项目.
+{{{
+[mainnav]
+wiki.label = Home
+tickets.href = /report/24
+
+[metanav]
+help = disabled
+}}}
+
+
+== 站点外观 ==
+
+Trac使用[http://genshi.edgewall.org Genshi]作为模板引擎. 文档还正在编写中, 这时候, 下列提示应能起作用.
+
+假设你想增加一个定制的样式表, 和你自己的页头和页脚.  创建文件{{{/path/to/env/templates/site.html}}} 或者 {{{/path/to/inherit/option/templates_dir/site.html}}}, 内容如下:
+
+{{{
+#!xml
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      py:strip="">
+
+  <!--! Add site-specific style sheet -->
+  <head py:match="head" py:attrs="select('@*')">
+    ${select('*')}
+    <link rel="stylesheet" type="text/css"
+          href="${href.chrome('site/style.css')}" />
+  </head>
+
+  <body py:match="body" py:attrs="select('@*')">
+    <!--! Add site-specific header -->
+    <div id="siteheader">
+      <!--! Place your header content here... -->
+    </div>
+
+    ${select('*|text()')}
+
+    <!--! Add site-specific footer -->
+    <div id="sitefooter">
+      <!--! Place your footer content here... -->
+    </div>
+  </body>
+</html>
+}}}
+注意, 引用了你的环境中的`htdocs/style.css`.
+
+例子, 在新建传票中增加介绍文本(预览时隐藏):
+
+{{{
+#!xml
+<form py:match="div[@id='content' and @class='ticket']/form" py:attrs="select('@*')">
+  <py:if test="req.environ['PATH_INFO'] == '/newticket' and (not 'preview' in req.args)">
+    <p>Please make sure to search for existing tickets before reporting a new one!</p>
+  </py:if>
+  ${select('*')} 
+</form>
+}}}
+
+如果环境是从0.10升级来的, 并且已经存在`site_newticket.cs`, 实际上可以用一种变通办法来载入 - 提供一个不包含ClearSilver特性的版本. 另外, 由于只能导入一个元素, 内容必须做某种封装, 比如`<div>`块或者其它类似的容器标签. XInclude必须指定名字空间以允许包含, 但是其可以与其他内容一起, 被移动至文档根目录:
+{{{
+#!xml
+<form py:match="div[@id='content' and @class='ticket']/form" py:attrs="select('@*')"
+        xmlns:xi="http://www.w3.org/2001/XInclude">
+  <py:if test="req.environ['PATH_INFO'] == '/newticket' and (not 'preview' in req.args)"> 
+    <xi:include href="site_newticket.cs"><xi:fallback /></xi:include>
+  </py:if>
+  ${select('*')} 
+</form>
+}}}
+
+同时注意, `site.html` (不管名字是什么) 可以放在一个普通的模板目录中 - 参见`[inherit] templates_dir`选项. 这将更加容易维护, (从0.10大型安装迁移路径), 因为一个新的全局`site.html`文件可以包含任何已有页头, 页脚和新传票片段.
+
+== 项目列表 ==
+如果你在使用Trac执行多个项目时, 你可以用一个定制!ClearSilver模板来显示项目的列表.
+
+下面是Trac用来显示各项目链接的列表的基本模板. 对于不能加载的项目, 它会显示一个错误信息. 你可以将它作为你自己的索引模板的一个起点.
+
+{{{
+#!text/html
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+  <head>
+    <title>Available Projects</title>
+  </head>
+  <body>
+    <h1>Available Projects</h1>
+    <ul>
+      <li py:for="project in projects" py:choose="">
+        <a py:when="project.href" href="$project.href"
+           title="$project.description">$project.name</a>
+        <py:otherwise>
+          <small>$project.name: <em>Error</em> <br /> ($project.description)</small>
+        </py:otherwise>
+      </li>
+    </ul>
+  </body>
+</html>
+}}}
+
+一旦你创建了自己的定制模板, 你需要配置Web服务器, 来告诉Trac该模板的具体位置:
+
+对于 [wiki:ZhTracFastCgi FastCGI]:
+{{{
+FastCgiConfig -initial-env TRAC_ENV_PARENT_DIR=/parent/dir/of/projects \
+              -initial-env TRAC_ENV_INDEX_TEMPLATE=/path/to/template
+}}}
+
+对于 [wiki:ZhTracModPython mod_python]:
+{{{
+PythonOption TracEnvIndexTemplate /path/to/template
+}}}
+
+对于 [wiki:ZhTracCgi CGI]:
+{{{
+SetEnv TRAC_ENV_INDEX_TEMPLATE /path/to/template
+}}}
+
+对于[ZhTracStandalone Trac独立服务器], 你需要在运行tracd的shell中设置`TRAC_ENV_INDEX_TEMPLATE`环境变量:
+ - Unix
+   {{{
+#!sh
+$ export TRAC_ENV_INDEX_TEMPLATE=/path/to/template
+   }}}
+ - Windows
+   {{{
+#!sh
+$ set TRAC_ENV_INDEX_TEMPLATE=/path/to/template
+   }}}
+
+----
+原文版本: TracInterfaceCustomization[[BR]]
+相关信息: [ZhTracGuide Trac导览], [ZhTracIni Trac配置][[BR]]
+See also: TracGuide, TracIni

@@ -1,0 +1,8 @@
+#!/bin/sh
+export DJANGO_SETTINGS_MODULE='taocode2.settings'
+FNAME=`readlink -f $0`
+D=`dirname $FNAME`
+ROOT=`readlink -f $D/../../../../`
+export PYTHONPATH=$ROOT
+
+python $D/post-commit.py $1 $2

@@ -1,0 +1,158 @@
+= 将Trac作为CGI安装 =
+
+把Trac作为CGI脚本安装, 你需要使`trac.cgi`成为Web服务器可以执行的一个CGI.
+
+  ''请注意, 通过CGI来使用Trac, 与其他方法(比如[ZhTracModPython mod_python] 或 [ZhTracFastCgi FastCGI].)相比, 其速度要慢得多.''
+
+如果你在使用[http://httpd.apache.org/ Apache HTTPD], 有很多方法可以用:
+
+ 1. 用`ScriptAlias`将一个URL映射到`trac.cgi`脚本.
+ 2. 将`trac.cgi`文件复制到Web服务器的CGI文件的目录(通常是''cgi-bin'')中. 你还可以创建一个符号链接, 但要确保启用''cgi-bin''目录的`FollowSymLinks`选项.
+
+推荐第一个选项, 因为它还可以让你将CGI映射到一个友好的URL中.
+
+现在, 编辑Apache配置文件并添加以下这段代码(修改文件名和路径以匹配你的安装):
+{{{
+ScriptAlias /trac /usr/share/trac/cgi-bin/trac.cgi
+}}}
+
+ ''注意, 该指令要求安装和启用`mod_alias`模块.''
+
+如果你正在某个独立项目中使用Trac, 你需要用`TRAC_ENV`环境变量来设置其位置:
+{{{
+<Location "/trac">
+  SetEnv TRAC_ENV "/path/to/projectenv"
+</Location>
+}}}
+
+或者如果使用多个项目, 通过`TRAC_ENV_PARENT_DIR`变量来指定他们的共同父目录:
+{{{
+<Location "/trac">
+  SetEnv TRAC_ENV_PARENT_DIR "/path/to/project/parent/dir"
+</Location>
+}}}
+
+ ''注意, `SetEnv`指令要求安装和启用`mod_env`模块. 否则, 你可以在trac.cgi中设置TRAC_ENV. 只需要增加如下代码到"try:" 和 "from trac.web ..."之间:''
+
+{{{
+    import os
+    os.environ['TRAC_ENV'] = "/path/to/projectenv"
+}}}
+
+ '' 或者, 对于TRAC_ENV_PARENT_DIR: ''
+
+{{{
+    import os
+    os.environ['TRAC_ENV_PARENT_DIR'] = "/path/to/project/parent/dir"
+}}}
+
+这将使得`http://yourhost.example.org/trac`生效.
+
+如果你在使用[http://httpd.apache.org/docs/suexec.html Apache suEXEC], 请参见[http://trac.edgewall.org/wiki/ApacheSuexec].
+
+某些系统中, 你''或许''需要在`trac.cgi`中编辑shebang行, 从而指向你真正的Python安装路径. 在Windows系统中, 你可能需要配置Windows, 使其知道如何运行一个.cgi文件.(资源管理器 -> 工具 -> 文件夹选项 -> 文件类型 -> CGI)
+
+== 映射静态资源 ==
+
+Trac天生就知道如何服务静态资源, 例如样式表或图片. 但是对于作为CGI的安装来说, 则非常不希望如此, 因为它会使得为处理此类文件而调用CGI脚本, 本来直接用Web服务器处理那些文件更高效.
+
+通过像[http://httpd.apache.org/ Apache HTTPD]的Web服务器, 你可以给那些资源创建''别名'', 这样给那些资源一个虚拟的URL, 不会与服务器文件系统的版本有任何雷同之处. 对CGI脚本定义''!ScriptAlias''时, 我们已经使用过上述的特性. 我们现在会用它将静态资源的请求映射到文件系统上的目录上, 这样就避免了使用CGI脚本来处理这类请求.
+
+再次编辑Apache配置文件, 并在''!ScriptAlias''之前添加以下片断(修改文件名和路径以匹配你的安装):
+{{{
+Alias /trac/chrome/common /usr/share/trac/htdocs
+<Directory "/usr/share/trac/htdocs">
+  Order allow,deny
+  Allow from all
+</Directory>
+}}}
+
+注意, 无论你将`trac.cgi`脚本映射到哪个URL路径, `/chrome/common`路径是你必须追加的位置, 来拦截访问静态资源的请求.
+
+例如, 在你的服务器上, 如果Trac映射到`/cgi-bin/trac.cgi`, ''别名''的URL应该是`/cgi-bin/trac.cgi/chrome/common`.
+
+类似的, 如果你在项目的htdocs目录中有静态资源, 你可以配置apache来提供那些资源((再次, 对CGI脚本, 将此放在`ScriptAlias`'''之前''', 并按你配置来调整名字和位置):
+
+{{{
+Alias /trac/chrome/site /path/to/projectenv/htdocs
+<Directory "/path/to/projectenv/htdocs">
+  Order allow,deny
+  Allow from all
+</Directory>
+}}}
+
+或者, 你可以在[wiki:TracIni trac.ini]中设置`htdocs_location`配置选项:
+{{{
+[trac]
+htdocs_location = /trac-htdocs
+}}}
+
+当把静态资源嵌入到HTML页面中时, Trac会使用该URL. 当然, 你仍然需要使Trac的`htdocs`目录对Web服务器可用. 例如, 将目录复制或链接到Web服务器的文档根目录中.
+{{{
+$ ln -s /usr/share/trac/htdocs /var/www/your_site.com/htdocs/trac-htdocs
+}}}
+
+注意, 要想获得此`htdocs`目录, 你需要首先使用TracAdmin的`copystatic`命令, 提取相关Trac资源 :
+[[TracAdminHelp(copystatic)]]
+
+== 添加验证 ==
+
+启用Apache验证的最简单的方法是创建一个口令文件. 用`htpasswd`程序来创建该口令文件:
+{{{
+$ htpasswd -c /somewhere/trac.htpasswd admin
+New password: <type password>
+Re-type new password: <type password again>
+Adding password for user admin
+}}}
+
+创建了第一个用户后, 不要再使用"-c"选项:
+{{{
+$ htpasswd /somewhere/trac.htpasswd john
+New password: <type password>
+Re-type new password: <type password again>
+Adding password for user john
+}}}
+
+创建用户后, 你可以使用[ZhTracPermissions Trac权限]设置他们的权限.
+
+现在, 在Apache配置中启用对此口令文件的验证:
+{{{
+<Location "/trac/login">
+  AuthType Basic
+  AuthName "Trac"
+  AuthUserFile /somewhere/trac.htpasswd
+  Require valid-user
+</Location>
+}}}
+
+如果同时有多个项目, 你可以对所有项目都使用同一个口令文件:
+{{{
+<LocationMatch "/trac/[^/]+/login">
+  AuthType Basic
+  AuthName "Trac"
+  AuthUserFile /somewhere/trac.htpasswd
+  Require valid-user
+</LocationMatch>
+}}}
+
+为了更加安全, 建议你启用SSL, 或者至少要使用''Digest''验证而不是''Basic''验证. 请阅读[http://httpd.apache.org/docs/2.0/ Apache HTTPD documentation]详细了解情况. 例如, 在 Debian 4.0r1 (etch) 系统中, 相关的apache配置段如下:
+{{{
+<Location "/trac/login">
+    LoadModule auth_digest_module /usr/lib/apache2/modules/mod_auth_digest.so
+    AuthType Digest
+    AuthName "trac"
+    AuthDigestDomain /trac
+    AuthUserFile /somewhere/trac.htpasswd
+    Require valid-user
+</Location>
+}}}
+你将使用htdigest而非htpasswd来需要创建.htpasswd文件:
+{{{
+# htdigest /somewhere/trac.htpasswd trac admin
+}}}
+其中上述的"trac"参数与上述!AuthName(apache文档中的"Realm")相同. 
+
+----
+原文版本: TracCgi[[BR]]
+相关信息: [ZhTracGuide Trac导览],  [ZhTracInstall Trac安装],  [ZhTracFastCgi FastCgi],  [ZhTracModPython ModPython][[BR]]
+See also: TracGuide,  TracInstall,  TracFastCgi,  TracModPython

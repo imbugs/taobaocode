@@ -1,0 +1,21 @@
+= Wiki 页面模板 = 
+
+  ''(自从[http://trac.edgewall.org/milestone/0.11 0.11])''
+
+新建的wiki页的默认内容可以从页面模板的列表中选择.
+
+该列表由以''PageTemplates/''开头命名的wiki页面而组成.
+一个新页面的最初内容将是选中的模板页中的内容, 或者是一个空白页, 如果选了某个特殊选项的话, 比如说''(blank page)''. 当没有wiki页面匹配该前缀时, 页面中的最初内容将一直是空白页, 并且不会显示列表选择器(即: 这跟我们现在的行为是一致的).
+
+要创建一个新的模板, 只需创建一个名字以''PageTemplates/''开头的的页面.
+
+(提示: 甚至可以创建一个''!PageTemplates/Template''模板, 以便日后创建模板使用!)
+
+现有的模板:
+
+[[TitleIndex(PageTemplates/)]]
+
+----
+原文版本: PageTemplates[[BR]]
+相关信息: [ZhTracWiki 维基][[BR]]
+See also: TracWiki

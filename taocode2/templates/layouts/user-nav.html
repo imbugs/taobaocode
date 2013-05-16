@@ -1,0 +1,32 @@
+{% load i18n %}
+{% load short_uri %}
+
+{% if user.is_authenticated %}
+{{_("Welcome")}},
+<span id="nav-my" class="username">
+  <a href="/my">
+    <span>{{user.name}}</span>
+  </a>
+</span>
+|
+<a href="/msg/">{{_("Messages")}}</a>
+<strong id='msg_count'>(0)</strong>
+|
+<a href="/logout/">{{_("Logout")}}</a>
+{% else %}
+
+<a href="/open/weibo/login/"><img src='/img/weibo_logo.png' />{{ _("Weibo Login") }}</a>&nbsp;
+<a href="/open/taobao/login/"><img src='/img/tao.png' />{{ _("Taobao Login") }}</a>
+, {{_("or")}}
+<a href="/login/">{{_("Login")}}</a>, {{_("or")}}
+<a href="/register/">{{_("Register")}}</a>&nbsp;&nbsp;
+    
+{% endif %}
+<a href="/all/">
+<strong style="color:#fd8300">#</strong>
+{{_("Projects")}}
+</a>
+
+||
+
+<a href="http://code.taobao.org/p/taobaocode/wiki/SiteHelp/"><font color="#fd8300">{{_("README")}}</font></a>

@@ -1,0 +1,32 @@
+= Trac路线图 =
+[[ZhTracGuideToc]]
+
+路线图提供了查看[wiki:ZhTracTickets Trac传票]的一个视图, 帮助你规划和管理项目的未来开发.
+
+== 路线图视图 ==
+
+基本上, 路线图只是一个未来的里程碑的列表. 你可以为里程碑添加描述(用[ZhWikiFormatting Wiki格式]), 例如描述主要目标. 另外, 以某个里程碑为目标的传票被集合起来, 并且现有传票和已处理传票间的比率, 将显示为里程碑进度条.
+
+== 里程碑视图 ==
+
+通过进入一个里程碑页面, 可以查看简单的统计信息. 默认情况下, 现有/已处理传票的比率是按照组件来分组和显示的. 你也可以按照其他的标准来重组他们, 例如传票的承担者或者严重程度. 传票号码链接到显示对应的传票的[wiki:ZhTracQuery 定制查询].
+
+== 管理路线图 ==
+
+可以通过[ZhTracAdmin Trac管理]或者Web界面添加, 修改和删除里程碑.
+
+'''注意:''' 里程碑描述当前只能从web界面中编辑. 拥有相应的许可, 你可以在路线图和里程碑页面中看见里程碑管理按钮.
+
+== iCalendar支持 ==
+
+路线图支持从你最爱的日历软件中, 用[http://www.ietf.org/rfc/rfc2445.txt iCalendar]格式, 来跟踪计划内的里程碑和相关传票. 支持iCalendar规范的日历程序包括[http://www.apple.com/ical/ Apple iCal](适用于Mac OS X)和跨平台的[http://www.mozilla.org/projects/calendar/ Mozilla Calendar].[http://kdepim.kde.org/components/korganizer.php Korganizer] ([http://www.kde.org/ KDE]项目的日历程序), [http://www.novell.com/de-de/products/desktop/features/evolution.html Evolution]也支持iCalendar.
+
+要订阅路线图, 从路线图(在页面的底部)中复制iCalendar链接. 在你的日历程序中, 选择''订阅远程的日历''(或类似的行为), 然后插入刚刚复制的URL.
+
+'''注意''': 要想把传票作为日历中的任务, 你需要登录后再复制链接. 你只能看到指派给你的, 与某个里程碑相关的传票.
+
+关于更多关于iCalendar的信息可以访问[http://en.wikipedia.org/wiki/ICalendar Wikipedia].
+----
+原文版本: TracRoadmap[[BR]]
+相关信息: [ZhTracTickets Trac传票], [ZhTracReports Trac报表], [ZhTracQuery Trac查询], [ZhTracGuide Trac导览][[BR]]
+See also: TracTickets, TracReports, TracQuery, TracGuide

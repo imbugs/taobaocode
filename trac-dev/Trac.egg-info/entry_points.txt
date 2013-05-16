@@ -1,0 +1,36 @@
+
+        [console_scripts]
+        trac-admin = trac.admin.console:run
+        tracd = trac.web.standalone:main
+
+        [trac.plugins]
+        trac.about = trac.about
+        trac.admin.console = trac.admin.console
+        trac.admin.web_ui = trac.admin.web_ui
+        trac.attachment = trac.attachment
+        trac.db.mysql = trac.db.mysql_backend
+        trac.db.postgres = trac.db.postgres_backend
+        trac.db.sqlite = trac.db.sqlite_backend
+        trac.mimeview.enscript = trac.mimeview.enscript
+        trac.mimeview.patch = trac.mimeview.patch
+        trac.mimeview.php = trac.mimeview.php
+        trac.mimeview.pygments = trac.mimeview.pygments[Pygments]
+        trac.mimeview.rst = trac.mimeview.rst[reST]
+        trac.mimeview.silvercity = trac.mimeview.silvercity[SilverCity]
+        trac.mimeview.txtl = trac.mimeview.txtl[Textile]
+        trac.prefs = trac.prefs.web_ui
+        trac.search = trac.search.web_ui
+        trac.ticket.admin = trac.ticket.admin
+        trac.ticket.query = trac.ticket.query
+        trac.ticket.report = trac.ticket.report
+        trac.ticket.roadmap = trac.ticket.roadmap
+        trac.ticket.web_ui = trac.ticket.web_ui
+        trac.timeline = trac.timeline.web_ui
+        trac.versioncontrol.svn_fs = trac.versioncontrol.svn_fs
+        trac.versioncontrol.svn_prop = trac.versioncontrol.svn_prop
+        trac.versioncontrol.web_ui = trac.versioncontrol.web_ui
+        trac.web.auth = trac.web.auth
+        trac.wiki.interwiki = trac.wiki.interwiki
+        trac.wiki.macros = trac.wiki.macros
+        trac.wiki.web_ui = trac.wiki.web_ui
+    

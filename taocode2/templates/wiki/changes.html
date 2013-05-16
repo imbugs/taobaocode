@@ -1,0 +1,35 @@
+{% extends "layouts/baseview.html" %}
+{% load i18n %}
+{% load short_uri %}
+
+{%block title%}{{pagename}}{%endblock%}
+{%block main-block%}
+
+{%if logs%}
+
+<div>
+  {%trans "Changes:"%} <a href="{{wiki|url}}">{{wiki.path}}</a>
+</div>
+
+<table>
+  <tr>
+    <th>{%trans "last author"%}</th>
+    <th>{%trans "modify time"%}</th> 
+    <th></th>    
+  </tr>
+
+  {%for log in logs%}
+  <tr>
+    <td><a href="{{log.user|url}}" class="username">{{log.user}}</a></td>
+    <td>{{log.ctime}}</td>
+    <td><a href="{{project|url}}raw_log_wiki/{{log.id}}/">{%trans "raw"%}</a></td>    
+    <td><a href="{{project|url}}diff_log_wiki/{{log.id}}/">{%trans "diff"%}</a></td>   
+  </tr>
+  {%endfor%}
+</table>
+{%else%}
+Not found changes
+{%endif%}
+{%endblock%}
+
+

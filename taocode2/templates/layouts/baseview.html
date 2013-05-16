@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+{% load i18n %}
+{% load short_uri %}
+<html>
+  <head>
+    <title>{%block title%}Taocode{%endblock%} More code fun</title>
+    {% block stylesheet %}
+    <link rel="stylesheet" type="text/css" href="/css/taocode2.css" />
+    {% endblock %}
+    <script type="text/javascript" src="/js/jquery-1.5.min.js"></script>
+    <script type="text/javascript" src="/js/utils.js"></script>
+    <script type="text/javascript" src="/js/ajaxcall.js"></script>
+    {% block extrastyle %}{% endblock %}
+    {% block extrascript %}{% endblock %}
+    <script type="text/javascript">
+      
+      $(document).ready(function() {
+      init_csrf();
+
+      {%block ready_js%}
+      {%endblock%}
+
+      {%if user.is_authenticated %}
+      start_auth_call();
+      {%else%}
+      start_call();
+      {%endif%}
+      });
+      
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <table style="border-collapse:collapse; border-spacing:0;" class="wrapper">	<tr>
+	  <td>	  
+	    <span class="img-btn">
+	      <a href="/"><img src='/img/Logo.png'></img></a>
+	  </span>
+	  </td>
+	  <td align="right" valign="bottom">
+	    {% include "layouts/user-nav.html" %}
+	  </td>
+	</tr>
+      </table>
+    </div>
+    <div class="pagebody">
+      <div id="info-message" class="hide left"></div>
+
+      <div class="mainbody wrapper">
+	{% block pagename-nav%}
+	<div class="pagename">
+	  <h2>{%block pagename%}
+	    {%if project%}
+	    <a class="username" href="{{project.owner|url}}">{{project.owner}}</a> / {{project.name}} - 
+	    {%endif%}
+	    {{pagename}}
+	    {%endblock%}</h2>
+	  {%if pagedesc%}
+	  {{pagedesc|truncatechars:80}}
+	  {%endif%}
+	</div>
+	{%endblock%}
+
+	
+	{% block main-nav %}
+	<div class="main-menu">	 
+	  {% include "layouts/main-nav.html" %}
+	</div>
+	{% endblock %}
+	<p>
+	  {%block body-menu%}
+	  {%endblock%}
+	</p>
+	<div class="main-content"> 
+	  {% block main-block %}
+	  {% endblock %}
+      </div>
+      </div>
+      <p></p>
+      <div class="footer">
+	<div class="wrapper">
+	  <p></p>
+	  <p>
+	    <a href="/about/">{{_("About")}}</a> |
+	    <a href="/about/privacy/">{{_("Privacy")}}</a> |
+	    <a href="/about/license/">License / GPLv2</a>
+            &nbsp; &nbsp; See also:
+	    <a href="http://www.taobao.com">TaoBao.com</a>
+	    
+	  </p>
+	  <p align="center">
+	    code.taobao.org
+	  </p>
+	  <p>
+</p>
+	</div>
+      </div>
+    </div>
+    <!-- JiaThis Button BEGIN -->
+    <!--
+<script type="text/javascript" src="http://v2.jiathis.com/code/jiathis_r.js?move=0&amp;btn=r2.gif" charset="utf-8"></script>
+-->
+<!-- JiaThis Button END -->
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-17329683-1']);
+      _gaq.push(['_trackPageview']);
+      
+      (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();      
+    </script>    
+
+<script type="text/javascript" src="http://js.tongji.linezing.com/2711653/tongji.js"></script><noscript><a href="http://www.linezing.com"><img src="http://img.tongji.linezing.com/2711653/tongji.gif"/></a></noscript>
+
+  </body>
+</html>

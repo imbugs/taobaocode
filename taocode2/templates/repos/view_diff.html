@@ -1,0 +1,36 @@
+{% extends "layouts/baseview.html" %}
+{% load i18n %}
+{% load short_uri %}
+
+{%block title%}{{project.name}} - {{path}}{%endblock%}
+
+{% block extrastyle %}
+<link rel="stylesheet" type="text/css" href="/css/highlight.css" >
+{% endblock %}
+
+{%block pagename%}
+<a class="username" href="{{project.owner|url}}">{{project.owner}}</a> / {{pagename}}
+{%endblock%}
+
+{%block main-block%}
+<p>
+    <strong><a href="{{project|url}}src/">{{project.name}}</a></strong>
+    <span>/</span>
+  {%for p in paths%}
+  
+  <strong><a class="filename" href="{{project|url}}src/{{p.url}}/">{{p.path}}</a></strong>
+  <span>/</span>
+  {%endfor%}    
+  <a class="filename" href="{{project|url}}src{{path}}">{{fname}}</a>
+</p>
+
+<h4><a href="{{project|url}}logs{{path}}">{%trans "Revision"%}</a> r{{revN}} - r{{revM|default:"PREV"}}</h4>
+{%if content%}
+<p>
+  <pre class="hl">
+    {{content|safe}}
+  </pre>
+<p>
+{%endif%}
+{%endblock%}
+

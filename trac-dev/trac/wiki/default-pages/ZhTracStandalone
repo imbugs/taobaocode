@@ -1,0 +1,167 @@
+= Tracd =
+
+Tracd是一个独立的Web服务器. 多数情况下, 它比[wiki:ZhTracCgi CGI脚本]更容易设置, 运行更快.
+
+== 优点 ==
+
+ * 更独立: 你不需要安装Apache或其他Web服务器.
+ * 快: 应该几乎和[wiki:ZhTracModPython mod_python]版本一样快, 并且比[wiki:ZhTracCgi CGI]快得多.
+ * 自动重新载入: 在开发时, Tracd可工作在''auto_reload''模式中, 这样无论何时你改变代码(Trac或插件中), 它会自动重启服务器.
+
+== 缺点 ==
+
+ * 特性更少: Tracd的定位是一个非常简单的Web服务器, 没有象Apache HTTPD那样的可配置性或可伸缩性.
+ * 不支持本地HTTPS: 可用[http://www.rickk.com/sslwrap/ sslwrap]来代替, 或者 [http://trac.edgewall.org/wiki/STunnelTracd stunnel -- 在tracd中使用管道的教程] 或者在Apache中使用mod_proxy.
+
+== 例子 ==
+
+在端口8080上的单个项目.(http://localhost:8080/)
+{{{
+ $ tracd -p 8080 /path/to/project
+}}}
+严格来讲, 这将使你的Trac可以被你的网络上的所有人访问到, 而不是 ''仅仅localhost''. 要想真正限制, 使用 ''--hostname'' 选项.
+{{{
+ $ tracd --hostname=localhost -p 8080 /path/to/project
+}}}
+多个项目.(http://localhost:8080/project1/ 和 http://localhost:8080/project2/)
+{{{
+ $ tracd -p 8080 /path/to/project1 /path/to/project2
+}}}
+
+各项目路径的最后一部分不能完全相同, 因为Trac使用该名字来区别不同项目的URL. 因此, 如果你使用`/project1/path/to`和`/project2/path/to`, 你只能看到第二个项目.
+
+另一种服务多个项目的方法是指定一个父目录, 其中每个子目录是一个Trac项目, 使用`-e`选项. 上面的例子可以改写为:
+{{{
+ $ tracd -p 8080 -e /path/to
+}}}
+
+== 使用验证 ==
+
+使用tracd及Apache .htpasswd文件:
+
+使用htpasswd来创建.htpasswd文件:
+
+{{{
+sudo htpasswd -c /path/to/env/.htpasswd username
+}}}
+然后增加的用户:
+{{{
+sudo htpasswd /var/www/html/.htpasswd-users username2
+}}}
+然后启动tracd:
+{{{
+tracd -p 8080 --basic-auth=environmentname,/fullpath/environmentname/.htpasswd,/fullpath/environmentname /fullpath/environmentname
+}}}
+
+Tracd支持Basic和Digest验证. 默认是使用Digest, 要使用Basic验证, 在下面的例子中将`--auth`替换为`--basic-auth`, 如下列所示. (你必须指定一个"realm", 其可以是BASICAUTH逗号后面的一个空的字符串.)
+
+  ''在0.9版本中添加了对Basic验证支持''
+
+使用验证的一般格式是:
+
+{{{
+ $ tracd -p port --auth=base_project_dir,password_file_path,realm project_path
+}}}
+
+其中:
+
+ * '''base_project_dir''' 项目的基目录; 注意: 这不是指的项目名称, 而且在windows环境中也是大小写敏感的
+ * '''password_file_path''' 密码文件的路径
+ * '''realm''' realm
+ * '''project_path''' 项目的路径
+
+例子:
+
+{{{
+ $ tracd -p 8080 \
+   --auth=project1,/path/to/users.htdigest,mycompany.com /path/to/project1
+}}}
+当然, digest文件可以被多个项目共享:
+{{{
+ $ tracd -p 8080 \
+   --auth=project1,/path/to/users.htdigest,mycompany.com \
+   --auth=project2,/path/to/users.htdigest,mycompany.com \
+   /path/to/project1 /path/to/project2
+}}}
+
+另一个共享digest文件的方法是将项目名称指定为"*":
+{{{
+ $ tracd -p 8080 \
+   --auth=*,/path/to/users.htdigest,mycompany.com \
+   /path/to/project1 /path/to/project2
+}}}
+
+== 如何创建一个htdigest口令文件 ==
+
+如果你有Apache, 你可以使用htdigest命令来创建口令文件. 键入'htdigest'以得到使用说明或者阅读摘自Apache手册的[http://httpd.apache.org/docs/2.0/programs/htdigest.html 页面]得到准确的指导. 你要为创建的每个用户输入密码. 口令文件的名字可以是任何你想要的名字. 但是如果你使用类似`users.htdigest`这样的名字, 它会提醒你该文件包含的内容. 建议将它和[ZhTracIni trac.ini]文件放在你的<projectname>/conf文件夹中.
+
+注意, 你可以不使用--auth参数来启动tracd, 但如果你单击''Login''链接, 你将得到一个错误.
+
+== 不用Apache创建密码 ==
+
+如果你没有Apache, 你可以使用这个简单的Python脚本来创建你的密码:
+
+{{{
+#!python
+from optparse import OptionParser
+import md5
+
+# build the options
+usage = "usage: %prog [options]"
+parser = OptionParser(usage=usage)
+parser.add_option("-u", "--username",action="store", dest="username", type = "string",
+                  help="the username for whom to generate a password")
+parser.add_option("-p", "--password",action="store", dest="password", type = "string",
+                  help="the password to use")
+(options, args) = parser.parse_args()
+
+# check options
+if (options.username is None) or (options.password is None):
+   parser.error("You must supply both the username and password")
+   
+# Generate the string to enter into the htdigest file
+realm = 'trac'
+kd = lambda x: md5.md5(':'.join(x)).hexdigest()
+print ':'.join((options.username, realm, kd([options.username, realm, options.password])))
+}}}
+
+注意:如果你使用上述脚本, 你必须使用--auth选项, 而不是--basic-auth, 并且你必须在 --auth值中设置域(没有引号). 例如(假设你将脚本保存为trac-digest.py):
+
+{{{
+python trac-digest.py -u username -p password >> c:\digest.txt
+tracd --port 8000 --auth=proj_name,c:\digest.txt,trac c:\path\to\proj_name
+}}}
+
+注意: 如果你要使用 --basic-auth, 你需要使用apache服务器的htpasswd工具来生成.htpasswd文件. 剩下的都很类似, 但是确认使用的是空realm (即, 路径中逗号后的). 当使用Windows时, 请确认使用-m选项(没有在*nix上测试, 所以不确定是否也这样). 如果你没有Apache, [trac:source:/tags/trac-0.11b2/contrib/htpasswd.py htpasswd.py] 也许有帮助.  (注意, 这要求 `crypt` 或 `fcrypt` 模块; 详情参见源代码中的注释.)
+
+可以使用md5sum工具来生成 digest-password 文件:
+{{{
+echo -e "${user}:trac:${password}\c" | md5sum - >>to-file
+}}}
+并从行尾手工删除" -", 并从'to-file'增加 "${user}:trac:" 到行首. 详情参见 attachment:trac-digest-corrected.sh.
+
+== 提示 ==
+
+=== 服务静态的内容 ===
+
+如果`tracd`是该项目的唯一Web服务器, 它还可以用于分发静态内容(tarballs, Doxygen文档, 等)
+
+该静态内容应放在`$TRAC_ENV/htdocs`文件夹中, 并且通过类似`<project_URL>/chrome/site/...`的URL来访问.
+
+例子: 假设一个`$TRAC_ENV/htdocs/software-0.1.tar.gz`文件, 对应的URL应该是`/<project_name>/chrome/site/software-0.1.tar.gz`, 可以使用wiki`[/<project_name>/chrome/site/software-0.1.tar.gz]`中的相关链接语法来编写.
+
+Trac的开发版本支持一个新的`htdocs:`Trac链接语法. 这样, 上面例子中的链接可以简化为`htdocs:software-0.1.tar.gz`.
+
+=== 使用apache rewrite规则 ===
+某些情况下, 当你选择在apache后端使用tracd时, 你可能遇到重定向的问题, 比如被重定向到错误的主机或协议上. 这种情况下(而且只能是这种情况), 设置`[trac] use_base_url_for_redirect`为`true`也许可以解决, 因为这将强制Trac使用`[trac] base_url`的值来做重定向.
+
+=== 通过/服务不同的基路径 ===
+Tracd支持使用不同的基URL服务多个项目/<project>. 要修改的参数是
+{{{
+tracd --base-path=/some/path
+}}}
+
+----
+原文版本: TracStandalone[[BR]]
+相关信息: [ZhTracInstall Trac安装], [ZhTracCgi TracCgi], [ZhTracModPython TracModPython], [ZhTracGuide Trac导览][[BR]]
+See also: TracInstall, TracCgi, TracModPython, TracGuide

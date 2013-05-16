@@ -1,0 +1,15 @@
+{%if navmenus%}
+<ul class="mainNav">
+  {%for m in navmenus%}
+  {%if m.choice%}
+  <li class="choice">
+    <a href="{{m.uri}}/">{{m.txt}}</a>
+  </li>
+  {%else%}
+  <li>
+    <a href="{{m.uri}}/">{{m.txt}}</a>
+  </li>
+  {%endif%}
+  {%endfor%}
+</ul>
+{%endif%}

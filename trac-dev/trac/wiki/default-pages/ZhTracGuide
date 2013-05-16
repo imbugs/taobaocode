@@ -1,0 +1,41 @@
+= Trac使用及管理指南 =
+[[ZhTracGuideToc]]
+
+'''Trac导览'''旨在作为一个所有相关Trac的使用/开发文档的一个索引服务. 
+'''Trac导览'''本身是一个免费的文档, 一个协作的成果, 并且是[http://projects.edgewall.com/trac/ Trac Project]本身的一部分.
+
+== 目录 ==
+现有的文档:
+ * [ZhTracGuide  Trac导览(本页)] -- 内置文档起点
+ * '''管理员指南'''
+   * [ZhTracInstall Trac安装] -- 如何安装和运行Trac
+   * [ZhTracUpgrade Trac升级] -- 如何升级已安装文件
+   * [ZhTracAdmin Trac管理] -- 管理一个Trac项目
+   * [ZhTracImport Trac导入] -- 从其他bug数据库中导入传票
+   * [ZhTracIni Trac配置] -- 配置参数指南
+   * [ZhTracPermissions TracACL] -- 访问控制和许可
+   * [ZhTracInterfaceCustomization Trac定制] -- 自定义Trac界面
+   * [ZhTracPlugins Trac插件] -- 安装和管理Trac插件
+   * [ZhTracLogging Trac日志] -- Trac日志工具
+   * [ZhTracNotification Trac提醒] -- 邮件通知
+   * [ZhTracWorkflow Trac工作流] -- 可配置的传票工作流
+ * '''用户指南'''
+   * [ZhTracWiki Trac内置Wiki] -- 如何使用内置的Wiki
+   * [ZhTracTimeline Trac项目时间线索] -- 为项目提供了完整的历史记录
+   * [ZhTracRss Trac的RSS] -- Trac中的RSS内容组织
+   * ''版本控制系统''
+     * [ZhTracBrowser Trac游览] -- 用Trac浏览源代码
+     * [ZhTracChangeset Trac变更集] -- 查看源代码的变更集
+     * [ZhTracRevisionLog Trac版本日志] -- 查看修改历史
+   * ''传票系统''
+     * [ZhTracTickets Trac传票] -- 使用传票系统
+     * [ZhTracReports Trac报表] -- 撰写和使用报表
+     * [ZhTracQuery Trac查询] -- 执行自定义传票查询
+     * [ZhTracRoadmap Trac项目路线图] -- 定义里程碑,协助项目的进度追踪
+ * [http://projects.edgewall.com/trac/wiki/TracFaq 常见问题集(在Trac官方网站上)]
+
+== 支持和其他的信息资源 ==
+如果你在寻找一个能解答你关于Trac的疑问的地方, 那么[http://projects.edgewall.com/trac/wiki/MailingList 邮件列表]是最佳选择. 它提供了一个Trac用户与开发者之间自由地讨论的良好的环境.
+相关信息: 想得到更多的信息资源, 请见[ZhTracSupport Trac技术支持]页面.
+
+原文版本: TracGuide

@@ -1,0 +1,32 @@
+= 使用搜索 =
+
+Trac有一个内置的搜索引擎, 可以查找Wiki页面, 传票和变更集描述中的关键字和子字符串.
+
+使用Trac搜索工具相当直接, 而且大多数用户也很熟悉其界面.
+
+除了[search: 搜索模块]之外, 你总会在导航栏上方发现一个小的搜索栏. 它在所有页面中都提供了方便的搜索入口.
+
+== "快速跳转"搜索 ==
+要快速访问各种项目资源, 在快速搜索栏输入一个[ZhTracLinks Wiki链接], 将把你直接带到该链接连接的资源.
+
+例如:
+
+ * ![42] -- 打开变更集42
+ * !#42 -- 打开42号传票
+ * !{1} -- 打开报表1
+ * /trunk -- 浏览trunk目录
+
+== 高级 ==
+
+=== 禁用快速跳转 ===
+要禁用搜索每个搜索关键字的快速跳转特征, 比如说当搜索文字!TracGuide时, 以一个感叹号(!)开始此查询.
+
+=== 搜索链接 ===
+在Wiki中, 使用''search:''链接, 可以链接到某个具体的搜索:
+ * `search:?q=crash` 会搜索字符串"crash"
+ * `search:?q=trac+link&wiki=on` 会只在Wiki页面中搜索"trac"和"link"
+ 
+----
+原文版本: TracSearch[[BR]]
+相关信息: [ZhTracGuide Trac导览], [ZhTracLinks Trac链接], [ZhTracQuery Trac查询][[BR]]
+See also: TracGuide, TracLinks, TracQuery

@@ -1,0 +1,16 @@
+{% extends "layouts/baseview.html" %}
+{% load i18n %}
+{% load short_uri %}
+
+{%block title%}Wiki Formart{%endblock%}
+
+
+
+{%block main-block%}
+<p>
+  {{formarts|safe}}
+</p>
+{%endblock%}
+
+
+

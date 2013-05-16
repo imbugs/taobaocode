@@ -1,0 +1,83 @@
+= 升级指南 =
+[[ZhTracGuideToc]]
+
+在使用Trac 0.11版本时, 需要升级[ZhTracEnvironment Trac环境]. 本文档描述了升级环境必需的步骤.
+
+除非特别强调, 否则没有必要为次要版本进行升级. 
+
+
+== 总体介绍 ==
+
+一般, 将Trac升级到一个新版本需要四个步骤:
+
+=== 更新Trac代码 ===
+
+按照TracInstall的描述取得新版本, 或是按照你的操作系统特定的过程.
+
+如果你手工升级(非操作系统特定), 你也可以通过从Python的`lib/site-packages`目录中删除`trac`目录, 来删除现有的Trac代码.
+
+site-packages目录的位置取决于操作系统和安装的是哪个Python. 然而, 通常是下列位置:
+ * Linux: /usr/lib/python2.X/site-packages
+ * Windows: C:\Python2.X\lib\site-packages
+ * MacOSX: /Library/Python2.X/site-packages
+
+你也可以删除Trac的`cgi-bin`, `htdocs`, `templates`和`wiki-default`目录, 通常位于叫做`share/trac`的目录 (具体的位置跟你的平台有关).
+
+> 如果你安装了webadmin插件, 现在你可以卸载它, 因为它现在是trac的一部分了.
+
+
+=== 升级Trac环境 ===
+
+重启后, Trac应当显示需要手工升级, 通过自动升级脚本可以减轻这个过程的负担. 这些脚本用[ZhTracAdmin trac-admin]运行:
+{{{
+trac-admin /path/to/projenv upgrade
+}}}
+
+如果环境已经是最新的了, 该命令不起任何作用.
+
+注意, 如果你使用的是PostgreSQL数据库, 该命令会失败. 失败的消息会是''只有当你使用SQLite数据库时, 才能备份环境.'' 这意味着, 你必须手动备份仓库和数据库. 然后, 要进行实际升级, 运行
+{{{
+trac-admin /path/to/projenv upgrade --no-backup
+}}}
+
+=== 更新Trac文档 ===
+
+每个[wiki:ZhTracEnvironment Trac环境]包含了一份安装版本的Trac文档副本. 因为你可能想要使文档与安装的Trac版本保持同步, [wiki:ZhTracAdmin trac-admin]提供了一个升级文档的命令:
+{{{
+trac-admin /path/to/projenv wiki upgrade
+}}}
+
+注意, 该程序绝不会改动你的`WikiStart`页面.
+
+=== Trac宏, 插件 ===
+Trac宏将需要调整, 因为老式的wiki宏不再被支持(由于放弃了ClearSilver和HDF); 它们需要转换为新式的宏, 见[ZhTracWikiMacros TracWikiMacros].
+
+
+=== 重启Web服务器 ===
+要重新加载新的Trac代码, 你需要重启你的Web服务器. 注意, 对[wiki:ZhTracCgi CGI]不需要.
+
+== 已知问题 ==
+=== 父目录 ===
+如果你使用trac父目录环境配置, 并且其中一个项目的某个插件无法工作, 所有子项目都将无法工作.
+=== 无法载入某些核心模块 === 
+这种情况仅仅在Windows上的Python2.3, 在没有先卸载的情况下升级发生.
+某些模块原先是大写开头的, 后来变成小写, 例如, trac/About.py变成trac/about.py. 你会在Trac日志中找到类似信息:
+{{{
+ERROR: Skipping "trac.about = trac.about": (can't import "No module named about")
+}}}
+删除`Lib/site-packages/trac`目录并重新安装.
+
+
+== 变更数据库后端 ==
+== SQLite到PostgreSQL ==
+
+[http://trac-hacks.org trac-hacks.org]的[http://trac-hacks.org/wiki/SqliteToPgScript sqlite2pg]脚本可以用来辅助迁移SQLite数据库到PostgreSQL数据库
+
+== 更老版本 ==
+
+关于从更老版本升级, 参见wiki:0.10/TracUpgrade.
+
+-----
+原文版本: TracUpgrade[[BR]]
+相关信息: [ZhTracGuide Trac导览], [ZhTracInstall Trac安装][[BR]]
+See also: TracGuide, TracInstall

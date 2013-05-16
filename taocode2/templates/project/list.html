@@ -1,0 +1,88 @@
+{% extends "layouts/baseview.html" %}
+{% load i18n %}
+{% load short_uri %}
+
+{%block title%}all projects{%endblock%}
+
+{% block extrastyle %}
+<script type="text/javascript">
+function watch_project(project_id,
+		       project_name, o) {
+    q_get('prj/watch/'+project_name, {}, function(r){
+	$(o).text(r[0]);
+	$('#project-id-'+project_id+' #watchers').text(r[1]);
+    });
+    return false;
+}
+</script>
+{% endblock %}
+
+{% block ready_js%}
+    $('#btn-search').click(function () {
+	$('#prj-search-form #q').val($('#key-text').val());
+	$('#prj-search-form').submit();
+    });
+
+{% endblock %}
+
+{%block main-nav%}
+{%endblock%}
+
+{%block body-menu%}
+<div class="body-menu">
+  <div class="left">
+    <ul class="bodynav">
+      {%for m in bodymenus%}
+      <li class="{{m.choice|yesno:'choice,'}}">
+	<a href="{{m.uri}}">{{m.text}}</a>
+      </li>
+      {%endfor%}
+    </ul>
+  </div>
+</div>
+{%endblock%}
+
+
+{%block main-block%}
+{%if all_projects%}
+<div class="body-menu">
+  <div class="left">
+    <form id="prj-search-form" action="/all/" method="POST">
+      {%csrf_token%}
+      <input id="q" name="q" type="hidden" value="{{key_text}}"></input>
+    </form>
+    <input size="30" id="key-text" type="text" value="{{key_text}}"></input>
+    <a id="btn-search" href="javascript:;" class="button">search</a>
+  </div>
+  <div class="img-btn right">
+    <a href="/new" title="New project">
+      <img src="/img/add_project.png"></img>
+    </a>
+  </div>
+</div>
+<div class="bottom-line">
+  {% include "layouts/page-nav.html" %}
+</div>
+{%endif%}
+<p>
+  <table cellspacing="0">    
+    <tr><th width="50"></th><th width="650"></th><th width="150"></th></tr>
+    {%for project in prjs%}
+    <tr class="row" id="project-id-{{project.id}}">
+      {%include "project/prj-info.html" with project=project%}
+      <td>
+	<img src="/img/users.png" title="members"></img>
+	<em>{{project.member_count|default:0}}</em>
+	<img src="/img/watch.png" title="watchers"></img>
+	<em id="watchers">{{project.watcher_count|default:0}}</em>
+      </td>
+    </tr>
+    {%endfor%}
+  </table>
+</p>
+{%if all_projects%}
+<div class="top-line">
+  {% include "layouts/page-nav.html" %}
+</div>
+{%endif%}
+{%endblock%}

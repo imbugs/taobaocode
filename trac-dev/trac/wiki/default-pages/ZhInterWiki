@@ -1,0 +1,50 @@
+= 外部Wiki链接的帮助 =
+''(自里程碑0.10后)''
+
+== 定义 ==
+[ZhInterWiki 外部Wiki]链接可用来引用另一个Wiki系统中的某个Wiki页面, 推而广之, 只需要一个简单的URL映射, [ZhInterWiki 外部Wiki]链接可用来引用其他任何Web程序中的某个对象.
+
+甚至, [ZhInterWiki 外部Wiki]前缀甚至可以用来将链接指定到新的协议中, 例如!TortoiseSvn使用的`tsvn:`.
+
+== 链接语法 ==
+{{{
+<target_wiki>(:<identifier>)+
+}}}
+
+链接是由目标Wiki(或者系统)的名字组成的, 紧跟一个冒号(比如 MeatBall:), 接着是目标的页面规格说明. 作为[ZhInterTrac 外部Trac]前缀, '''[ZhInterWiki 外部Wiki]前缀是不区分大小写的.'''
+
+目标Wiki的URL是在[ZhInterMapTxt 链接前缀表]Wiki页面中查找的, 参照的是MeatBall:InterMapTxt.
+
+除了传统的[ZhInterWiki 外部Wiki]链接外(目标被简单地附加在URL的后面), Trac支持参数化的[ZhInterWiki 外部Wiki] URL.URL中的标识符`$1`,  `$2`,  ..., 会被相应的参数所替代. 参数列表是通过用":"来分隔页标记而形成的.
+
+== 例子 ==
+下面是[ZhInterMapTxt 链接前缀表]页面的一个摘录:
+{{{
+= InterMapTxt =
+== 此处定义外部Wiki前缀 ==
+当前的活动前缀:[[InterWiki]]
+
+该页参照MeatBall:InterMapTxt页.
+另外, 可以在在映射后添加注释.
+----
+{{{
+PEP      http://www.python.org/peps/pep-$1.html           # Python Enhancement Proposal $1 
+Trac-ML  http://thread.gmane.org/gmane.comp.version-control.subversion.trac.general/$1  # Message $1 in Trac Mailing List
+
+tsvn     tsvn:                                            # Interact with TortoiseSvn
+...
+MeatBall http://www.usemod.com/cgi-bin/mb.pl?
+MetaWiki http://sunir.org/apps/meta.pl?
+MetaWikiPedia http://meta.wikipedia.org/wiki/
+MoinMoin http://moinmoin.wikiwikiweb.de/
+...
+}}}
+}}}
+
+那么, 
+ * `MoinMoin:InterWikiMap`将被解释为 MoinMoin:InterWikiMap , 该链接的''标题''则是"!InterWikiMap in !MoinMoin".
+ * `Trac-ML:4346`将被解释为 Trac-ML:4346 , 该链接的''标题''则是"Message 4346 in Trac Mailing List".
+----
+原文版本: InterWiki[[BR]]
+相关信息: [ZhInterTrac 外部Trac],  [ZhInterMapTxt 链接前缀表][[BR]]
+See also: InterTrac,  InterMapTxt 

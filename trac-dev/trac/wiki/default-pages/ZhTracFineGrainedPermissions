@@ -1,0 +1,122 @@
+= 粒度更细的权限 =
+
+在Trac 0.11之前, 只能在仓库浏览子系统中定义细粒度的权限.
+
+自0.11起, 有一种通用机制, 允许定制权限策略, 授予或拒绝针对Trac资源的任何动作, 甚至到了资源的特定版本这个程度.
+
+== 权限策略 ==
+
+=== !AuthzPolicy ===
+
+增加了一个基于认证式系统的策略例子. 详情参见
+[source:trunk/sample-plugins/permissions/authz_policy.py]. (更多例子见 [source:trunk/sample-plugins/permissions].)
+
+ - 安装[http://www.voidspace.org.uk/python/configobj.html ConfigObj] (必须).
+ - 复制此文件到你的插件目录
+ - 创建一个[http://swapoff.org/files/authzpolicy.conf authzpolicy.conf]文件. FIXME: what does ''plonk'' mean? ;-)
+ - 更新你的`trac.ini`:
+{{{
+[trac]
+...
+permission_policies = AuthzPolicy, DefaultPermissionPolicy
+
+[authz_policy]
+authz_file = /some/trac/env/conf/authzpolicy.conf
+
+[components]
+...
+authz_policy = enabled
+}}}
+
+注意指定权限策略的顺序是非常重要的, 
+因为将按照提供的顺序进行策略的检查.
+
+策略将对一个给定的权限检查返回`True`, `False` 或者 `None`.
+仅仅当返回值是`None`时, 将查询''下一个''权限策略.
+如果没有策略明确授予权限, 最终结果将是`False` 
+(即, 没有权限).
+
+比如, 如果`authz_file`包含:
+{{{
+[wiki:WikiStart@*]
+* = VIEW
+
+[wiki:PrivatePage@*]
+john = VIEW
+* =
+}}}
+and the default permissions are set like this:
+{{{
+john           WIKI_VIEW
+jack           WIKI_VIEW
+# anonymous has no WIKI_VIEW
+}}}
+
+因此: 
+ - WikiStart的所有版本将可以被所有人看到(包括匿名用户)
+ - !PrivatePage只能被john看到
+ - 其余页面只能被john和jack看到
+
+
+=== mod_authz_svn-like权限策略 ===
+
+编写时, 用于限制访问仓库的Trac 0.10 及之前版本的旧的细粒度权限系统还没有转换为权限策略组件, 但是从用户的角度看没有什么分别.
+
+那种细粒度权限控制需要一个定义文件, 其被Subversion的mod_authz_svn使用. 
+关于此文件格式及其在Subversion中的用法的更多信息, 见[http://svnbook.red-bean.com/svnbook/book.html#svn-ch-6-sect-4.4.2 Subversion Book (Per-Directory Access Control)].
+
+例子:
+{{{
+[/]
+* = r
+
+[/branches/calc/bug-142]
+harry = rw
+sally = r
+
+[/branches/calc/bug-142/secret]
+harry =
+}}}
+
+ * '''/''' = ''默认所有人可以读''
+ * '''/branches/calc/bug-142''' = ''harry有读/写权限, sally只有读权限''
+ * '''/branches/calc/bug-142/secret''' = ''harry没有权限, sally有读权限 (从子目录权限中继承来)''
+
+==== Trac配置 ====
+
+要激活细粒度权限, 你 __必须__ 在trac.ini中{{{[trac]}}}段指定{{{authz_file}}}选项. 如果此选项设为空, 或者没有指定, 将没有任何权限.
+
+{{{
+[trac]
+authz_file = /path/to/svnaccessfile
+}}}
+
+如果你想在`authz_file`中支持`[`''modulename''`:/`''some''`/`''path''`]`语法, 增加
+
+{{{
+authz_module_name = modulename
+}}}
+
+其中''modulename''对应`[trac]`段中`repository_dir`条目指示的同一个仓库.
+
+'''注意:''' 在Authz文件中的用户名 __必须__ 与trac中使用的相同. 
+
+==== Subversion配置 ====
+
+典型用于相应的Subversion仓库相同的访问文件, 用Apache指令则如下:
+{{{
+<Location /repos>
+  DAV svn
+  SubversionParentPath /usr/local/svn
+
+  # our access control policy
+  AuthzSubversionAccessFile /path/to/svnaccessfile
+</Location>
+}}}
+
+关于在多项目环境中, 如何限制访问整个项目的更多信息参见[trac:wiki:TracMultipleProjectsSubversionAccess]
+
+----
+原文版本: TracFineGrainedPermissions[[BR]]
+相关信息: [ZhTracPermissions Trac权限][[BR]]
+See also: TracPermissions

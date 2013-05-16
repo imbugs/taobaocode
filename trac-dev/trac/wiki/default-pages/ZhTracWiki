@@ -1,0 +1,31 @@
+= Trac的Wiki引擎 =
+[[ZhTracGuideToc]]
+
+Trac有一个内置的Wiki引擎, 用于系统中的文本和文档. [ZhWikiFormatting Wiki格式]用在[wiki:ZhTitleIndex Wiki页面], [wiki:ZhTracTickets 传票]和[wiki:ZhTracChangeset 检入日志消息]中. 因此在所有Trac模块中, 都可以使用格式化文本和超链接.
+
+编辑Wiki文本很简单, 使用任意Web浏览器和简单的[ZhWikiFormatting Wiki格式], 而不是那些复杂的标记语言(如HTML). 背后的设计理念是, HTML有太多的嵌套的标签, 太复杂, 无法实现快节奏的编辑, 并且使网页的实际内容分散. 注意, Trac也支持[wiki:ZhWikiHtml HTML], [wiki:ZhWikiRestructuredText 结构化文本]和 [http://www.textism.com/tools/textile/ Textile], 作为替换的内容格式.
+
+Wiki的主要目标是使编辑文字的过程变得更简单, 以及鼓励人们贡献和评论项目的文字内容.
+
+Wiki本身并不强制任何结构, 而像一些白纸. 在那里你可以按照你的意愿组织信息和文档, 需要时可以再重组它们.
+
+更多关于编辑Wiki文本的帮助, 请参考这些网页:
+ * [ZhWikiFormatting  Wiki格式]
+ * [ZhWikiPageNames Wiki页面名字]
+ * [ZhWikiNewPage 创建Wiki页面]
+ * [ZhTracLinks Trac链接]
+ * [ZhWikiMacros Wiki宏]
+ * [ZhWikiProcessors Wiki解析器]
+ * [ZhPageTemplates PageTemplates]
+
+如果你想练习, 请使用[ZhSandBox 沙箱].
+
+Web上更多关于Wiki的信息:
+ * http://wikipedia.org/wiki/Wiki
+ * http://c2.com/cgi/wiki?WikiHistory
+ * http://www.usemod.com/cgi-bin/mb.pl?WhyWikiWorks
+
+----
+原文版本: TracWiki[[BR]]
+相关信息: [ZhTracGuide Trac导览][[BR]]
+See also: TracGuide

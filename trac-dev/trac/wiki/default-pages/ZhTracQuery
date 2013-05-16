@@ -1,0 +1,97 @@
+= Trac传票查询 =
+[[ZhTracGuideToc]]
+
+除[wiki:ZhTracReports 报表]之外, Trac支持''自定义传票查询'', 用于显示满足特定条件的传票列表.
+
+要配置和执行一个自定义查询, 从导航栏切换到''传票检索''模块, 然后选择''自定义查询''链接.
+
+== 过滤器 ==
+当你首次访问查询页面时, 默认的过滤器会显示所有打开的传票. 如果你登录了, 它会显示分配给你的打开的传票. 单击右侧有减号标志的标签, 可以将当前过滤器删除掉. 通过过滤框右下角的折叠菜单可以添加新的过滤器. 带有文本框或下拉菜单的过滤器可被多次添加来生成一个''or''条件.
+
+你可以用过滤框下方的字段, 来按照某个字段对结果进行分组, 或者显示每个传票的完整描述.
+
+一旦你编辑了过滤器, 点击更新按钮来刷新结果.
+
+== 传票导航 ==
+单击某个查询结果会将你带到该传票处. 你可以通过单击主菜单栏下方的''下一传票''或''上一传票''链接在结果中浏览, 或者是单击''回到查询''链接返回到查询页面.
+
+你能安全的编辑, 保存这些传票, 然后继续在结果中浏览(使用''下一传票''或''上一传票''). 当你返回查询, 所有被编辑过的传票将显示成斜体字. 如果其中有些传票被编辑后不再匹配查询条件, 其文字将是灰色的. 最后, 如果有新创建的匹配传票, 将被显示为粗体字.
+
+再次单击''更新''按钮, 可以刷新查询结果并清除掉这些状态提示符.
+
+== 保存查询 ==
+
+虽然Trac还不能允许保存一个命名的查询(由此能将其放在导航列表中), 你可以在Wiki中保存对查询的引用, 如下所示.
+
+=== 使用Trac链接 ===
+
+你可能需要保存查询结果以供下次使用. 你可以在任何Wiki页面中通过链接到查询页面实现.
+{{{
+[query:status=new|assigned|reopened&version=1.0 Active tickets against 1.0]
+}}}
+
+显示为:
+  [query:status=new|assigned|reopened&version=1.0 Active tickets against 1.0]
+
+下面使用简单的查询语句 (查看 [wiki:ZhTracQuery#QueryLanguage 查询语言]).
+
+可以复制查询语句, 并粘贴到Wiki链接中(包括前面的问号"?")
+{{{
+[query:?status=new&status=assigned&status=reopened&group=owner Assigned tickets by owner]
+}}}
+
+显示为:
+  [query:?status=new&status=assigned&status=reopened&group=owner Assigned tickets by owner]
+
+=== 使用`[[TicketQuery]]`宏 ===
+
+`[[TicketQuery]]`宏使你能在任何可以使用[ZhWikiFormatting Wiki格式]的地方显示符合条件的传票列表.
+
+例如:
+{{{
+[[TicketQuery(version=0.6|0.7&resolution=duplicate)]]
+}}}
+
+显示为:
+  [[TicketQuery(version=0.6|0.7&resolution=duplicate)]]
+
+就像[wiki:ZhTracQuery#UsingTracLinks query: wiki links], 宏的参数是符合简单 [wiki:ZhTracQuery#QueryLanguage 传票查询语言]格式的查询字符串.
+
+更紧凑的, 没有传票概要的方法:
+{{{
+[[TicketQuery(version=0.6|0.7&resolution=duplicate, compact)]]
+}}}
+
+显示为:
+  [[TicketQuery(version=0.6|0.7&resolution=duplicate, compact)]]
+
+最后, 如果你希望只收到匹配查询的defects的数量, 使用``count``参数.
+
+{{{
+[[TicketQuery(version=0.6|0.7&resolution=duplicate, count)]]
+}}}
+
+显示为:
+  [[TicketQuery(version=0.6|0.7&resolution=duplicate, count)]]
+
+
+=== 查询语言 ===
+
+`query:`Trac链接`和[[TicketQuery]]`宏都使用一个迷你查询语言来指定查询过滤器. 基本上, 过滤器由&符号(`&`)隔开. 每个过滤器包含传票字段名, 一个操作符和一个以上的值. 值之间被(`|`)分隔, 表示匹配任一值. 
+
+可用的运算符是:
+|| '''=''' || 精确匹配其中某个值的字段内容 ||
+|| '''~=''' || 字段内容包含一个或多个值 ||
+|| '''!^=''' || 字段内容以某个或某几个值开始 ||
+|| '''$=''' || 字段内容以某个或某几个值结尾 ||
+
+所有这些运算符还可以取反:
+|| '''!=''' || 字段内容不匹配任何值 ||
+|| '''!~=''' || 字段内容不包含任何值 ||
+|| '''!!^=''' || 字段内容不以任何值开始 ||
+|| '''!$=''' || 字段内容不以任何值结尾 ||
+
+----
+原文版本: TracQuery[[BR]]
+相关信息: [ZhTracTickets Trac传票], [ZhTracReports Trac报表], [ZhTracGuide Trac导览][[BR]]
+See also: TracTickets, TracReports, TracGuide

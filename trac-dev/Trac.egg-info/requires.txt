@@ -1,0 +1,14 @@
+setuptools>=0.6b1
+Genshi>=0.5
+
+[SilverCity]
+SilverCity>=0.9.4
+
+[Textile]
+textile>=2.0
+
+[Pygments]
+Pygments>=0.6
+
+[reST]
+docutils>=0.3

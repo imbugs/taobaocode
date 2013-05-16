@@ -1,0 +1,9 @@
+{% extends "layouts/baseview.html" %}
+{% load i18n %}
+{% load short_uri %}
+
+{%block title%}not found project{%endblock%}
+
+{%block main-block%}
+<div>not found <b>{{project_name}}</b> project! you can <a href="/new/">create it!</a> or <a href="/all/">found it!</a></div>
+{%endblock%}

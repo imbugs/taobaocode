@@ -1,0 +1,77 @@
+<div class="TabStripNew">
+    <table cellpadding="0" cellspacing="0" border="0" class="FullWidth">
+        <tr>
+            {% ifequal tabIndex 'Home' %}
+                <td id="Tabs_homeTabCell" class="Tab ActiveTabNew">
+                    {% else %}
+                <td id="Tabs_homeTabCell" class="Tab InactiveTabNew">
+            {% endifequal %}
+            <a id="Tabs_homeTab" class="TabLinkNew" href="/p/{{ project.name }}/">
+                <div class="TabPadding">Home</div>
+            </a>
+            </td>
+            {% ifequal tabIndex 'SourceControl' %}
+                <td id="Tabs_sourceTabCell" class="Tab ActiveTabNew">
+                    {% else %}
+                <td id="Tabs_sourceTabCell" class="Tab InactiveTabNew">
+            {% endifequal %}
+            <a id="Tabs_sourceTab" class="TabLinkNew"
+               href="/p/{{ project.name }}/sc/">
+                <div class="TabPadding">Source Code</div>
+            </a>
+            </td>
+            {% ifequal tabIndex 'Documentation' %}
+                <td id="Tabs_documentationTabCell" class="Tab ActiveTabNew">
+                    {% else %}
+                <td id="Tabs_documentationTabCell" class="Tab InactiveTabNew">
+            {% endifequal %}
+            <a id="Tabs_documentationTab" class="TabLinkNew"
+               href="/p/{{ project.name }}/doc/">
+                <div class="TabPadding">Documentation</div>
+            </a>
+
+            </td>
+            {% ifequal tabIndex 'Discussions' %}
+                <td id="Tabs_discussionTabCell" class="Tab ActiveTabNew">
+                    {% else %}
+                <td id="Tabs_discussionTabCell" class="Tab InactiveTabNew">
+            {% endifequal %}
+            <a id="Tabs_discussionTab" class="TabLinkNew"
+               href="/p/{{ project.name }}//discussions">
+                <div class="TabPadding">Discussions</div>
+            </a>
+            </td>
+            {% ifequal tabIndex 'Issue' %}
+                <td id="Tabs_workItemsTabCell" class="Tab ActiveTabNew">
+                    {% else %}
+                <td id="Tabs_workItemsTabCell" class="Tab InactiveTabNew">
+            {% endifequal %}
+
+            <a id="Tabs_workItemsTab" class="TabLinkNew"
+               href="/p/{{ project.name }}//issue">
+                <div class="TabPadding">Issue Tracker</div>
+            </a>
+            </td>
+            {% ifequal tabIndex 'People' %}
+                <td id="Tabs_peopleTabCell" class="Tab ActiveTabNew">
+                    {% else %}
+                <td id="Tabs_peopleTabCell" class="Tab InactiveTabNew">
+            {% endifequal %}
+            <a id="Tabs_peopleTab" class="TabLinkNew"
+               href="/p/{{ project.name }}/team/view">
+                <div class="TabPadding">People</div>
+            </a>
+            </td>
+            {% ifequal tabIndex 'License' %}
+                <td id="Tabs_licenseTabCell" class="Tab ActiveTabNew">
+                    {% else %}
+                <td id="Tabs_licenseTabCell" class="Tab InactiveTabNew">
+            {% endifequal %}
+            <a id="Tabs_licenseTab" class="TabLinkNew" href="/p/{{ project.name }}//license">
+                <div class="TabPadding">License</div>
+            </a>
+            </td>
+            <td width="40%"></td>
+        </tr>
+    </table>
+</div>

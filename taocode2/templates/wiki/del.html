@@ -1,0 +1,27 @@
+{% extends "layouts/baseview.html" %}
+{% load i18n %}
+{% load short_uri %}
+
+{%block title%}{{pagename}}{%endblock%}
+
+{%block ready_js%}
+$('#btn_del').click(function() {
+$('#del_wiki').submit();
+});
+{%endblock%}
+{%block main-block%}
+{%if can_op%}
+<p>
+  Are you sure delete page - {{pagename}} ? 
+</p>
+<p class="op">
+  <a id="btn_del" href="javascript:;" class="button yes">Confrim delete</a>
+  <a href="{{project|url}}wiki/{{pagename}}" class="button no">Cancel</a>
+</p>
+
+{%else%}
+<p>
+  Forbidden!
+</p>
+{%endif%}
+{%endblock%}
